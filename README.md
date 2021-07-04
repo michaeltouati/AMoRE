@@ -6,7 +6,7 @@ https://iopscience.iop.org/article/10.1088/1367-2630/16/7/073014/pdf
 and 
 https://tel.archives-ouvertes.fr/tel-01238782/document
 
-For publications of scientific results using AMoRE, do not forget to cite the latter article or PhD manuscript. 
+For publications of scientific results using AMoRE in peer-review journals, do not forget to cite the latter article and/or PhD manuscript. 
 
 This version of the code only implement 2D homogeneous cartesian spatial grids and OpenMP shared memory. 
 The next release will implement 3D non-homogeneous cartesian meshes, MPI distributed memory and SIMD vectorization.
