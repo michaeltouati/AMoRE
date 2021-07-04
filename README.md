@@ -21,7 +21,7 @@ make
 
 2) Run a simulation :
 
-Fill the wished input-deck (all parameters are described inside) and type :
+Fill the wished input-deck 'init_parameters' (all parameters are described inside) and type :
 
 ./amore
 
