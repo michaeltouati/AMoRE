@@ -10,3 +10,26 @@ For publications of scientific results using AMoRE in peer-review journals, do n
 
 This version of the code only implement 2D homogeneous cartesian spatial grids and OpenMP shared memory. 
 The next release will implement 3D non-homogeneous cartesian meshes, MPI distributed memory and SIMD vectorization.
+
+In order to :
+
+1) Compile the code :
+
+Modify the makefile as a function of the wished compilation options and the compilers installed on your computer and then type :
+
+make
+
+2) Run a simulation :
+
+Fill the wished input-deck (all parameters are described inside) and type :
+
+./amore
+
+3) Plot the simulation results :
+
+Type for example :
+
+python3 extract_tools/extract_maps.py
+
+All simulation results are stored in text files located in the folder 'diags' and the python scripts used to make the plots are located in the folder 'extract_tools'.
+The plots will be located in the folder 'figure'.
