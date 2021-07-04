@@ -6,4 +6,5 @@ https://iopscience.iop.org/article/10.1088/1367-2630/16/7/073014/pdf
 and 
 https://tel.archives-ouvertes.fr/tel-01238782/document
 
-Only OpenMP shared memory is used in this version of the code. The next release will implement MPI distributed memory and SIMD vectorization.
+This version of the code only implement 2D homogeneous cartesian spatial grids and OpenMP shared memory. 
+The next release will implement 3D non-homogeneous cartesian meshes, MPI distributed memory and SIMD vectorization.
