@@ -14,7 +14,7 @@ make
 
 # Running a simulation
 
-Fill the wished input-deck 'init_parameters' (all parameters are described inside) and type :
+Fill the wished input-deck [init_parameters](https://github.com/michaeltouati/AMoRE/blob/main/init_parameters) (all parameters are described inside) and type :
 ```sh
 ./amore
 ```
