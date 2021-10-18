@@ -22,11 +22,11 @@ Type
 make plot
 ```
 to plot all the simulation results automatically. It can also be plotted separately
-all 2D density plots of the relativistic electron beam and target species hydrodynamic moments as well as the self-generated electromagnetic fields and target  transport coefficients at the chosen damped times by typing
+all 2D density plots of the relativistic electron beam and target species hydrodynamic moments as well as the self-generated electromagnetic fields and target  transport coefficients at the damped time steps by typing
 ```sh
 python3 sources/tools/extract_maps.py
 ```
-Similarly, the relativistic beam electron 2D-3P phase-space distribution can be plotted at the maximum beam density location by typing
+Similarly, the relativistic beam electron 2D-3P phase-space distribution can be plotted at the maximum beam density location and damped time steps by typing
 ```sh
 python3 sources/tools/extract_distribution.py
 ```
