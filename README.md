@@ -7,7 +7,7 @@ The next release will implement 3D non-homogeneous cartesian meshes, MPI distrib
 
 # Compiling the code
 
-Modify the makefile as a function of the wished compilation options and the compilers installed on your computer and then type :
+Modify the [makefile](https://github.com/michaeltouati/AMoRE/blob/main/Makefile) as a function of the wished compilation options and the compilers installed on your computer and then type :
 ```sh
 make
 ```
