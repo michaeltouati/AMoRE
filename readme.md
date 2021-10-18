@@ -41,7 +41,7 @@ and
 ```sh
 python3 sources/tools/extract_energy.py
 ```
-that plot respectively :
+that plots respectively :
 * the initial properties of the relativistic electron beam (longitudinal and transversal spatial distribution, momentum angular distribution and kinetic energy spectrum),
 * the transport coefficients of the medium where the beam is propagating through (ionization state, thermal capacities, electrical and thermal conductivities as well as electron-ion/lattice coupling factor) and 
 * the time evolution of the different energy contributions during the beam transport (injected electron beam energy, collisional and collective electron beam energy losses, instantaneous electron beam energy propagating in the medium and escaped electron beam energy). 
