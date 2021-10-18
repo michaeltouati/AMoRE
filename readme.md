@@ -45,12 +45,9 @@ and
 python3 sources/tools/extract_energy.py
 ```
 that plot respectively :
-
--the initial properties of the relativistic electron beam,
-
--the transport coefficient of target electrons(ions) (thermal capacities, electrical and thermal conductivities as well as electron-ion coupling factor) and 
-
--the time evolution of the diffetent energy contribution in the simulation. 
+*the initial properties of the relativistic electron beam,
+*the transport coefficient of target electrons(ions) (thermal capacities, electrical and thermal conductivities as well as electron-ion coupling factor) and 
+*the time evolution of the diffetent energy contribution in the simulation. 
 
 All simulation results are stored in text files located in the folder 'diags' and the python scripts used to make the plots are located in the folder 'extract_tools'.
 The plots will be located in the folder 'figure'.
