@@ -20,9 +20,34 @@ Fill the wished input-deck [init_parameters](https://github.com/michaeltouati/AM
 ```
 # Plotting the simulation results
 
-Type for example :
+Type :
 ```sh
-python3 extract_tools/extract_maps.py
+make plot
 ```
+to plot all the simulation results automatically. It can also be plotted separately
+all 2D density plots of both relativistic beam electrons and target electrons/ions hydrodynamic moments as well as the electromagnetic fields and target transport coefficient by typing
+```sh
+python3 sources/tools/extract_maps.py
+```
+Similarly, the relativistic beam electron distribution can be plotted by typing
+```sh
+python3 sources/tools/extract_distribution.py
+```
+and the simulation can be checked by typing 
+```sh
+python3 sources/tools/extract_initialization.py
+```
+```sh
+python3 sources/tools/extract_material.py
+```
+and
+```sh
+python3 sources/tools/extract_energy.py
+```
+that plot respectively :
+-the initial properties of the relativistic electron beam, 
+-the transport coefficient of target electrons(ions) (thermal capacities, electrical and thermal conductivities as well as electron-ion coupling factor) and 
+-the time evolution of the diffetent energy contribution in the simulation. 
+
 All simulation results are stored in text files located in the folder 'diags' and the python scripts used to make the plots are located in the folder 'extract_tools'.
 The plots will be located in the folder 'figure'.

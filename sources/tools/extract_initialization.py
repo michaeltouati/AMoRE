@@ -1,13 +1,36 @@
-import numpy as np
+#######################################################################
+##                                                                   ##
+## Angular Momentum Model Of Relativistic Electron beam (AMoRE) code ##
+##                                                                   ##
+## Copyright © 2015 Michaël J TOUATI                                 ##
+##                                                                   ##
+## This file is part of AMoRE.                                       ##
+##                                                                   ##
+## AMoRE is free software: you can redistribute it and/or modify     ##
+## it under the terms of the GNU General Public License as published ##
+## by the Free Software Foundation, either version 3 of the License, ##
+## or (at your option) any later version.                            ##
+##                                                                   ##
+## AMoRE is distributed in the hope that it will be useful,          ##
+## but WITHOUT ANY WARRANTY; without even the implied warranty of    ##
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     ##
+## GNU General Public License for more details.                      ##
+##                                                                   ##
+## You should have received a copy of the GNU General Public License ##
+## along with AMoRE. If not, see <https://www.gnu.org/licenses/>.    ##
+##                                                                   ##
+#######################################################################
+## Initial commit written by Michaël J TOUATI - Oct. 2015
+import os
 import math
+import numpy as np
+import rapc
 import matplotlib
-matplotlib.use('Qt5Agg')
 import matplotlib.pyplot as plt
 from matplotlib import cm
-import os
-import rapc
 
-dir= os.path.dirname("figure/")
+
+dir= os.path.dirname("figures/")
 if not os.path.exists(dir):
     os.mkdir(dir)
 
@@ -32,7 +55,7 @@ plt.xlim([np.min(t),np.max(t)])
 plt.ylabel(r'$d N / d t\,(\mathrm{a.u.})$', fontdict=font)
 plt.yticks(fontsize=16)
 plt.ylim([np.min(dN_dt),1.1*np.max(dN_dt)])
-fig.savefig('figure/injected_fast_e_temporal_distr.png',bbox_inches='tight')
+fig.savefig('figures/injected_fast_e_temporal_distr.png',bbox_inches='tight')
 plt.close(fig)
 
 
@@ -59,7 +82,7 @@ plt.xlim([np.min(eps),np.max(eps)])
 plt.ylabel(r'$d N / d \varepsilon\,(\mathrm{a.u.})$', fontdict=font)
 plt.yticks(fontsize=16)
 plt.ylim([np.min(dN_dE),1.1*np.max(dN_dE)])
-fig.savefig('figure/injected_fast_e_energy_spectrum.png',bbox_inches='tight')
+fig.savefig('figures/injected_fast_e_energy_spectrum.png',bbox_inches='tight')
 plt.close(fig)
 
 x     = []
@@ -83,7 +106,7 @@ plt.xlim([np.min(x),np.max(x)])
 plt.ylabel(r'$d N / d x\,(\mathrm{a.u.})$', fontdict=font)
 plt.yticks(fontsize=16)
 plt.ylim([np.min(dN_dx),1.1*np.max(dN_dx)])
-fig.savefig('figure/injected_fast_e_transverse_distribution.png',bbox_inches='tight')
+fig.savefig('figures/injected_fast_e_transverse_distribution.png',bbox_inches='tight')
 plt.close(fig)
 
 N1 = 360
@@ -131,6 +154,6 @@ plt.xlim([np.min(theta),np.max(theta)])
 plt.ylabel(r'$x\,(\mu\mathrm{m})$', fontdict=font)
 plt.yticks(fontsize=16)
 plt.ylim([np.min(x2),np.max(x2)])
-fig.savefig('figure/injected_fast_e_angular_distribution.png',bbox_inches='tight')
+fig.savefig('figures/injected_fast_e_angular_distribution.png',bbox_inches='tight')
 plt.close(fig)
 

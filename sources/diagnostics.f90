@@ -1,3 +1,26 @@
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!                                                                   !!
+!! Angular Momentum Model Of Relativistic Electron beam (AMoRE) code !!
+!!                                                                   !!
+!! Copyright © 2015 Michaël J TOUATI                                 !!
+!!                                                                   !!
+!! This file is part of AMoRE.                                       !!
+!!                                                                   !!
+!! AMoRE is free software: you can redistribute it and/or modify     !!
+!! it under the terms of the GNU General Public License as published !!
+!! by the Free Software Foundation, either version 3 of the License, !!
+!! or (at your option) any later version.                            !!
+!!                                                                   !!
+!! AMoRE is distributed in the hope that it will be useful,          !!
+!! but WITHOUT ANY WARRANTY; without even the implied warranty of    !!
+!! MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     !!
+!! GNU General Public License for more details.                      !!
+!!                                                                   !!
+!! You should have received a copy of the GNU General Public License !!
+!! along with AMoRE. If not, see <https://www.gnu.org/licenses/>.    !!
+!!                                                                   !!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!! Initial commit written by Michaël J TOUATI - Oct. 2015
 module diagnostics
 
 use constants
@@ -268,9 +291,10 @@ end subroutine plasma_diagnostics
 !     Write some electron properties in txt files at the beginning of the simulation
 !=========================================================================================
 
-subroutine electron_diagnostics(xa,epsa)
+subroutine electron_diagnostics(eps_tab,xa,epsa)
 implicit none
 ! inputs
+real(PR), dimension(1:N_eps_tab,1:2), intent(in) :: eps_tab
 real(PR), dimension(1:N_x), intent(in)   :: xa
 real(PR), dimension(1:N_eps), intent(in) :: epsa
 ! locals
@@ -294,7 +318,7 @@ open (unit=4,file ="diag/fast_electron_temporal_distr.dat",form='formatted',stat
 ! Fast Electron Kinetic Energy Spectrum
 delta = epsa(2) - epsa(1)
 do l=1,N_eps,1
-dN_dE(l) = function_energy(epsa(l))
+dN_dE(l) = function_energy(eps_tab,epsa(l))
 end do
 dN_dE = dN_dE / (sum(dN_dE(1:N_eps))*delta)
 do l=1,N_eps,1
@@ -409,7 +433,7 @@ open (unit=50,file='diag/ne[cm-3].dat'                ,form='formatted',status='
 open (unit=52,file='diag/je_x[A_cm-2].dat'            ,form='formatted',status='unknown')
 open (unit=53,file='diag/je_z[A_cm-2].dat'            ,form='formatted',status='unknown')
 ! Open, read and store the file 'Kalpha_tab.dat' in the table Kalphatab :
-open (unit=51,file='source/Kalpha_tab.dat'          ,form='formatted',status='unknown')      
+open (unit=51,file='sources/Kalpha_tab.dat'          ,form='formatted',status='unknown')      
 read(51,*)
 do i=1,79,1
 read(51,*) Kalphatab(i,1),Kalphatab(i,2),Kalphatab(i,3),Kalphatab(i,4),&
@@ -542,10 +566,10 @@ U_el    = (sum(E_x**2._PR+E_z**2._PR)/ 2._PR)*d_x*sim_box_thickness*d_z*((micron
 U_ma    = (sum(B_y_n**2._PR)/ 2._PR) *d_x*sim_box_thickness*d_z*((microns)**2._PR)/Joules 
 ! Print in the console :
 if (diag_condition) then
-print *, '============================'
+print *, '======================================'
 print *, 't (fs) =', time
 print *, '( Number of iterations :',N_t,')'
-print *, '============================'
+print *, '======================================'
 print*, 'Time integrated injected energy         (J)', U_e
 print*, 'Instantaneous beam energy               (J)', U_b
 print*, 'Energy deposited                        (J)', U_d
