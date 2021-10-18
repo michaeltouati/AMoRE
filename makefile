@@ -1,3 +1,27 @@
+#######################################################################
+##                                                                   ##
+## Angular Momentum Model Of Relativistic Electron beam (AMoRE) code ##
+##                                                                   ##
+## Copyright © 2015 Michaël J TOUATI                                 ##
+##                                                                   ##
+## This file is part of AMoRE.                                       ##
+##                                                                   ##
+## AMoRE is free software: you can redistribute it and/or modify     ##
+## it under the terms of the GNU General Public License as published ##
+## by the Free Software Foundation, either version 3 of the License, ##
+## or (at your option) any later version.                            ##
+##                                                                   ##
+## AMoRE is distributed in the hope that it will be useful,          ##
+## but WITHOUT ANY WARRANTY; without even the implied warranty of    ##
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     ##
+## GNU General Public License for more details.                      ##
+##                                                                   ##
+## You should have received a copy of the GNU General Public License ##
+## along with AMoRE. If not, see <https://www.gnu.org/licenses/>.    ##
+##                                                                   ##
+#######################################################################
+## Initial commit written by Michaël J TOUATI - Oct. 2015
+
 #############
 #############
 ##  ifort  ##
@@ -25,7 +49,8 @@
 ################
 ################
 
-F90 = mpif90
+# F90 = mpif90
+F90 = gfortran
 
 ##########
 # openMP #
@@ -46,8 +71,8 @@ OPTS = -O2 -fopenmp
 #####################################
 #####################################
 
-SRC_PATH    = source/
-SRC_PATH_PY = source/extract/
+SRC_PATH    = sources/
+SRC_PATH_PY = sources/tools/
 
 SRCS = constants.f90 \
 	physics_library.f90 \
@@ -59,25 +84,32 @@ SRCS = constants.f90 \
 	diagnostics.f90 \
 	EM_fields.f90 \
 	temperatures.f90 \
-	main.f90
+	AMoRE.f90
 
 OBJTS := $(SRCS:%.f90=%.o)
 
-all : AMoRE
+all : amore
 
-AMoRE : $(OBJTS)
-	$(F90) $(OPTS) $(OBJTS) -o AMoRE
+amore : $(OBJTS)
+	$(F90) $(OPTS) $(OBJTS) -o amore
 	rm *.mod
 	rm *.o
 
 %.o : $(SRC_PATH)%.f90
 	$(F90) $(OPTS) -c $(SRC_PATH)$*.f90
 
-clean :
-	rm -rf *.mod *.o source/*.o source/*.mod diag/*.dat figure/* AMoRE
-
 clean_results :
-	rm -rf diag/*.dat
+	@rm -rf diag/*
 
 clean_figures :
-	rm -rf figure/*
+	@rm -rf figures/*
+
+clean : clean_results clean_figures
+	@rm -rf *.mod *.o sources/*.o sources/*.mod amore ${SRC_PATH_PY}__pycache__
+
+plot :
+	@python3 ${SRC_PATH_PY}extract_energy.py
+	@python3 ${SRC_PATH_PY}extract_initialization.py
+	@python3 ${SRC_PATH_PY}extract_material.py
+	@python3 ${SRC_PATH_PY}extract_maps.py
+	@python3 ${SRC_PATH_PY}extract_distribution.py

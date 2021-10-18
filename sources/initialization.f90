@@ -1,3 +1,26 @@
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!                                                                   !!
+!! Angular Momentum Model Of Relativistic Electron beam (AMoRE) code !!
+!!                                                                   !!
+!! Copyright © 2015 Michaël J TOUATI                                 !!
+!!                                                                   !!
+!! This file is part of AMoRE.                                       !!
+!!                                                                   !!
+!! AMoRE is free software: you can redistribute it and/or modify     !!
+!! it under the terms of the GNU General Public License as published !!
+!! by the Free Software Foundation, either version 3 of the License, !!
+!! or (at your option) any later version.                            !!
+!!                                                                   !!
+!! AMoRE is distributed in the hope that it will be useful,          !!
+!! but WITHOUT ANY WARRANTY; without even the implied warranty of    !!
+!! MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     !!
+!! GNU General Public License for more details.                      !!
+!!                                                                   !!
+!! You should have received a copy of the GNU General Public License !!
+!! along with AMoRE. If not, see <https://www.gnu.org/licenses/>.    !!
+!!                                                                   !!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!! Initial commit written by Michaël J TOUATI - Oct. 2015
 module initialization
 
 use constants
@@ -24,11 +47,11 @@ real(PR), dimension(:,:), allocatable, intent(out) :: eps_tab
 integer, intent(out)                               :: N_eps_tab
 integer                                            :: reason, i
 character                                          :: str
-! Find the number of lines in the file 'source/spectrum_tab.dat' and allocate the
+! Find the number of lines in the file 'sources/spectrum_tab.dat' and allocate the
 ! table eps_tab :
 reason = 0
 i = -2   
-open (unit=50,file='source/spectrum_tab.dat',form='formatted',status='unknown')  
+open (unit=50,file='sources/spectrum_tab.dat',form='formatted',status='unknown')  
 do while (reason==0)
 read(50,*,IOSTAT=Reason) str
 i = i + 1
@@ -37,9 +60,9 @@ end do
 close(50)
 N_eps_tab = i
 allocate(eps_tab(1:N_eps_tab,1:2))
-!  Read the file 'source/spectrum_tab.dat' and define the table eps_tab with the 
+!  Read the file 'sources/spectrum_tab.dat' and define the table eps_tab with the 
 !  corresponding values
-open (unit=40,file='source/spectrum_tab.dat',form='formatted',status='unknown')      
+open (unit=40,file='sources/spectrum_tab.dat',form='formatted',status='unknown')      
 read(40,*)
 do i =1,N_eps_tab,1
 read(40,*) eps_tab(i,1),eps_tab(i,2)
@@ -313,10 +336,10 @@ character                                             :: str
 select case  (Material)
   case (1)
     if (tabulated_plasma) then
-      !  Read the file 'source/plasma_tab.dat' and find the number of lines :
+      !  Read the file 'sources/plasma_tab.dat' and find the number of lines :
       reason = 0
       i = -2
-      open (unit=50,file='source/plasma_tab.dat',form='formatted',status='unknown')      
+      open (unit=50,file='sources/plasma_tab.dat',form='formatted',status='unknown')      
       do while (reason==0)
         read(50,*,IOSTAT=Reason) str
         i = i + 1
@@ -325,16 +348,16 @@ select case  (Material)
       close(50)
       N_plasma_tab = i
       allocate(plasma_tab(1:N_plasma_tab,1:4))
-      !  Read the file 'source/plasma_tab.dat' and define the table plasma_tab with the 
+      !  Read the file 'sources/plasma_tab.dat' and define the table plasma_tab with the 
       !  corresponding values :
-      open (unit=50,file='source/plasma_tab.dat',form='formatted',status='unknown')      
+      open (unit=50,file='sources/plasma_tab.dat',form='formatted',status='unknown')      
       read(50,*)
       do i =1,N_plasma_tab,1
         read(50,*) plasma_tab(i,1),plasma_tab(i,2),plasma_tab(i,3),plasma_tab(i,4)
       end do
       close(50)
       ! find the number of cells on x-axis and deduce the
-      !      the number of cells on z-axis in 'source/plasma_tab.dat' :
+      !      the number of cells on z-axis in 'sources/plasma_tab.dat' :
       i = 1
       reason = 0
       do while (reason==0)

@@ -1,6 +1,28 @@
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!                                                                   !!
+!! Angular Momentum Model Of Relativistic Electron beam (AMoRE) code !!
+!!                                                                   !!
+!! Copyright © 2015 Michaël J TOUATI                                 !!
+!!                                                                   !!
+!! This file is part of AMoRE.                                       !!
+!!                                                                   !!
+!! AMoRE is free software: you can redistribute it and/or modify     !!
+!! it under the terms of the GNU General Public License as published !!
+!! by the Free Software Foundation, either version 3 of the License, !!
+!! or (at your option) any later version.                            !!
+!!                                                                   !!
+!! AMoRE is distributed in the hope that it will be useful,          !!
+!! but WITHOUT ANY WARRANTY; without even the implied warranty of    !!
+!! MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     !!
+!! GNU General Public License for more details.                      !!
+!!                                                                   !!
+!! You should have received a copy of the GNU General Public License !!
+!! along with AMoRE. If not, see <https://www.gnu.org/licenses/>.    !!
+!!                                                                   !!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!! Initial commit written by Michaël J TOUATI - Oct. 2015
 program main
-! Program written by Dr Michael J TOUATI
-! UCLA, October 2015
+
 use constants
 use input
 use VFP
@@ -96,7 +118,7 @@ logical :: diag_condition
 
 ! Read the simulation parameter
 call read_init_parameters  
-
+print *, 'Initialization of the simulation...'
 ! Initialization of diagnostics
 call initialize_spectrum(eps_tab, N_eps_tab)
 call initialize_resistivity(eta_tab, N_eta_tab)
@@ -195,7 +217,7 @@ call Kalpha_emission(Kalpha_tab, norm, d_t, Z, ni, eps_a, phi_n,&
 nK_holes, nKalpha, nKbeta, ioniz_rate) 
 end if
 diag_condition = abs(mod(time,Delta_t_diag)) < d_t
-diag_condition = diag_condition.and.(time.ne.0._PR) 
+diag_condition = diag_condition.or.(time.eq.0._PR) 
 diag_condition = diag_condition.or.((time <= L_t).and.((time+d_t) > L_t))
 if (diag_condition) then
 ! -write the results in text files

@@ -1,3 +1,26 @@
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!                                                                   !!
+!! Angular Momentum Model Of Relativistic Electron beam (AMoRE) code !!
+!!                                                                   !!
+!! Copyright © 2015 Michaël J TOUATI                                 !!
+!!                                                                   !!
+!! This file is part of AMoRE.                                       !!
+!!                                                                   !!
+!! AMoRE is free software: you can redistribute it and/or modify     !!
+!! it under the terms of the GNU General Public License as published !!
+!! by the Free Software Foundation, either version 3 of the License, !!
+!! or (at your option) any later version.                            !!
+!!                                                                   !!
+!! AMoRE is distributed in the hope that it will be useful,          !!
+!! but WITHOUT ANY WARRANTY; without even the implied warranty of    !!
+!! MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     !!
+!! GNU General Public License for more details.                      !!
+!!                                                                   !!
+!! You should have received a copy of the GNU General Public License !!
+!! along with AMoRE. If not, see <https://www.gnu.org/licenses/>.    !!
+!!                                                                   !!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!! Initial commit written by Michaël J TOUATI - Oct. 2015
 module transport_coef
 
 use constants
@@ -533,11 +556,11 @@ real(PR), dimension(:,:), allocatable, intent(out) :: eta_tab
 integer, intent(out)                               :: N_eta_tab
 integer                                            :: reason, i
 character                                          :: str
-! Find the number of lines in the file 'source/resistivity_tab.dat' and allocate the
+! Find the number of lines in the file 's/resistivity_tab.dat' and allocate the
 ! table eta_tab :
 reason = 0
 i = -2
-open (unit=50,file='source/resistivity_tab.dat',form='formatted',status='unknown')      
+open (unit=50,file='sources/resistivity_tab.dat',form='formatted',status='unknown')      
 do while (reason==0)
 read(50,*,IOSTAT=Reason) str
 i = i + 1
@@ -546,9 +569,9 @@ end do
 close(50)
 N_eta_tab = i
 allocate(eta_tab(1:N_eta_tab,1:2))
-!  Read the file 'source/resistivity_tab.dat' and define the table eta_tab with the 
+!  Read the file 'sources/resistivity_tab.dat' and define the table eta_tab with the 
 !  corresponding values
-open (unit=40,file='source/resistivity_tab.dat',form='formatted',status='unknown')      
+open (unit=40,file='sources/resistivity_tab.dat',form='formatted',status='unknown')      
 read(40,*)
 do i =1,N_eta_tab,1
 read(40,*) eta_tab(i,1),eta_tab(i,2)

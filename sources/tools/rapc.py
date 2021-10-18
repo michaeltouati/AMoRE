@@ -1,7 +1,29 @@
+#######################################################################
+##                                                                   ##
+## Angular Momentum Model Of Relativistic Electron beam (AMoRE) code ##
+##                                                                   ##
+## Copyright © 2015 Michaël J TOUATI                                 ##
+##                                                                   ##
+## This file is part of AMoRE.                                       ##
+##                                                                   ##
+## AMoRE is free software: you can redistribute it and/or modify     ##
+## it under the terms of the GNU General Public License as published ##
+## by the Free Software Foundation, either version 3 of the License, ##
+## or (at your option) any later version.                            ##
+##                                                                   ##
+## AMoRE is distributed in the hope that it will be useful,          ##
+## but WITHOUT ANY WARRANTY; without even the implied warranty of    ##
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     ##
+## GNU General Public License for more details.                      ##
+##                                                                   ##
+## You should have received a copy of the GNU General Public License ##
+## along with AMoRE. If not, see <https://www.gnu.org/licenses/>.    ##
+##                                                                   ##
+#######################################################################
+## Initial commit written by Michaël J TOUATI - Oct. 2015
+import math
 import numpy as np
 import matplotlib
-matplotlib.use('Qt5Agg')
-import math
 import matplotlib.pyplot as plt
 from matplotlib import cm
 import os
@@ -119,7 +141,8 @@ def read_and_plot_2D_pcolormesh(filename,N1,N2,cmap,title,name,log):
 			p.append(float(array[3]))
 		counter = counter + 1
 		if counter % N3 == 0:
-			time = int(float(array[0]))
+			time = int(100.*float(array[0]))/100.
+			print('-at t = '+str(time)+' fs')
 			N = int(counter / N3)
 			val=max(abs(np.amax(p[(N-1)*N3:N*N3])),abs(np.amin(p[(N-1)*N3:N*N3])))
 			if (val != 0.) and (log!=1):
@@ -190,7 +213,8 @@ def read_and_plot_2D_pcolormesh_abs(filenamez,filenamex,N1,N2,cmap,title,name):
 		pz.append(float(arrayz[3]))
 		counter = counter + 1
 		if counter % N3 == 0:
-			time = int(float(arrayz[0]))
+			time = int(100.*float(arrayz[0]))/100.
+			print('-at t = '+str(time)+' fs')
 			N = int(counter/N3)
 			for l in range(0,N3):
 				linex  = filex.readline()
@@ -203,7 +227,7 @@ def read_and_plot_2D_pcolormesh_abs(filenamez,filenamex,N1,N2,cmap,title,name):
 					X[i][k]= x[(N-1)*N3+i*N2+k]
 					p[i][k]= np.sqrt((pz[(N-1)*N3+i*N2+k]**2.)+(px[(N-1)*N3+i*N2+k]**2.))
 			Maxval = np.matrix(p).max()
-			Power=math.floor(np.log(Maxval)/np.log(10.))
+			Power=np.int(np.log(Maxval)/np.log(10.))
 			P = p / (10.**Power)
 			cmap = plt.get_cmap(cmap)
 			norm = cm.colors.Normalize(vmax=np.matrix(P).max(), vmin=np.matrix(P).min())
