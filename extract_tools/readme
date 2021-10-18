@@ -1,7 +1,7 @@
 In order to plot the simulation results, just type :
-
-$python3 extract_tools/extract_maps.py
-
+```sh
+python3 extract_tools/extract_maps.py
+```
 and simularly for 
 - extract_materials.py
 - extract_distribution.py
