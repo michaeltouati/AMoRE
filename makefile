@@ -28,19 +28,20 @@
 ######################
 ######################
 
-#F90 = ifort
+F90 = ifort
 
 ##########
 # openMP #
 ##########
 
-#OPTS = -O3 -openmp -openmp-report2 -r8
+# OPTS = -O3 -fopenmp -r8
+OPTS = -O2 -fopenmp
 
 #########
 # debug #
 #########
 
-# OPTS = -O -g -debug all -debug-parameters all -C -openmp -openmp-report2
+# OPTS = -O -g -debug all -debug-parameters all -C -fopenmp
 # OPTS = -g -traceback -fopenmp -r8 -std95 -fpe0 -debug all -debug-parameters all -C
 
 ################
@@ -50,14 +51,14 @@
 ################
 
 # F90 = mpif90
-F90 = gfortran
+# F90 = gfortran
 
 ##########
 # openMP #
 ##########
 
 #OPTS = -O3 -fopenmp -fdefault-real-8
-OPTS = -O2 -fopenmp
+# OPTS = -O2 -fopenmp
 
 #########
 # debug #
@@ -99,6 +100,15 @@ amore : $(OBJTS)
 
 %.o : $(SRC_PATH)%.f90
 	$(F90) $(OPTS) -c $(SRC_PATH)$*.f90
+
+#############
+#############
+## Running ##
+#############
+#############
+
+run :
+	@./amore
 
 ##############
 ##############

@@ -498,94 +498,96 @@ end subroutine diagnose_energy
 !=========================================================================================
 
 subroutine energy_balance(diag_condition, N_t, time, d_t, norm, eps_a, phi_n,&
-p_depos, p_lost_col, p_lost_res, E_x, E_z, B_y_n,&
-U_e, U_b, U_d, U_d_col, U_d_res, U_el, U_ma,&
-U_sf, U_sb, U_su, U_sd)
-! input :      diag_condition = logical ensuring that the energy balance is printed
-!                               in the console every Delta_t_diag
-!              N_t            = time iteration
-!              time           = time in (fs)
-!              d_t            = time step in (fs)
-!              norm           = coefficient of normalization for the distribution function
-!                               in (/cm^3/keV)
-!              eps_a          = array containing the kinetic energy grid in (keV)
-!              phi_n          = table containing the 0th and 1st order angular moment 
-!                               components of the distribution function in ()
-!              p_depos        = table containing the density of power deposited on 
-!                               at t = time in (erg/cm^3/s)
-!              p_lost_col    = table containing the density of power lost by the fast e-
-!                              beam due to collisions in (erg/cm^3/s)
-!              p_lost_res    = table containing the density of power lost by the fast e-
-!                              beam due to the self-generated electric field 
-!                              in (erg/cm^3/s)
-!              E_x           = table containing the self-generated electric field 
-!                              component on the x-axis in (statVolt/cm)
-!              E_z           = table containing the self-generated electric field 
-!                              component on the z-axis in (statVolt/cm)
-!              B_y_n         = table containing the self-generated magnetic field 
-!                              component on the x-axis in (gauss)
-! in(out)put : Ue    = injected fast e- beam energy at time t in (J)
-!              Ub    = instantaneous beam energy in the simulation box at time t in (J)
-!              Udcol = time integrated energy lost by fast e- due to collisions at t=time
-!                      in (J) 
-!              Udres = time integrated energy lost by fast e- due to electric fields at 
-!                      t = time in (J)
-!              Uel   = instantaneous electric energy in the simulation box at t=time in (J)
-!              Uma   = instantaneous magnetic energy in the simulation box at t=time in (J)
-!              Usf   = time integrated fast e- beam energy escaping from the simulation box
-!                      at z = L_z at time t in (J)
-!              Usb   = time integrated fast e- beam energy escaping from the simulation box
-!                      at z = 0 at t=time in (J)
-!              Usu   = time integrated fast e- beam energy escaping from the simulation box
-!                      at x = +L_x/2 at t=time in (J)
-!              Usd   = time integrated fast e- beam energy escaping from the simulation box
-!                      at x = -L_x/2 at t=time in (J)
-implicit none
-logical, intent(in)                                                      :: diag_condition
-integer, intent(in)                                                      :: N_t
-real(PR), intent(in)                                                     :: time, d_t, norm
-real(PR), dimension(1:N_eps), intent(in)                                 :: eps_a
-real(PR), dimension(forward:backward,psi0:psi1z,-1:N_x+2,-1:N_z+2,-1:N_eps+2), intent(in) :: phi_n
-real(PR), dimension(1:N_x,1:N_z), intent(in)                             :: p_depos, p_lost_col, p_lost_res
-real(PR), dimension(1:N_x,1:N_z), intent(in)                             :: E_x, E_z, B_y_n
-real(PR), intent(inout)                                                  :: U_e, U_b, U_d
-real(PR), intent(inout)                                                  :: U_d_col, U_d_res, U_el, U_ma
-real(PR), intent(inout)                                                  :: U_sf, U_sb, U_su, U_sd
-integer                                                                  :: m,l
-real(PR)                                                                 :: error
-do m=forward,backward,1
-do l=1,N_eps,1
-U_b     = U_b + sum(phi_n(m,psi0,1:N_x,1:N_z,l)) * d_x * sim_box_thickness * d_z * (microns**2_PR) &
-* (eps_a(l)*keV) * d_eps * norm / Joules 
-end do   
-end do
-U_d     = U_d     + sum(p_depos)    * d_x *  sim_box_thickness*d_z*((microns)**2._PR)*d_t*fs/Joules
-U_d_col = U_d_col + sum(p_lost_col) * d_x *  sim_box_thickness*d_z*((microns)**2._PR)*d_t*fs/Joules
-U_d_res = U_d_res + sum(p_lost_res) * d_x *  sim_box_thickness*d_z*((microns)**2._PR)*d_t*fs/Joules
-U_el    = (sum(E_x**2._PR+E_z**2._PR)/ 2._PR)*d_x*sim_box_thickness*d_z*((microns)**2._PR)/Joules 
-U_ma    = (sum(B_y_n**2._PR)/ 2._PR) *d_x*sim_box_thickness*d_z*((microns)**2._PR)/Joules 
-! Print in the console :
-if (diag_condition) then
-print *, '======================================'
-print *, 't (fs) =', time
-print *, '( Number of iterations :',N_t,')'
-print *, '======================================'
-print*, 'Time integrated injected energy         (J)', U_e
-print*, 'Instantaneous beam energy               (J)', U_b
-print*, 'Energy deposited                        (J)', U_d
-print*, 'Energy lost due to collisions           (J)', U_d_col
-print*, '...         due to Ohmic heating        (J)', U_d_res
-print*, 'Instantaneous electric energy           (J)', U_el
-print*, 'Instantaneous magnetic energy           (J)', U_ma
-print*, 'Time integrated escaped energy forward  (J)', U_sf
-print*, 'Time integrated escaped energy backward (J)', U_sb
-print*, 'Time integrated escaped energy upward   (J)', U_su
-print*, 'Time integrated escaped energy downward (J)', U_sd
-error = 100._PR*((U_e-(U_b+U_d_col+U_d_res+U_sf+U_sb+U_el+U_ma+U_su+U_sd))/U_e)
-print*, '=> ENERGY CONSERVATION ERROR =', error, '%'
-end if
-! write in txt files :
-call diagnose_energy(time, U_e, U_b, U_d_col, U_d_res, U_el, U_ma, U_sf, U_sb, U_su, U_sd)
+  p_depos, p_lost_col, p_lost_res, E_x, E_z, B_y_n,&
+  U_e, U_b, U_d, U_d_col, U_d_res, U_el, U_ma,&
+  U_sf, U_sb, U_su, U_sd)
+  ! input :      diag_condition = logical ensuring that the energy balance is printed
+  !                               in the console every Delta_t_diag
+  !              N_t            = time iteration
+  !              time           = time in (fs)
+  !              d_t            = time step in (fs)
+  !              norm           = coefficient of normalization for the distribution function
+  !                               in (/cm^3/keV)
+  !              eps_a          = array containing the kinetic energy grid in (keV)
+  !              phi_n          = table containing the 0th and 1st order angular moment 
+  !                               components of the distribution function in ()
+  !              p_depos        = table containing the density of power deposited on 
+  !                               at t = time in (erg/cm^3/s)
+  !              p_lost_col    = table containing the density of power lost by the fast e-
+  !                              beam due to collisions in (erg/cm^3/s)
+  !              p_lost_res    = table containing the density of power lost by the fast e-
+  !                              beam due to the self-generated electric field 
+  !                              in (erg/cm^3/s)
+  !              E_x           = table containing the self-generated electric field 
+  !                              component on the x-axis in (statVolt/cm)
+  !              E_z           = table containing the self-generated electric field 
+  !                              component on the z-axis in (statVolt/cm)
+  !              B_y_n         = table containing the self-generated magnetic field 
+  !                              component on the x-axis in (gauss)
+  ! in(out)put : Ue    = injected fast e- beam energy at time t in (J)
+  !              Ub    = instantaneous beam energy in the simulation box at time t in (J)
+  !              Udcol = time integrated energy lost by fast e- due to collisions at t=time
+  !                      in (J) 
+  !              Udres = time integrated energy lost by fast e- due to electric fields at 
+  !                      t = time in (J)
+  !              Uel   = instantaneous electric energy in the simulation box at t=time in (J)
+  !              Uma   = instantaneous magnetic energy in the simulation box at t=time in (J)
+  !              Usf   = time integrated fast e- beam energy escaping from the simulation box
+  !                      at z = L_z at time t in (J)
+  !              Usb   = time integrated fast e- beam energy escaping from the simulation box
+  !                      at z = 0 at t=time in (J)
+  !              Usu   = time integrated fast e- beam energy escaping from the simulation box
+  !                      at x = +L_x/2 at t=time in (J)
+  !              Usd   = time integrated fast e- beam energy escaping from the simulation box
+  !                      at x = -L_x/2 at t=time in (J)
+  implicit none
+  logical, intent(in)                                                      :: diag_condition
+  integer, intent(in)                                                      :: N_t
+  real(PR), intent(in)                                                     :: time, d_t, norm
+  real(PR), dimension(1:N_eps), intent(in)                                 :: eps_a
+  real(PR), dimension(forward:backward,psi0:psi1z,-1:N_x+2,-1:N_z+2,-1:N_eps+2), intent(in) :: phi_n
+  real(PR), dimension(1:N_x,1:N_z), intent(in)                             :: p_depos, p_lost_col, p_lost_res
+  real(PR), dimension(1:N_x,1:N_z), intent(in)                             :: E_x, E_z, B_y_n
+  real(PR), intent(inout)                                                  :: U_e, U_b, U_d
+  real(PR), intent(inout)                                                  :: U_d_col, U_d_res, U_el, U_ma
+  real(PR), intent(inout)                                                  :: U_sf, U_sb, U_su, U_sd
+  integer                                                                  :: m,l
+  real(PR)                                                                 :: U_s, error
+  do m=forward,backward,1
+    do l=1,N_eps,1
+      U_b     = U_b + sum(phi_n(m,psi0,1:N_x,1:N_z,l)) * d_x * sim_box_thickness * d_z * (microns**2_PR) &
+      * (eps_a(l)*keV) * d_eps * norm / Joules 
+    end do   
+  end do
+  U_d     = U_d     + sum(p_depos)    * d_x *  sim_box_thickness*d_z*((microns)**2._PR)*d_t*fs/Joules
+  U_d_col = U_d_col + sum(p_lost_col) * d_x *  sim_box_thickness*d_z*((microns)**2._PR)*d_t*fs/Joules
+  U_d_res = U_d_res + sum(p_lost_res) * d_x *  sim_box_thickness*d_z*((microns)**2._PR)*d_t*fs/Joules
+  U_el    = (sum(E_x**2._PR+E_z**2._PR)/ 2._PR)*d_x*sim_box_thickness*d_z*((microns)**2._PR)/Joules 
+  U_ma    = (sum(B_y_n**2._PR)/ 2._PR) *d_x*sim_box_thickness*d_z*((microns)**2._PR)/Joules 
+  U_s     = U_sf+U_sb+U_su+U_sd
+  error   = 100._PR*((U_e-(U_b+U_d_col+U_d_res+U_s+U_el+U_ma))/U_e)
+  ! Print in the console :
+  if (diag_condition) then
+    write(*,*)'=========================='
+    write(*,'(A,1E21.14,A)')'t =', time, ' fs'
+    write(*,'(A,1I12,A)')'( iteration :',N_t,' )'
+    write(*,*)'=========================='
+    write(*,'(A,1E21.14,A)')'* Time integrated injected energy =', U_e, ' J'
+    write(*,'(A,1E21.14,A)')'* Instantaneous beam energy       =', U_b, ' J'
+    write(*,'(A,1E21.14,A)')'* Energy deposited :              =', U_d, ' J'
+    write(*,'(A,1E21.14,A)')'   * due to collisions            =', U_d_col, ' J'
+    write(*,'(A,1E21.14,A)')'   * due to Ohmic heating         =', U_d_res, ' J'
+    write(*,'(A,1E21.14,A)')'* Instantaneous electric energy   =', U_el, ' J'
+    write(*,'(A,1E21.14,A)')'* Instantaneous magnetic energy   =', U_ma, ' J'
+    write(*,'(A,1E21.14,A)')'* Time integrated escaped energy  =', U_sf, ' J'
+    write(*,'(A,1E21.14,A)')'   * forward                      =', U_sf, ' J'
+    write(*,'(A,1E21.14,A)')'   * backward                     =', U_sb, ' J'
+    write(*,'(A,1E21.14,A)')'   * upward                       =', U_su, ' J'
+    write(*,'(A,1E21.14,A)')'   * downward                     =', U_sd, ' J'
+    write(*,'(A,1F6.2,A)')  '-> ENERGY CONSERVATION ERROR      =', error, ' %'
+  end if
+  ! write in txt files :
+  call diagnose_energy(time, U_e, U_b, U_d_col, U_d_res, U_el, U_ma, U_sf, U_sb, U_su, U_sd)
 end subroutine energy_balance
 
 !=========================================================================================
