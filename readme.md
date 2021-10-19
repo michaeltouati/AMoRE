@@ -27,7 +27,7 @@ make plot
 ```
 to plot all the simulation results that are stored in the directory 'diag'. It can also be plotted separately all 2D spatial density plots of relativistic electron beam and target species hydrodynamic moments as well as the self-generated electromagnetic fields and target transport coefficients at each damped time step by typing
 ```sh
-make plot_maps.py
+make plot_maps
 ```
 or
 ```sh
@@ -35,18 +35,18 @@ python3 sources/tools/plot_maps.py
 ```
 Similarly, the relativistic beam electron 2D-3P phase-space distribution can be plotted at the maximum beam density location and at each damped time step by typing
 ```sh
-make plot_maps.py
+make plot_maps
 ```
 The simulation can be checked by typing
 ```sh
-make plot_initialization.py
+make plot_initialization
 ```
 ```sh
-make plot_material.py
+make plot_material
 ```
 and
 ```sh
-make plot_energy.py
+make plot_energy
 ```
 that plots respectively :
 * the initialiazed properties of the relativistic electron beam (longitudinal and transversal spatial distributions, momentum angular distribution as a function of transverse locations and kinetic energy spectrum),
