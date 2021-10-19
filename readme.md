@@ -1,6 +1,6 @@
 ## Written by Michaël J TOUATI
 
-Angular Momentum model Of Relativistic Electron beam transport ([AMoRE](https://github.com/michaeltouati/AMoRE)) is a Fortran code parallelized using OpenMP for fast simulations of laser-generated relativistic electron beam transport in solid or dense plasma targets. It computes the two first angular moments of the relativistic Vlasov-Fokker-Planck-Belaiev-Budker kinetic equation completed with the Minerbo maximum angular entropy closure and coupled with target Magneto-Hydrodynamic equations considering time scales during which the return current has already set up. It thus takes into account both collective effects, with the self-generated electromagnetic fields, and collisional effects, with the slowing down of beam electrons in collisions with plasmons, bound and free electrons and their angular scattering on both ions and electrons. [AMoRE](https://github.com/michaeltouati/AMoRE) allows for fast computations while also describing the relativistic beam electron 2D-3P phase-space evolution. More pieces of information can be found in my [PhD manuscript](https://tel.archives-ouvertes.fr/tel-01238782/document) and in this [peer-reviewed article](https://iopscience.iop.org/article/10.1088/1367-2630/16/7/073014/pdf). Citations to these references are recommended and appreciated for publications of scientific results using AMoRE in peer-reviewed journals. 
+[AMoRE](https://github.com/michaeltouati/AMoRE) (Angular Momentum model Of Relativistic Electron beam transport) is a unique Fortran code parallelized using OpenMP allowing for fast simulations of relativistic electron beam transport in solid or dense plasma targets while describing the full relativistic beam electron phase-space evolution. It computes the two first angular moments of the relativistic beam electrons Vlasov-Fokker-Planck-Belaiev-Budker kinetic equation, completed with the Minerbo maximum angular entropy closure, that is coupled with the target electrons and ions Magneto-Hydrodynamic equations considering time scales on which the return current has already set up. It thus takes into account both collective effects, with the self-generated electromagnetic fields, and collisional effects, with the slowing down of beam electrons in collisions with plasmons, bound and free electrons and their angular scattering on both ions and electrons. More pieces of information can be found in my [PhD manuscript](https://tel.archives-ouvertes.fr/tel-01238782/document) and in this [peer-reviewed article](https://iopscience.iop.org/article/10.1088/1367-2630/16/7/073014/pdf). Citations to these references are appreciated for publications of scientific results using AMoRE in peer-reviewed journals. 
 
 # Compiling the code
 
@@ -21,30 +21,29 @@ Type
 ```sh
 make plot
 ```
-to plot all the simulation results automatically. It can also be plotted separately
-all 2D density plots of the relativistic electron beam and target species hydrodynamic moments as well as the self-generated electromagnetic fields and target  transport coefficients at the damped time steps by typing
+to plot all the simulation results that are stored in the directory 'diag'. It can also be plotted separately all 2D spatial density plots of relativistic electron beam and target species hydrodynamic moments as well as the self-generated electromagnetic fields and target transport coefficients at each damped time step by typing
 ```sh
-python3 sources/tools/extract_maps.py
+python3 sources/tools/plot_maps.py
 ```
-Similarly, the relativistic beam electron 2D-3P phase-space distribution can be plotted at the maximum beam density location and damped time steps by typing
+Similarly, the relativistic beam electron 2D-3P phase-space distribution can be plotted at the maximum beam density location and at each damped time step by typing
 ```sh
-python3 sources/tools/extract_distribution.py
+python3 sources/tools/plot_distribution.py
 ```
-and the simulation can be checked by typing 
+The simulation can be checked by typing 
 ```sh
-python3 sources/tools/extract_initialization.py
+python3 sources/tools/plot_initialization.py
 ```
 ```sh
-python3 sources/tools/extract_material.py
+python3 sources/tools/plot_material.py
 ```
 and
 ```sh
-python3 sources/tools/extract_energy.py
+python3 sources/tools/plot_energy.py
 ```
 that plots respectively :
-* the initial properties of the relativistic electron beam (longitudinal and transversal spatial distribution, momentum angular distribution and kinetic energy spectrum),
-* the transport coefficients of the medium where the beam is propagating through (ionization state, thermal capacities, electrical and thermal conductivities as well as electron-ion/lattice coupling factor) and 
-* the time evolution of the different energy contributions during the beam transport (injected electron beam energy, collisional and collective electron beam energy losses, instantaneous electron beam energy propagating in the medium and escaped electron beam energy). 
+* the initialiazed properties of the relativistic electron beam (longitudinal and transversal spatial distributions, momentum angular distribution as a function of transverse locations and kinetic energy spectrum),
+* the transport coefficients of the solid/liquid/Warm-Dense-Matter/plasma where the beam is propagating through (ionization state, thermal capacities, electrical and thermal conductivities as well as electron-ion/lattice coupling factor) and 
+* the time evolution of the different energy contributions in the beam transport (injected electron beam energy, collisional and collective electron beam energy losses, instantaneous electron beam energy in the target and electron beam energy escaping from the target). 
 
-The python scripts used to make the plots are located in the directory [sources/tools](https://github.com/michaeltouati/AMoRE/tree/main/sources/tools).
+The python scripts are located in the directory [sources/tools](https://github.com/michaeltouati/AMoRE/tree/main/sources/tools).
 The plots will be located in the directory 'figures'.
