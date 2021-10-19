@@ -23,6 +23,7 @@
 !! Initial commit written by Michaël J TOUATI - Oct. 2015
 module physics_library
 
+use acuracy
 use constants
 
 implicit none

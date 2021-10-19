@@ -23,6 +23,7 @@
 !! Initial commit written by Michaël J TOUATI - Oct. 2015
 module EM_fields
 
+use acuracy
 use constants
 use transport_coef
 use input

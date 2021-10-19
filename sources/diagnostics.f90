@@ -23,6 +23,7 @@
 !! Initial commit written by Michaël J TOUATI - Oct. 2015
 module diagnostics
 
+use acuracy
 use constants
 use physics_library
 use Fokker_Planck_coef
@@ -233,18 +234,18 @@ A  = A_Ta
 Z  = Z_Ta
 end select
 end select
-call system('mkdir -p diag')
-open (unit=1,file ="diag/zeffvsTe[eV].dat"                           ,form='formatted',status='unknown')
-open (unit=2,file ="diag/electron_capacity[SI]vsTe[eV].dat"          ,form='formatted',status='unknown')
-open (unit=3,file ="diag/ion_capacity[SI]vsTe[eV].dat"               ,form='formatted',status='unknown')
-open (unit=4,file ="diag/resistivity[SI]vsTe[eV]_Te_eq_Ti.dat"       ,form='formatted',status='unknown')
-open (unit=7,file ="diag/resistivity[SI]vsTe[eV]_Ti_eq_Tamb.dat"     ,form='formatted',status='unknown')
-open (unit=8,file ="diag/conductivity[SI]vsTe[eV]_Te_eq_Ti.dat"      ,form='formatted',status='unknown')
-open (unit=9,file ="diag/conductivity[SI]vsTe[eV]_Ti_eq_Tamb.dat"    ,form='formatted',status='unknown')
-open (unit=10,file="diag/G[SI]vsTe[eV]_Te_eq_Ti.dat"                 ,form='formatted',status='unknown')
-open (unit=11,file="diag/G[SI]vsTe[eV]_Ti_eq_Tamb.dat"               ,form='formatted',status='unknown')
-open (unit=12,file="diag/ang_coll_rate[s-1]vsEps[keV].dat"           ,form='formatted',status='unknown')
-open (unit=13,file="diag/stopping_power[keV_Microns-1]vsEps[keV].dat",form='formatted',status='unknown')
+call system('mkdir -p results/'//trim(simu))
+open (unit=1,file ='results/'//trim(simu)//'/zeffvsTe[eV].dat'                           ,form='formatted',status='unknown')
+open (unit=2,file ='results/'//trim(simu)//'/electron_capacity[SI]vsTe[eV].dat'          ,form='formatted',status='unknown')
+open (unit=3,file ='results/'//trim(simu)//'/ion_capacity[SI]vsTe[eV].dat'               ,form='formatted',status='unknown')
+open (unit=4,file ='results/'//trim(simu)//'/resistivity[SI]vsTe[eV]_Te_eq_Ti.dat'       ,form='formatted',status='unknown')
+open (unit=7,file ='results/'//trim(simu)//'/resistivity[SI]vsTe[eV]_Ti_eq_Tamb.dat'     ,form='formatted',status='unknown')
+open (unit=8,file ='results/'//trim(simu)//'/conductivity[SI]vsTe[eV]_Te_eq_Ti.dat'      ,form='formatted',status='unknown')
+open (unit=9,file ='results/'//trim(simu)//'/conductivity[SI]vsTe[eV]_Ti_eq_Tamb.dat'    ,form='formatted',status='unknown')
+open (unit=10,file='results/'//trim(simu)//'/G[SI]vsTe[eV]_Te_eq_Ti.dat'                 ,form='formatted',status='unknown')
+open (unit=11,file='results/'//trim(simu)//'/G[SI]vsTe[eV]_Ti_eq_Tamb.dat'               ,form='formatted',status='unknown')
+open (unit=12,file='results/'//trim(simu)//'/ang_coll_rate[s-1]vsEps[keV].dat'           ,form='formatted',status='unknown')
+open (unit=13,file='results/'//trim(simu)//'/stopping_power[keV_Microns-1]vsEps[keV].dat',form='formatted',status='unknown')
 do i=-2000,4000
 T= (10._PR**(1.e-3_PR*i)) * eV 
 Zf = zeff(Z,ni,T)
@@ -310,11 +311,10 @@ real(PR), dimension(1:N_theta)       :: theta
 real(PR), dimension(1:N_x,1:N_theta) :: dN_dtheta
 !
 ! Create and or Open Files where data will be stored 
-call system('mkdir -p diag')
-open (unit=1,file ="diag/fast_electron_spectrum.dat"     ,form='formatted',status='unknown')
-open (unit=2,file ="diag/fast_electron_angular_distr.dat",form='formatted',status='unknown')
-open (unit=3,file ="diag/fast_electron_spatial_distr.dat",form='formatted',status='unknown')
-open (unit=4,file ="diag/fast_electron_temporal_distr.dat",form='formatted',status='unknown')
+open (unit=1,file ='results/'//trim(simu)//'/fast_electron_spectrum.dat'     ,form='formatted',status='unknown')
+open (unit=2,file ='results/'//trim(simu)//'/fast_electron_angular_distr.dat',form='formatted',status='unknown')
+open (unit=3,file ='results/'//trim(simu)//'/fast_electron_spatial_distr.dat',form='formatted',status='unknown')
+open (unit=4,file ='results/'//trim(simu)//'/fast_electron_temporal_distr.dat',form='formatted',status='unknown')
 ! Fast Electron Kinetic Energy Spectrum
 delta = epsa(2) - epsa(1)
 do l=1,N_eps,1
@@ -353,7 +353,7 @@ end do
 ! Fast Electron Spatial Distribution
 delta = xa(2) - xa(1)
 do i=1,N_x,1
-dN_dx(i) = function_space(shape,xa(i))
+dN_dx(i) = function_space(xa(i))
 end do
 dN_dx = dN_dx / (sum(dN_dx(1:N_x))*delta)
 do i=1,N_x,1
@@ -364,7 +364,7 @@ N_tt = int(L_t / dtt)
 allocate(tt(1:N_tt),dN_dtt(1:N_tt))
 do n=1,N_tt,1
 tt(n) = (real(n)-1.)*dtt
-dN_dtt(n) = function_time(shape,1._PR, tt(n))
+dN_dtt(n) = function_time(1._PR, tt(n))
 end do
 dN_dtt = dN_dtt / sum(dN_dtt(:))
 do n=1,N_tt,1
@@ -397,41 +397,41 @@ subroutine initialize_diagnostics(Kalphatab)
 implicit none
 real(PR), dimension(1:79,1:7), intent(out) :: Kalphatab
 integer                                    :: i
-open (unit=10 ,file='diag/psi0_z[cm-3_keV-1].dat'     ,form='formatted',status='unknown')
-open (unit=11 ,file='diag/psi1x_z[cm-3_keV-1].dat'    ,form='formatted',status='unknown')
-open (unit=12,file='diag/psi1z_z[cm-3_keV-1].dat'     ,form='formatted',status='unknown')
-open (unit=13,file='diag/psi0_x[cm-3_keV-1].dat'      ,form='formatted',status='unknown')
-open (unit=14,file='diag/psi1x_x[cm-3_keV-1].dat'     ,form='formatted',status='unknown')
-open (unit=15,file='diag/psi1z_x[cm-3_keV-1].dat'     ,form='formatted',status='unknown')
-open (unit=20,file='diag/nb[cm-3].dat'                ,form='formatted',status='unknown')
-open (unit=21,file='diag/jb_x[A_cm-2].dat'            ,form='formatted',status='unknown')
-open (unit=22,file='diag/jb_z[A_cm-2].dat'            ,form='formatted',status='unknown')
-open (unit=23,file='diag/E_x[V_m-1].dat'              ,form='formatted',status='unknown')
-open (unit=24,file='diag/E_z[V_m-1].dat'              ,form='formatted',status='unknown')
-open (unit=25,file='diag/B_y[Tesla].dat'              ,form='formatted',status='unknown')
-open (unit=26,file='diag/We[erg_s-1_cm-3].dat'        ,form='formatted',status='unknown')
-open (unit=27,file='diag/Te[eV].dat'                  ,form='formatted',status='unknown')
-open (unit=28,file='diag/Wi[erg_s-1_cm-3].dat'        ,form='formatted',status='unknown')
-open (unit=29,file='diag/Ti[eV].dat'                  ,form='formatted',status='unknown')
-open (unit=30,file='diag/resis[Ohm.m].dat'            ,form='formatted',status='unknown')
-open (unit=31,file='diag/Kappa_e[erg_m-1_K-1_s-1].dat',form='formatted',status='unknown')
-open (unit=32,file='diag/K_shell_ioniz_rate_[s-1].dat',form='formatted',status='unknown')
-open (unit=33,file='diag/n_Kalpha[cm-3].dat'          ,form='formatted',status='unknown')
-open (unit=34,file='diag/n_Kbeta[cm-3].dat'           ,form='formatted',status='unknown')
-open (unit=35,file='diag/ni[cm-3].dat'                ,form='formatted',status='unknown')
-open (unit=40,file='diag/U_e[J].dat'                  ,form='formatted',status='unknown')
-open (unit=41,file='diag/U_b[J].dat'                  ,form='formatted',status='unknown')
-open (unit=42,file='diag/Ud_col[J].dat'               ,form='formatted',status='unknown')
-open (unit=43,file='diag/Ud_res[J].dat'               ,form='formatted',status='unknown')
-open (unit=44,file='diag/U_el[J].dat'                 ,form='formatted',status='unknown')
-open (unit=45,file='diag/U_ma[J].dat'                 ,form='formatted',status='unknown')
-open (unit=46,file='diag/U_sf[J].dat'                 ,form='formatted',status='unknown')
-open (unit=47,file='diag/U_sb[J].dat'                 ,form='formatted',status='unknown')
-open (unit=48,file='diag/U_su[J].dat'                 ,form='formatted',status='unknown')
-open (unit=49,file='diag/U_sd[J].dat'                 ,form='formatted',status='unknown')
-open (unit=50,file='diag/ne[cm-3].dat'                ,form='formatted',status='unknown')
-open (unit=52,file='diag/je_x[A_cm-2].dat'            ,form='formatted',status='unknown')
-open (unit=53,file='diag/je_z[A_cm-2].dat'            ,form='formatted',status='unknown')
+open (unit=10 ,file='results/'//trim(simu)//'/psi0_z[cm-3_keV-1].dat'     ,form='formatted',status='unknown')
+open (unit=11 ,file='results/'//trim(simu)//'/psi1x_z[cm-3_keV-1].dat'    ,form='formatted',status='unknown')
+open (unit=12,file='results/'//trim(simu)//'/psi1z_z[cm-3_keV-1].dat'     ,form='formatted',status='unknown')
+open (unit=13,file='results/'//trim(simu)//'/psi0_x[cm-3_keV-1].dat'      ,form='formatted',status='unknown')
+open (unit=14,file='results/'//trim(simu)//'/psi1x_x[cm-3_keV-1].dat'     ,form='formatted',status='unknown')
+open (unit=15,file='results/'//trim(simu)//'/psi1z_x[cm-3_keV-1].dat'     ,form='formatted',status='unknown')
+open (unit=20,file='results/'//trim(simu)//'/nb[cm-3].dat'                ,form='formatted',status='unknown')
+open (unit=21,file='results/'//trim(simu)//'/jb_x[A_cm-2].dat'            ,form='formatted',status='unknown')
+open (unit=22,file='results/'//trim(simu)//'/jb_z[A_cm-2].dat'            ,form='formatted',status='unknown')
+open (unit=23,file='results/'//trim(simu)//'/E_x[V_m-1].dat'              ,form='formatted',status='unknown')
+open (unit=24,file='results/'//trim(simu)//'/E_z[V_m-1].dat'              ,form='formatted',status='unknown')
+open (unit=25,file='results/'//trim(simu)//'/B_y[Tesla].dat'              ,form='formatted',status='unknown')
+open (unit=26,file='results/'//trim(simu)//'/We[erg_s-1_cm-3].dat'        ,form='formatted',status='unknown')
+open (unit=27,file='results/'//trim(simu)//'/Te[eV].dat'                  ,form='formatted',status='unknown')
+open (unit=28,file='results/'//trim(simu)//'/Wi[erg_s-1_cm-3].dat'        ,form='formatted',status='unknown')
+open (unit=29,file='results/'//trim(simu)//'/Ti[eV].dat'                  ,form='formatted',status='unknown')
+open (unit=30,file='results/'//trim(simu)//'/resis[Ohm.m].dat'            ,form='formatted',status='unknown')
+open (unit=31,file='results/'//trim(simu)//'/Kappa_e[erg_m-1_K-1_s-1].dat',form='formatted',status='unknown')
+open (unit=32,file='results/'//trim(simu)//'/K_shell_ioniz_rate_[s-1].dat',form='formatted',status='unknown')
+open (unit=33,file='results/'//trim(simu)//'/n_Kalpha[cm-3].dat'          ,form='formatted',status='unknown')
+open (unit=34,file='results/'//trim(simu)//'/n_Kbeta[cm-3].dat'           ,form='formatted',status='unknown')
+open (unit=35,file='results/'//trim(simu)//'/ni[cm-3].dat'                ,form='formatted',status='unknown')
+open (unit=40,file='results/'//trim(simu)//'/U_e[J].dat'                  ,form='formatted',status='unknown')
+open (unit=41,file='results/'//trim(simu)//'/U_b[J].dat'                  ,form='formatted',status='unknown')
+open (unit=42,file='results/'//trim(simu)//'/Ud_col[J].dat'               ,form='formatted',status='unknown')
+open (unit=43,file='results/'//trim(simu)//'/Ud_res[J].dat'               ,form='formatted',status='unknown')
+open (unit=44,file='results/'//trim(simu)//'/U_el[J].dat'                 ,form='formatted',status='unknown')
+open (unit=45,file='results/'//trim(simu)//'/U_ma[J].dat'                 ,form='formatted',status='unknown')
+open (unit=46,file='results/'//trim(simu)//'/U_sf[J].dat'                 ,form='formatted',status='unknown')
+open (unit=47,file='results/'//trim(simu)//'/U_sb[J].dat'                 ,form='formatted',status='unknown')
+open (unit=48,file='results/'//trim(simu)//'/U_su[J].dat'                 ,form='formatted',status='unknown')
+open (unit=49,file='results/'//trim(simu)//'/U_sd[J].dat'                 ,form='formatted',status='unknown')
+open (unit=50,file='results/'//trim(simu)//'/ne[cm-3].dat'                ,form='formatted',status='unknown')
+open (unit=52,file='results/'//trim(simu)//'/je_x[A_cm-2].dat'            ,form='formatted',status='unknown')
+open (unit=53,file='results/'//trim(simu)//'/je_z[A_cm-2].dat'            ,form='formatted',status='unknown')
 ! Open, read and store the file 'Kalpha_tab.dat' in the table Kalphatab :
 open (unit=51,file='sources/Kalpha_tab.dat'          ,form='formatted',status='unknown')      
 read(51,*)

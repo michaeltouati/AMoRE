@@ -26,34 +26,43 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 import os
-import rapc
+import library as lib
 
-dir= os.path.dirname("figures/")
-if not os.path.exists(dir):
-    os.mkdir(dir)
+simu_name=lib.get_results_dir()
+
+print(' --------------------')
+print(' Energies Scalar Plot')
+print(' --------------------')
+print('  ')
+
+lib.create_dir('figures/')
+subdir = 'figures/'+simu_name+'/'
+lib.create_dir(subdir)
+
+results_dir = 'results/'+simu_name+'/'
     							
 t       = []
-rapc.read_file_and_define_first_col('diag/U_e[J].dat',t)
+lib.read_file_and_define_first_col(results_dir+'U_e[J].dat',t)
 Ue      = []
-rapc.read_file_and_define_second_col('diag/U_e[J].dat',Ue)
+lib.read_file_and_define_second_col(results_dir+'U_e[J].dat',Ue)
 Ub      = []
-rapc.read_file_and_define_second_col('diag/U_b[J].dat',Ub)
+lib.read_file_and_define_second_col(results_dir+'U_b[J].dat',Ub)
 Ud_col  = []
-rapc.read_file_and_define_second_col('diag/Ud_col[J].dat', Ud_col)
+lib.read_file_and_define_second_col(results_dir+'Ud_col[J].dat', Ud_col)
 Ud_res  = []
-rapc.read_file_and_define_second_col('diag/Ud_res[J].dat', Ud_res)
+lib.read_file_and_define_second_col(results_dir+'Ud_res[J].dat', Ud_res)
 U_el    = []
-rapc.read_file_and_define_second_col('diag/U_el[J].dat',   U_el)
+lib.read_file_and_define_second_col(results_dir+'U_el[J].dat',   U_el)
 U_ma    = []
-rapc.read_file_and_define_second_col('diag/U_ma[J].dat',   U_ma)
+lib.read_file_and_define_second_col(results_dir+'U_ma[J].dat',   U_ma)
 U_sd    = []
-rapc.read_file_and_define_second_col('diag/U_sd[J].dat',   U_sd)
+lib.read_file_and_define_second_col(results_dir+'U_sd[J].dat',   U_sd)
 U_su    = []
-rapc.read_file_and_define_second_col('diag/U_su[J].dat',   U_su)
+lib.read_file_and_define_second_col(results_dir+'U_su[J].dat',   U_su)
 U_sf    = []
-rapc.read_file_and_define_second_col('diag/U_sf[J].dat',   U_sf)
+lib.read_file_and_define_second_col(results_dir+'U_sf[J].dat',   U_sf)
 U_sb    = []
-rapc.read_file_and_define_second_col('diag/U_sb[J].dat',   U_sb)
+lib.read_file_and_define_second_col(results_dir+'U_sb[J].dat',   U_sb)
 if np.amax(U_el)>0:
 	coef_el = np.floor(np.log(np.amax(Ub)/np.amax(U_el))/np.log(10))
 	coef_el = 10.**coef_el
@@ -94,5 +103,5 @@ plt.xlim([t[0],t[nn]])
 plt.ylabel('Energy (J)', fontdict=font)
 plt.yticks(fontsize=16)
 plt.ylim([Ue[0],1.1*Ue[nn]])
-fig.savefig('figures/energy_conservation.png',bbox_inches='tight')
+fig.savefig(subdir+'energy_conservation.png',bbox_inches='tight')
 plt.close(fig)

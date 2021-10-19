@@ -23,6 +23,7 @@
 !! Initial commit written by Michaël J TOUATI - Oct. 2015
 module VFP
 
+use acuracy
 use constants
 use physics_library
 use Fokker_Planck_coef

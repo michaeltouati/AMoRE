@@ -23,6 +23,7 @@
 !! Initial commit written by Michaël J TOUATI - Oct. 2015
 module transport_coef
 
+use acuracy
 use constants
 use physics_library
 use input
@@ -552,10 +553,10 @@ end function cond_H
 subroutine initialize_resistivity(eta_tab,N_eta_tab)
 ! output  : eta_tab = tabulated values the electrical resistivity if chosen by the user
 implicit none
-real(PR), dimension(:,:), allocatable, intent(out) :: eta_tab
-integer, intent(out)                               :: N_eta_tab
-integer                                            :: reason, i
-character                                          :: str
+real(PR), dimension(:,:), allocatable, intent(inout) :: eta_tab
+integer, intent(out)                                 :: N_eta_tab
+integer                                              :: reason, i
+character                                            :: str
 ! Find the number of lines in the file 's/resistivity_tab.dat' and allocate the
 ! table eta_tab :
 reason = 0

@@ -23,6 +23,7 @@
 !! Initial commit written by Michaël J TOUATI - Oct. 2015
 module initialization
 
+use acuracy
 use constants
 use physics_library
 use Fokker_Planck_coef
@@ -140,22 +141,13 @@ function_energy = spectrum_tab(eps_tab, nrj)
 end select
 end function function_energy
 
-elemental function function_space(type,r)
-! input  : type = chosen distribution shape 
-!          r = transverse position in (microns)
+elemental function function_space(r)
+! input  : r = transverse position in (microns)
 ! output : function_space = fast e- beam transverse distribution in (/cm)
 implicit none
-integer, intent(in)   :: type
 real(PR),intent(in)   :: r
 real(PR)              :: function_space
-select case (type)
-! Gaussian distribution profile
-case default
 function_space = exp(- r**2._PR/(2*(sigma_r**2._PR))) / sqrt(2._PR*pi*((sigma_r*microns)**2._PR))
-! L. Volpe hyperbolic secant distribution profile
-case (1)
-function_space = ( 1._PR / cosh( 2._PR * r / sigma_r ) ) / sqrt( pi*Catalan*((sigma_r*microns)**2._PR))
-end select
 end function function_space
 
 elemental function function_theta(r)
@@ -168,23 +160,14 @@ real(PR)              :: function_theta
 function_theta = (angle0*pi/180._PR)*tanh(r/sigma_r)    
 end function function_theta
 
-elemental function function_time(type, Vb, t)
-! input  : type = chosen distribution shape 
-!          Vb = injected fast e- beam kinetic energy flux mean velocity in (cm/s)
+elemental function function_time(Vb, t)
+! input  : Vb = injected fast e- beam kinetic energy flux mean velocity in (cm/s)
 !          t  = time in (fs)
 ! output : function_time = fast e- beam longitudinal distribution in (/cm)
 implicit none
-integer, intent(in)   :: type
 real(PR),intent(in)   :: Vb, t
 real(PR)              :: function_time
-select case (type)
-! Gaussian distribution profile
-case default
 function_time = exp(- (t-t_c)**2._PR/(2*(sigma_t**2._PR)) ) / (Vb*sqrt(2._PR*pi*((sigma_t*fs)**2._PR)))
-! L. Volpe hyperbolic secant distribution profile
-case (1)
-function_time = (1._PR / cosh(2._PR * (t-t_c) / sigma_t ) ) / ( 0.5_PR * pi * Vb * (sigma_t*fs) )
-end select
 end function function_time
 
 subroutine calcul_Vb0_Intfeps_nrjmean_Intfx(eps_tab,xa,epsa,Vb, Intfeps, nrj_mean, Intfx)
@@ -217,14 +200,14 @@ else
 omega0 = 1._PR
 end if
 do i=1,N_x,1
-Intfx = Intfx + (function_space(shape,xa(i)) * (d_x*microns))
+Intfx = Intfx + (function_space(xa(i)) * (d_x*microns))
 end do
 do l=1,N_eps,1
 Intfeps = Intfeps + (function_energy(eps_tab,epsa(l)) * d_eps)
 nrj_mean =  nrj_mean + (epsa(l) * function_energy(eps_tab,epsa(l)) * d_eps)
 do i=1,N_x,1
 theta   = function_theta(xa(i))
-vit_b = vit_b + (vit(epsa(l)) * omega0 * cos(theta) * epsa(l) * function_space(shape,xa(i)) &
+vit_b = vit_b + (vit(epsa(l)) * omega0 * cos(theta) * epsa(l) * function_space(xa(i)) &
               & * function_energy(eps_tab,epsa(l))  * d_eps * (d_x*microns))
 end do
 end do
@@ -260,6 +243,8 @@ real(PR)                                                                        
 real(PR)                                                                                        :: omega0
 real(PR)                                                                                        :: theta,Int_feps
 real(PR)                                                                                        :: nrj_mean,Int_fx
+integer                                                                                        :: shape
+shape = 0 ! shape = 1 for the particular case of L. Volpe hyperbolic secant distribution profile 
 call calcul_Vb0_Intfeps_nrjmean_Intfx(eps_tab,xa,epsa,Vb,Int_feps,nrj_mean,Int_fx)
 ! total number of fast e- beam injected in the simulation box in (/cm) (2D simulation)
 if (shape==1) then
@@ -269,8 +254,8 @@ else
 end if
 N0 = E_tot*Joules / (nrj_mean*keV*third_dim_norm)
 norm = N0 * function_energy(eps_tab,eps_min)
-norm = norm * function_time(shape,Vb,t_c)
-norm = norm * function_space(shape,0._PR)
+norm = norm * function_time(Vb,t_c)
+norm = norm * function_space(0._PR)
 if (time <= source_duration) then       
 if (sigma_theta.ne.0._PR) then
 a2 = 1._PR / ((pi*sigma_theta/180._PR)**2._PR)
@@ -283,14 +268,14 @@ do l=1,N_eps,1
 do i=1,N_x,1   
 theta   = function_theta(xa(i))
 phin(forward,psi0,i,0,l)     = N0 * function_energy(eps_tab,epsa(l))/Int_feps
-phin(forward,psi0,i,0,l)     = phin(forward,psi0,i,0,l) * function_time(shape,Vb, time)
-phin(forward,psi0,i,0,l)     = phin(forward,psi0,i,0,l) * function_space(shape,xa(i))/Int_fx
+phin(forward,psi0,i,0,l)     = phin(forward,psi0,i,0,l) * function_time(Vb, time)
+phin(forward,psi0,i,0,l)     = phin(forward,psi0,i,0,l) * function_space(xa(i))/Int_fx
 phin(forward,psi0,i,0,l)     = phin(forward,psi0,i,0,l) / norm
 phin(forward,psi1x,i,0,l)    = omega0 * sin(theta) * phin(forward,psi0,i,0,l) 
 phin(forward,psi1z,i,0,l)    = omega0 * cos(theta) * phin(forward,psi0,i,0,l) 
 phinp1(forward,psi0,i,0,l)   = N0 * function_energy(eps_tab,epsa(l))/Int_feps
-phinp1(forward,psi0,i,0,l)   = phinp1(forward,psi0,i,0,l) * function_time(shape,Vb, time + dt)
-phinp1(forward,psi0,i,0,l)   = phinp1(forward,psi0,i,0,l) * function_space(shape,xa(i))/Int_fx
+phinp1(forward,psi0,i,0,l)   = phinp1(forward,psi0,i,0,l) * function_time(Vb, time + dt)
+phinp1(forward,psi0,i,0,l)   = phinp1(forward,psi0,i,0,l) * function_space(xa(i))/Int_fx
 phinp1(forward,psi0,i,0,l)   = phinp1(forward,psi0,i,0,l) / norm
 phinp1(forward,psi1x,i,0,l)  = omega0 * sin(theta) * phinp1(forward,psi0,i,0,l) 
 phinp1(forward,psi1z,i,0,l)  = omega0 * cos(theta) * phinp1(forward,psi0,i,0,l) 
@@ -532,7 +517,7 @@ if (Tracer==1) then
   !$omp PARALLEL DO DEFAULT(SHARED) PRIVATE(i,k) COLLAPSE(2)
   do i=0,N_x+1,1
     do k=1,N_z,1
-      if ( (z_a(k) >= z_tracer_start) .and. (z_a(k) <= z_tracer_stop) ) then
+      if ( (z_a(k) >= z_tracer_start) .and. (z_a(k) < z_tracer_stop) ) then
         A(i,k)     = A_tracer
         ni(i,k)    = rho_tracer / (mu * A_tracer)
         Z(i,k)     = Z_tracer

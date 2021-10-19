@@ -28,6 +28,83 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 import os
 
+def get_results_dir():
+    file = open('input-deck','r')
+    for line in file:
+        line      = line.strip()
+        array     = line.split()
+        if (array[0] == '#simu') :
+            name = array[1]
+            break
+    file.close()
+    to_print=' '+name+' AMoRE SIMULATION PLOTS :'
+    N_to_print = len(to_print)
+    line_to_print= ' '
+    for char in range(0,len(to_print)-1):
+        line_to_print+='='
+    print(line_to_print)
+    print(to_print)
+    print(line_to_print)
+    return name
+
+def create_dir(name):
+    dir_name= os.path.dirname(name)
+    if not os.path.exists(dir_name):
+        os.mkdir(dir_name)
+
+def find_spatial_simulation_box_dimension(file_name):
+	t0  = []
+	x0  = []
+	nb_file0 = open(file_name, 'r')
+	line = nb_file0.readline()
+	line = line.strip()
+	array = line.split()
+	t0.append(float(array[0]))
+	x0.append(float(array[1]))
+	counter = 0
+	for line in nb_file0:
+		line      = line.strip()
+		array     = line.split()
+		t0.append(float(array[0]))
+		x0.append(float(array[1]))
+		counter = counter + 1
+		if x0[counter]!=x0[counter-1]:
+			Nz = counter
+			break
+	for line in nb_file0:
+		line      = line.strip()
+		array     = line.split()
+		t0.append(float(array[0]))
+		counter = counter + 1
+		if t0[counter]!=t0[counter-1]:
+			NxNz = counter
+			break
+	nb_file0.close()	
+	Nx = NxNz / Nz
+	return [Nz,Nx]
+
+def find_energy_bins(file_name):
+	x0  = []
+	e0  = []
+	psi0_file0 = open(file_name, 'r')
+	line = psi0_file0.readline()
+	line = line.strip()
+	array = line.split()
+	x0.append(float(array[1]))
+	e0.append(float(array[2]))
+	counter = 0
+	for line in psi0_file0:
+		line      = line.strip()
+		array     = line.split()
+		x0.append(float(array[1]))
+		e0.append(float(array[2]))
+		counter = counter + 1
+		if x0[counter]!=x0[counter-1]:
+			Neps = counter
+			break
+	psi0_file0.close()
+	return [Neps,e0]
+
 def read_and_plot_curve(filename,xlabel,ylabel,title,name,logx,logy):
 	x = []
 	y = []
@@ -142,7 +219,7 @@ def read_and_plot_2D_pcolormesh(filename,N1,N2,cmap,title,name,log):
 		counter = counter + 1
 		if counter % N3 == 0:
 			time = int(100.*float(array[0]))/100.
-			print('-at t = '+str(time)+' fs')
+			print(' * t = '+str(time)+' fs')
 			N = int(counter / N3)
 			val=max(abs(np.amax(p[(N-1)*N3:N*N3])),abs(np.amin(p[(N-1)*N3:N*N3])))
 			if (val != 0.) and (log!=1):
@@ -214,7 +291,7 @@ def read_and_plot_2D_pcolormesh_abs(filenamez,filenamex,N1,N2,cmap,title,name):
 		counter = counter + 1
 		if counter % N3 == 0:
 			time = int(100.*float(arrayz[0]))/100.
-			print('-at t = '+str(time)+' fs')
+			print(' * t = '+str(time)+' fs')
 			N = int(counter/N3)
 			for l in range(0,N3):
 				linex  = filex.readline()
@@ -315,7 +392,7 @@ def read_and_plot_distribution(Ne,e0,mu,Nmu,filename_psi0,filename_psi1x,filenam
 		counter = counter + 1
 		if (counter % NeNmu == 0):
 			N = int(counter/NeNmu)
-			print('-at t = '+str(time[(N-1)*NeNmu])+' fs')
+			print(' * t = '+str(time[(N-1)*NeNmu])+' fs')
 			for k in range(0,NeNmu):
 				line_x  = psi1x_file.readline()
 				line_x  = line_x.strip()

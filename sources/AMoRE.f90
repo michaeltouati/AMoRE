@@ -23,6 +23,7 @@
 !! Initial commit written by Michaël J TOUATI - Oct. 2015
 program main
 
+use acuracy
 use constants
 use input
 use VFP
@@ -118,7 +119,8 @@ logical :: diag_condition
 
 ! Read the simulation parameter
 call read_init_parameters  
-print *, 'Initialization of the simulation...'
+print *, 'Initialization of the simulation'
+write(*,*)
 ! Initialization of diagnostics
 call initialize_spectrum(eps_tab, N_eps_tab)
 call initialize_resistivity(eta_tab, N_eta_tab)

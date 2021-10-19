@@ -22,11 +22,11 @@
 #######################################################################
 ## Initial commit written by Michaël J TOUATI - Oct. 2015
 
-#############
-#############
-##  ifort  ##
-#############
-#############
+######################
+######################
+##  INTEL compiler  ##
+######################
+######################
 
 #F90 = ifort
 
@@ -40,8 +40,8 @@
 # debug #
 #########
 
-#OPTS = -O -g -debug all -debug-parameters all\
-#	 -C -openmp -openmp-report2
+# OPTS = -O -g -debug all -debug-parameters all -C -openmp -openmp-report2
+# OPTS = -g -traceback -fopenmp -r8 -std95 -fpe0 -debug all -debug-parameters all -C
 
 ################
 ################
@@ -64,6 +64,7 @@ OPTS = -O2 -fopenmp
 #########
 
 #OPTS = -O3 -Wall -fcheck=all -g -fbacktrace -fopenmp
+# OPTS = -fdefault-real-8 -O -g -fopenmp -Wall -fcheck=all -fbacktrace -std=f95 -fall-intrinsics -ffpe-trap=invalid,zero,overflow
 
 #####################################
 #####################################
@@ -72,9 +73,10 @@ OPTS = -O2 -fopenmp
 #####################################
 
 SRC_PATH    = sources/
-SRC_PATH_PY = sources/tools/
+SRC_PATH_PY = sources/plot/
 
-SRCS = constants.f90 \
+SRCS = acuracy.f90 \
+	constants.f90 \
 	physics_library.f90 \
 	Fokker_Planck_coef.f90 \
 	input.f90 \
@@ -98,18 +100,112 @@ amore : $(OBJTS)
 %.o : $(SRC_PATH)%.f90
 	$(F90) $(OPTS) -c $(SRC_PATH)$*.f90
 
+##############
+##############
+## Cleaning ##
+##############
+##############
+
 clean_results :
-	@rm -rf diag/*
+	@rm -rf results
 
 clean_figures :
-	@rm -rf figures/*
+	@rm -rf figures
 
-clean : clean_results clean_figures
-	@rm -rf *.mod *.o sources/*.o sources/*.mod amore ${SRC_PATH_PY}__pycache__
+clean_dist :
+	@rm -rf *.mod *.o amore ${SRC_PATH_PY}__pycache__
 
-plot :
-	@python3 ${SRC_PATH_PY}extract_energy.py
-	@python3 ${SRC_PATH_PY}extract_initialization.py
-	@python3 ${SRC_PATH_PY}extract_material.py
-	@python3 ${SRC_PATH_PY}extract_maps.py
-	@python3 ${SRC_PATH_PY}extract_distribution.py
+clean_all : clean_results clean_figures clean_dist
+
+##############
+##############
+## Plotting ##
+##############
+##############
+
+plot_energy :
+	@python3 ${SRC_PATH_PY}plot_energy.py
+
+plot_initialization :
+	@python3 ${SRC_PATH_PY}plot_initialization.py
+
+plot_material :
+	@python3 ${SRC_PATH_PY}plot_material.py
+
+plot_maps :
+	@python3 ${SRC_PATH_PY}plot_maps.py
+
+plot_distribution :
+	@python3 ${SRC_PATH_PY}plot_distribution.py
+
+plot : plot_energy \
+	plot_initialization \
+	plot_material \
+	plot_maps \
+	plot_distribution
+
+###############
+###############
+##  Testing  ##
+###############
+###############
+
+TEST_DIR  = Vlasov/HLL-1
+TEST_DIR += Vlasov/HLL-2
+TEST_DIR += Parallelization/OpenMP
+TEST_DIR += Fokker-Planck/Implicit-collisions
+# TEST_DIR += Boundary-conditions/Periodic
+# TEST_DIR += Boundary-conditions/Absorbing
+# TEST_DIR += Vlasov-linear/Donor-cell
+# TEST_DIR += Vlasov-linear/Lax-Wendroff
+# TEST_DIR += Vlasov-linear/Beam-Warming
+# TEST_DIR += Vlasov-linear/Fromm
+# TEST_DIR += Vlasov-nonlinear/Minmod
+# TEST_DIR += Vlasov-nonlinear/Superbee
+# TEST_DIR += Vlasov-nonlinear/Van-Leer
+# TEST_DIR += Vlasov-nonlinear/MUSCL1
+# TEST_DIR += Vlasov-nonlinear/MUSCL2
+# TEST_DIR += Academic-cases/Landau
+# TEST_DIR += Academic-cases/Wakefield
+# TEST_DIR += Academic-cases/Two-stream-insta
+# TEST_DIR += New-features/Example
+
+RED   =$(shell tput setaf 1)
+GREEN =$(shell tput setaf 2)
+RESET =$(shell tput sgr0)
+TESTS:=$(sort ${TEST_DIR})
+test :
+	@mv input-deck input-deck-old
+	@echo '---------------------------------'
+	@echo '        TESTS DESCRIPTION        '
+	@echo '---------------------------------'
+	@echo '                                 '
+	@echo 'The tests consist in performing  '
+	@echo ' diff file1 file2 where :        '
+	@echo ' * file1 is the test simulation  '
+	@echo '   terminal output               '
+	@echo ' * file2 the terminal output of  '
+	@echo '   the corresponding simulation  '
+	@echo '   performed by the developper   '
+	@echo '   located in test-cases/Tests/  '
+	@echo '                                 '
+	@for tst in ${TESTS}; do \
+		echo '---------------------------------' ; \
+		echo $${tst}' :'  ; \
+		cp test-cases/Tests/$${tst}/input-deck . ; \
+		./amore > test.output ; \
+		if hash tac 2>/dev/null; then \
+			tail -n +0 test.output | head -n -4 > file1 ; \
+			tail -n +0 test-cases/Tests/$${tst}/output | head -n -4 > file2 ; \
+		else \
+			tail -n +0 test.output | tail -r | tail -n +5 | tail -r > file1 ; \
+			tail -n +0 test-cases/Tests/$${tst}/output | tail -r | tail -n +5 | tail -r > file2 ; \
+		fi ; \
+		diff file1 file2; \
+		TST=$$?; \
+		rm file1; rm file2; \
+		if [ $$TST -eq 0 ]; then echo "${GREEN}PASSED${RESET}"; else echo "${RED}NOT PASSED${RESET}"; fi; \
+	done
+	@rm -rf results/Vlasov
+	@mv input-deck-old input-deck
+	@rm -f  test.output
