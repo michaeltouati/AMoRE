@@ -28,14 +28,14 @@
 ######################
 ######################
 
-F90 = ifort
+# F90 = ifort
 
 ##########
 # openMP #
 ##########
 
 # OPTS = -O3 -fopenmp -r8
-OPTS = -O2 -fopenmp
+# OPTS = -O2 -fopenmp
 
 #########
 # debug #
@@ -51,14 +51,14 @@ OPTS = -O2 -fopenmp
 ################
 
 # F90 = mpif90
-# F90 = gfortran
+F90 = gfortran
 
 ##########
 # openMP #
 ##########
 
 #OPTS = -O3 -fopenmp -fdefault-real-8
-# OPTS = -O2 -fopenmp
+OPTS = -O2 -fopenmp
 
 #########
 # debug #
@@ -125,7 +125,7 @@ clean_figures :
 clean_dist :
 	@rm -rf *.mod *.o amore ${SRC_PATH_PY}__pycache__
 
-clean_all : clean_results clean_figures clean_dist
+clean : clean_results clean_figures clean_dist
 
 ##############
 ##############
