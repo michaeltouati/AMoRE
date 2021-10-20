@@ -91,13 +91,13 @@
 #########################################################################
 #########################################################################
 #
-#simu Vlasov
+#simu Solids
 #
 #N_threads   1
 #
 #hll_order           2
 #
-#implicit_coll   .true.
+#implicit_coll   .false.
 #
 #cfl               0.9
 #
@@ -223,45 +223,46 @@
 ##                                                                     ##
 ##                       Material properties :                         ##
 ##                                                                     ##
-## Material = 1 if Plasma or                                           ##
-##            2 if Metal                                               ##
-##                                                                     ##
-## Plasmas : Z0               = Mean Atomic Number (Al:13.,Cu:29.)     ##
-##           A0               = Mean Atomic Weight (Al:26.98,Cu:63.54) ##
-##           tabulated_plasma = A tabulated map of the plasma density  ##
-##                              and temperature may be used (.true.)   ##
-##                              or not (.false.)                       ##
-##                              -if (.true.), the file 'plasma_tab.dat'##
-##                               must be filled with data provided by  ##
-##                               the user                              ##
-##                              -if (.false.), the following values    ##
-##                               for the plasma density and temperature##
-##                               are used :                            ##
-##           rho               = plasma density in g/cm3               ##
-##                               (Al:2.7,Cu:8.96)                      ##
-##           T_ini             = Initial temperature in eV             ##
-##           (for plasmas, bitemp is set .false.)                      ##
+## Material = 1 for a plasma or                                        ##
+##            2 for a metal at ambiant conditions (20° Celsius)        ##
 ##                                                                     ##
 ## tabulated_resistivity = A tabulated electrical resistivity          ##
 ##                         may be used (.true.) or not (.false.)       ##
 ##                         if (.true.) the file 'resistivity_tab.dat'  ##
 ##                         must be filled with data provided by the    ##
-##                         user (magnetic_diff and bi_temp are set     ##
+##                         user (magnetic_diff and bi_temp must be set ##
 ##                         .false. in this case)                       ##
 ##                                                                     ##
-## Metals : Mat = Al (for Aluminum at ambiant conditions),             ##
+## if plasma : Z0               = Mean Atomic Number (ex. 1. for H)    ##
+##             A0               = Mean Atomic Weight (ex. 1.01 for H)  ##
+##             tabulated_plasma = A tabulated map of the plasma        ##
+##                                density and temperature may be used  ##
+##                                (.true.) or not (.false.)            ##
+##                                -if .true., the file                 ##
+##                                 'plasma_tab.dat' must be filled     ##
+##                                 with data provided by the user      ##
+##                                -if .false., the following values    ##
+##                                 for the plasma density and          ##
+##                                 temperature are used                ##
+##             rho               = plasma density in g/cm3             ##
+##                                 (ex. 10. for H at 10 g/cm3)         ##
+##             T_ini             = Initial temperature in eV           ##
+##             (for plasmas, bitemp must be set .false.)               ##
 ##                                                                     ##
-## Kalpha Tracer Layer : Tracer = 0 (no) or 1 (yes)                    ##
-##                             z_tracer_start = depth (microns) at     ## 
-##                                     which the tracer layer starts   ##
-##                             z_tracer_stop  = depth (microns) at     ## 
-##                                     which the tracer layer stops    ##
-##                             Z_tracer       = atomic number of       ##
-##                                              tracer layer           ##
-##                             A_tracer       = atomic weight of       ##
-##                                              tracer layer           ##
-##                             rho_tracer     = density in g/cm3       ##
-##                                              tracer layer           ##
+## if metal : Mat = Al for Aluminum                                    ##
+##                  Cu for Copper                                      ##
+##                  Ta for Tantalum                                    ##
+##                  XX for other solids -> needs tabulated_resistivity ##
+##                     .true. and Z0, A0 and rho filled in this case   ##
+##                                                                     ##
+## Kalpha tracer layer : Tracer         = 0 (no tracer) or 1 (tracer)  ##
+##                       z_tracer_start = target depth (microns) at    ##
+##                                        which the tracer layer starts##
+##                       z_tracer_stop  = target depth (microns) at    ##
+##                                        which the tracer layer stops ##
+##                       Z_tracer       = tracer atomic number         ##
+##                       A_tracer       = tracer atomic weight         ##
+##                       rho_tracer     = tracer density in g/cm3      ##
 ##                                                                     ##
 ## IMPORTANT NOTE : Except for : -Hydrogen plasmas, for which the      ##
 ##                                plasma transport coefficients are    ##
@@ -271,7 +272,7 @@
 ##                                which the transport coefficient      ##
 ##                                models are valid from the solid to   ##
 ##                                the plasma state and                 ##
-##                               -tabulated resistivity,               ##
+##                               - tabulated resistivity,              ##
 ##                  the initial plasma temperature T_ini must be       ##
 ##                  greater than the Fermi temperature in order to     ##
 ##                  make valid the Lee-More's plasma model             ##
@@ -279,21 +280,21 @@
 #########################################################################
 #########################################################################
 #
-#Material  1
+#Material  2
 #
-#Mat Al
+#Mat XX
 #
-#Z0  1.
+#Z0  3.5
 #
-#A0  1.008
+#A0  6.50945
 #
 #tabulated_plasma .false.
 #
-#rho   10.
+#rho   1.05
 #
-#T_ini 1.e2
+#T_ini 2.6e-2
 #
-#tabulated_resistivity .false.
+#tabulated_resistivity .true.
 #
 #Tracer 0
 #

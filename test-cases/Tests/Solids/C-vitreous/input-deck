@@ -91,19 +91,19 @@
 #########################################################################
 #########################################################################
 #
-#simu Fokker-Planck
+#simu Solids
 #
 #N_threads   1
 #
 #hll_order           2
 #
-#implicit_coll   .true.
+#implicit_coll   .false.
 #
 #cfl               0.9
 #
 #bi_temp        .false.
 #
-#magnetic_diff .false.
+#magnetic_diff .true.
 #
 #backward 1
 #
@@ -280,21 +280,21 @@
 #########################################################################
 #########################################################################
 #
-#Material  1
+#Material  2
 #
-#Mat Al
+#Mat XX
 #
-#Z0  1.
+#Z0  6.
 #
-#A0  1.008
+#A0  12.011
 #
 #tabulated_plasma .false.
 #
-#rho   10.
+#rho   2.1
 #
-#T_ini 1.e2
+#T_ini 2.6e-2
 #
-#tabulated_resistivity .false.
+#tabulated_resistivity .true.
 #
 #Tracer 0
 #

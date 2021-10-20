@@ -28,14 +28,14 @@
 ######################
 ######################
 
-# F90 = ifort
+F90 = ifort
 
 ##########
 # openMP #
 ##########
 
 # OPTS = -O3 -fopenmp -r8
-# OPTS = -O2 -fopenmp
+OPTS = -O2 -fopenmp
 
 #########
 # debug #
@@ -164,16 +164,17 @@ TEST_DIR  = Vlasov/HLL-1
 TEST_DIR += Vlasov/HLL-2
 TEST_DIR += Parallelization/OpenMP
 TEST_DIR += Fokker-Planck/Implicit-collisions
-# TEST_DIR += Boundary-conditions/Periodic
-# TEST_DIR += Boundary-conditions/Absorbing
-# TEST_DIR += Vlasov-linear/Donor-cell
-# TEST_DIR += Vlasov-linear/Lax-Wendroff
-# TEST_DIR += Vlasov-linear/Beam-Warming
-# TEST_DIR += Vlasov-linear/Fromm
-# TEST_DIR += Vlasov-nonlinear/Minmod
-# TEST_DIR += Vlasov-nonlinear/Superbee
-# TEST_DIR += Vlasov-nonlinear/Van-Leer
-# TEST_DIR += Vlasov-nonlinear/MUSCL1
+TEST_DIR += MHD/Bi-temperature
+TEST_DIR += MHD/Magnetic-diffusion
+TEST_DIR += Laser-solid-interaction/Rear-side-refluxing
+TEST_DIR += Laser-solid-interaction/Both-sides-refluxing
+TEST_DIR += Solids/Al
+TEST_DIR += Solids/Cu
+TEST_DIR += Solids/Ta
+TEST_DIR += Solids/CH
+TEST_DIR += Solids/C-vitreous
+TEST_DIR += Plasmas/H
+TEST_DIR += Plasmas/Be
 # TEST_DIR += Vlasov-nonlinear/MUSCL2
 # TEST_DIR += Academic-cases/Landau
 # TEST_DIR += Academic-cases/Wakefield
@@ -202,6 +203,14 @@ test :
 	@for tst in ${TESTS}; do \
 		echo '---------------------------------' ; \
 		echo $${tst}' :'  ; \
+		if [ $${tst} = Solids/C-vitreous ]; then \
+			mv sources/user/resistivity_tab.dat sources/user/resistivity_tab-old.dat ; \
+			cp test-cases/Tests/Solids/C-vitreous/resistivity_tab.dat sources/user/ ; \
+		fi ; \
+		if [ $${tst} = Solids/CH ]; then \
+			mv sources/user/resistivity_tab.dat sources/user/resistivity_tab-old.dat ; \
+			cp test-cases/Tests/Solids/CH/resistivity_tab.dat sources/user/ ; \
+		fi ; \
 		cp test-cases/Tests/$${tst}/input-deck . ; \
 		./amore > test.output ; \
 		if hash tac 2>/dev/null; then \
@@ -215,6 +224,12 @@ test :
 		TST=$$?; \
 		rm file1; rm file2; \
 		if [ $$TST -eq 0 ]; then echo "${GREEN}PASSED${RESET}"; else echo "${RED}NOT PASSED${RESET}"; fi; \
+		if [ $${tst} = Solids/C-vitreous ]; then \
+			mv sources/user/resistivity_tab-old.dat sources/user/resistivity_tab.dat ; \
+		fi ; \
+		if [ $${tst} = Solids/CH ]; then \
+			mv sources/user/resistivity_tab-old.dat sources/user/resistivity_tab.dat ; \
+		fi ; \
 	done
 	@rm -rf results/Vlasov
 	@mv input-deck-old input-deck

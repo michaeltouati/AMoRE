@@ -242,11 +242,11 @@ subroutine read_init_parameters
   end if
 
   ! Alert magnetic field diffusion
-  if (tabulated_resistivity.and.magnetic_diffusion) then
-    write(*,*)'For a tabulated resistivity, the magnetic field diffusion is not yet implemented'
-    write(*,*)'magnetic_diff must be set .false.'
-    stop
-  end if
+  ! if (tabulated_resistivity.and.magnetic_diffusion) then
+  !   write(*,*)'For a tabulated resistivity, the magnetic field diffusion is not yet implemented'
+  !   write(*,*)'magnetic_diff must be set .false.'
+  !   stop
+  ! end if
 
   ! Alerts refluxing 
   if ((backward .ne. 1) .and. (backward .ne. 2)) then
@@ -283,8 +283,8 @@ subroutine read_init_parameters
   write(*,*)'------------------------------------------'
   write(*,*)'* Simulation time properties : '
   write(*,'(A,1E21.14)')'   cfl          = ',cfl
-  write(*,'(A,1E21.14)')'   Delta_t_diag = ',cfl
-  write(*,'(A,1E21.14)')'   L_t          = ',cfl
+  write(*,'(A,1E21.14)')'   Delta_t_diag = ',Delta_t_diag
+  write(*,'(A,1E21.14)')'   L_t          = ',L_t
   write(*,*)'------------------------------------------'
   write(*,*)'* Relativistic electron beam properties : '
   write(*,'(A,1E21.14)')'   E_tot       = ',E_tot

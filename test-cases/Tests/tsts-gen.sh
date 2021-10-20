@@ -27,17 +27,17 @@ TEST_DIR=' Vlasov/HLL-1'
 TEST_DIR+=' Vlasov/HLL-2'
 TEST_DIR+=' Fokker-Planck/Implicit-collisions'
 TEST_DIR+=' Parallelization/OpenMP'
-
-# TEST_DIR+=' Boundary-conditions/Periodic'
-# TEST_DIR+=' Boundary-conditions/Absorbing'
-# TEST_DIR+=' Vlasov-linear/Donor-cell'
-# TEST_DIR+=' Vlasov-linear/Lax-Wendroff'
-# TEST_DIR+=' Vlasov-linear/Beam-Warming'
-# TEST_DIR+=' Vlasov-linear/Fromm'
-# TEST_DIR+=' Vlasov-nonlinear/Minmod'
-# TEST_DIR+=' Vlasov-nonlinear/Superbee'
-# TEST_DIR+=' Vlasov-nonlinear/Van-Leer'
-# TEST_DIR+=' Vlasov-nonlinear/MUSCL1'
+TEST_DIR+=' MHD/Bi-temperature'
+TEST_DIR+=' MHD/Magnetic-diffusion'
+TEST_DIR+=' Laser-solid-interaction/Rear-side-refluxing'
+TEST_DIR+=' Laser-solid-interaction/Both-sides-refluxing'
+TEST_DIR+=' Solids/Al'
+TEST_DIR+=' Solids/Cu'
+TEST_DIR+=' Solids/Ta'
+TEST_DIR+=' Solids/CH'
+TEST_DIR+=' Solids/C-vitreous'
+TEST_DIR+=' Plasmas/H'
+TEST_DIR+=' Plasmas/Be'
 # TEST_DIR+=' Vlasov-nonlinear/MUSCL2'
 # TEST_DIR+=' Academic-cases/Landau'
 # TEST_DIR+=' Academic-cases/Wakefield'
@@ -47,10 +47,17 @@ TEST_DIR+=' Parallelization/OpenMP'
 cd ../..
 mv input-deck input-deck-old
 for tst in ${TEST_DIR}; do \
+	if [[ ${tst} = Solids/C-vitreous || ${tst} = Solids/CH ]]; then \
+		mv sources/user/resistivity_tab.dat sources/user/resistivity_tab-old.dat ; \
+		cp test-cases/Tests/${tst}/resistivity_tab.dat sources/user/ ; \
+	fi
 	cp test-cases/Tests/${tst}/input-deck .
 	./amore > output 
 	mv output test-cases/Tests/${tst}/ ; \
 	echo ${tst}'/output file generated'
+	if [[ ${tst} = Solids/C-vitreous || ${tst} = Solids/CH ]]; then \
+		mv sources/user/resistivity_tab-old.dat sources/user/resistivity_tab.dat ; \
+	fi
 done
 rm -rf results/Vlasov output
 mv input-deck-old input-deck
