@@ -70,7 +70,7 @@ end function Kioni_cross_section
 
 pure subroutine Kalpha_diagnostic(Kalphatab, norma, dt, Z, ni,&
                                   epsa, phi, nK_Holes, nKalpha, nKbeta, ionizrate)
-! input  : Kalphatab = table containing data provided in the file 'Kalpha_tab.dat' 
+! input  : Kalphatab = table containing data provided in the file 'sources/data/Kalpha_tab.dat' 
 !          norma     = coefficient of normalization for the distribution function in (/cm^3/keV) 
 !          dt        = time step in (fs)
 !          Z         = atomic number of the material at a given location in ()
@@ -151,7 +151,7 @@ end subroutine Kalpha_diagnostic
 
 subroutine Kalpha_emission(Kalpha_tab, norm, d_t, Z, ni, eps_a, phi_n,&
 n_K_Holes, n_Kalpha, n_Kbeta, ioniz_rate) 
-! input  : Kalphatab = table containing data provided in the file 'Kalpha_tab.dat' 
+! input  : Kalphatab = table containing data provided in the file 'sources/data/Kalpha_tab.dat' 
 !          norm      = coefficient of normalization for the distribution function in (/cm^3/keV) 
 !          d_t        = time step in (fs)
 !          Z         = table containing the atomic number in each spatial cell in ()
@@ -206,86 +206,65 @@ end subroutine Kalpha_emission
 !=========================================================================================
 
 subroutine plasma_diagnostics(eta_tab)
-! input : eta_tab   = tabulated resistivity if provided by the user 
-implicit none
-real(PR), dimension(1:N_eta_tab,1:2), intent(in) :: eta_tab
-integer                                          :: i
-real(PR)                                         :: T, Zf, Cv, res, cond_t
-real(PR)                                         :: S, nu, energy, om
-real(PR)                                         :: Z, A, ni
-select case (Material)
-case (1)
-A  = A0
-Z  = Z0
-ni = rho/(mu*A0)
-case (2)
-select case (Mat)
-case ('Al')
-ni = ni_Al
-A  = A_Al
-Z  = Z_Al
-case ('Cu')
-ni = ni_Cu
-A  = A_Cu
-Z  = Z_Cu
-case ('Ta')
-ni = ni_Ta
-A  = A_Ta
-Z  = Z_Ta
-end select
-end select
-call system('mkdir -p results/'//trim(simu))
-open (unit=1,file ='results/'//trim(simu)//'/zeffvsTe[eV].dat'                           ,form='formatted',status='unknown')
-open (unit=2,file ='results/'//trim(simu)//'/electron_capacity[SI]vsTe[eV].dat'          ,form='formatted',status='unknown')
-open (unit=3,file ='results/'//trim(simu)//'/ion_capacity[SI]vsTe[eV].dat'               ,form='formatted',status='unknown')
-open (unit=4,file ='results/'//trim(simu)//'/resistivity[SI]vsTe[eV]_Te_eq_Ti.dat'       ,form='formatted',status='unknown')
-open (unit=7,file ='results/'//trim(simu)//'/resistivity[SI]vsTe[eV]_Ti_eq_Tamb.dat'     ,form='formatted',status='unknown')
-open (unit=8,file ='results/'//trim(simu)//'/conductivity[SI]vsTe[eV]_Te_eq_Ti.dat'      ,form='formatted',status='unknown')
-open (unit=9,file ='results/'//trim(simu)//'/conductivity[SI]vsTe[eV]_Ti_eq_Tamb.dat'    ,form='formatted',status='unknown')
-open (unit=10,file='results/'//trim(simu)//'/G[SI]vsTe[eV]_Te_eq_Ti.dat'                 ,form='formatted',status='unknown')
-open (unit=11,file='results/'//trim(simu)//'/G[SI]vsTe[eV]_Ti_eq_Tamb.dat'               ,form='formatted',status='unknown')
-open (unit=12,file='results/'//trim(simu)//'/ang_coll_rate[s-1]vsEps[keV].dat'           ,form='formatted',status='unknown')
-open (unit=13,file='results/'//trim(simu)//'/stopping_power[keV_Microns-1]vsEps[keV].dat',form='formatted',status='unknown')
-do i=-2000,4000
-T= (10._PR**(1.e-3_PR*i)) * eV 
-Zf = zeff(Z,ni,T)
-write(1,*) T / eV, Zf
-Cv   = capacity(Z,ni,T) * 1.E-1_PR               ! Cv[CGS] * 1.E-1_PR = Cv[SI]
-write(2,*) T / eV, Cv 
-Cv   = ion_capacity(Z,ni,T) * 1.E-1_PR           ! Cv[CGS] * 1.E-1_PR = Cv[SI]
-write(3,*) T / eV, Cv 
-res   = resis(eta_tab, Z,ni,T,T) * 9.E9_PR       ! res[CGS]*9.E9_PR = res[SI]
-write(4,*) T / eV, res 
-res   = resis(eta_tab, Z,ni, T, Tamb) * 9.E9_PR  ! res[CGS]*9.E9_PR = res[SI]
-write(7,*) T / eV, res 
-cond_t   = cond(Z,ni,T,T)
-write(8,*) T / eV, cond_t * 1.E-5_PR            ! cond_t[CGS] * 1.E-5_PR = cond_t[SI]
-cond_t   = cond(Z,ni,T,Tamb)
-write(9,*) T / eV, cond_t * 1.E-5_PR            ! cond_t[CGS] * 1.E-5_PR = cond_t[SI]
-om = Omega_ei(A, Z, ni, T, T)
-write(10,*) T / eV, om * 1.E-1_PR               ! om[CGS] * 1.E-1_PR = om[SI]
-om = Omega_ei(A, Z, ni, T, Tamb)
-write(11,*) T / eV, om                          ! om[CGS] * 1.E-1_PR = om[SI]
-end do
-i  = 1
-do i=1,100
-energy = (10_PR*(i**2)) 
-nu   = nu_tot(Z, ni, Tamb, Tamb, energy)
-write(12,*) energy , nu
-S   = S_tot(A, Z, ni, Tamb, Tamb, energy) * microns / keV
-write(13,*) energy , S
-end do
-close(1)
-close(2)
-close(3)
-close(4)
-close(7)
-close(8)
-close(9)
-close(10)
-close(11)
-close(12)
-close(13)
+  ! input : eta_tab   = tabulated resistivity if provided by the user 
+  implicit none
+  real(PR), dimension(1:N_eta_tab,1:2), intent(in) :: eta_tab
+  integer                                          :: i
+  real(PR)                                         :: T, Zf, Cv, res, cond_t
+  real(PR)                                         :: S, nu, energy, om
+  real(PR)                                         :: Z, A, ni
+  call get_A_Z_ni(A,Z,ni)
+  call system('mkdir -p results/'//trim(simu))
+  open (unit=1,file ='results/'//trim(simu)//'/zeffvsTe[eV].dat'                           ,form='formatted',status='unknown')
+  open (unit=2,file ='results/'//trim(simu)//'/electron_capacity[SI]vsTe[eV].dat'          ,form='formatted',status='unknown')
+  open (unit=3,file ='results/'//trim(simu)//'/ion_capacity[SI]vsTe[eV].dat'               ,form='formatted',status='unknown')
+  open (unit=4,file ='results/'//trim(simu)//'/resistivity[SI]vsTe[eV]_Te_eq_Ti.dat'       ,form='formatted',status='unknown')
+  open (unit=7,file ='results/'//trim(simu)//'/resistivity[SI]vsTe[eV]_Ti_eq_Tamb.dat'     ,form='formatted',status='unknown')
+  open (unit=8,file ='results/'//trim(simu)//'/conductivity[SI]vsTe[eV]_Te_eq_Ti.dat'      ,form='formatted',status='unknown')
+  open (unit=9,file ='results/'//trim(simu)//'/conductivity[SI]vsTe[eV]_Ti_eq_Tamb.dat'    ,form='formatted',status='unknown')
+  open (unit=10,file='results/'//trim(simu)//'/G[SI]vsTe[eV]_Te_eq_Ti.dat'                 ,form='formatted',status='unknown')
+  open (unit=11,file='results/'//trim(simu)//'/G[SI]vsTe[eV]_Ti_eq_Tamb.dat'               ,form='formatted',status='unknown')
+  open (unit=12,file='results/'//trim(simu)//'/ang_coll_rate[s-1]vsEps[keV].dat'           ,form='formatted',status='unknown')
+  open (unit=13,file='results/'//trim(simu)//'/stopping_power[keV_Microns-1]vsEps[keV].dat',form='formatted',status='unknown')
+  do i=-2000,4000
+    T= (10._PR**(1.e-3_PR*i)) * eV 
+    Zf = zeff(Z,ni,T)
+    write(1,*) T / eV, Zf
+    Cv   = capacity(Z,ni,T) * 1.E-1_PR               ! Cv[CGS] * 1.E-1_PR = Cv[SI]
+    write(2,*) T / eV, Cv 
+    Cv   = ion_capacity(Z,ni,T) * 1.E-1_PR           ! Cv[CGS] * 1.E-1_PR = Cv[SI]
+    write(3,*) T / eV, Cv 
+    res   = resis(eta_tab, Z,ni,T,T) * 9.E9_PR       ! res[CGS]*9.E9_PR = res[SI]
+    write(4,*) T / eV, res 
+    res   = resis(eta_tab, Z,ni, T, Tamb) * 9.E9_PR  ! res[CGS]*9.E9_PR = res[SI]
+    write(7,*) T / eV, res 
+    cond_t   = cond(Z,ni,T,T)
+    write(8,*) T / eV, cond_t * 1.E-5_PR            ! cond_t[CGS] * 1.E-5_PR = cond_t[SI]
+    cond_t   = cond(Z,ni,T,Tamb)
+    write(9,*) T / eV, cond_t * 1.E-5_PR            ! cond_t[CGS] * 1.E-5_PR = cond_t[SI]
+    om = Omega_ei(A, Z, ni, T, T)
+    write(10,*) T / eV, om * 1.E-1_PR               ! om[CGS] * 1.E-1_PR = om[SI]
+    om = Omega_ei(A, Z, ni, T, Tamb)
+    write(11,*) T / eV, om                          ! om[CGS] * 1.E-1_PR = om[SI]
+  end do
+  do i=1,100
+    energy = (10_PR*(i**2)) 
+    nu   = nu_tot(Z, ni, Tamb, Tamb, energy)
+    write(12,*) energy , nu
+    S   = S_tot(A, Z, ni, Tamb, Tamb, energy) * microns / keV
+    write(13,*) energy , S
+  end do
+  close(1)
+  close(2)
+  close(3)
+  close(4)
+  close(7)
+  close(8)
+  close(9)
+  close(10)
+  close(11)
+  close(12)
+  close(13)
 end subroutine plasma_diagnostics
 
 !=========================================================================================
@@ -384,7 +363,7 @@ end subroutine electron_diagnostics
 !=========================================================================================
 
 subroutine initialize_diagnostics(Kalphatab)
-! output : Kalphatab = table containing data provided in the file 'Kalpha_tab.dat'
+! output : Kalphatab = table containing data provided in the file 'sources/data/Kalpha_tab.dat'
 !          array 1 corresponds to the atomic number Z () 
 !          array 2 to the K-shell electron ionisation energy E_ionization (eV) 
 !          array 3 to the Kalpha1 photon energy E_Kalpha1 (eV) if emitted
@@ -432,8 +411,8 @@ open (unit=49,file='results/'//trim(simu)//'/U_sd[J].dat'                 ,form=
 open (unit=50,file='results/'//trim(simu)//'/ne[cm-3].dat'                ,form='formatted',status='unknown')
 open (unit=52,file='results/'//trim(simu)//'/je_x[A_cm-2].dat'            ,form='formatted',status='unknown')
 open (unit=53,file='results/'//trim(simu)//'/je_z[A_cm-2].dat'            ,form='formatted',status='unknown')
-! Open, read and store the file 'Kalpha_tab.dat' in the table Kalphatab :
-open (unit=51,file='sources/Kalpha_tab.dat'          ,form='formatted',status='unknown')      
+! Open, read and store the file 'sources/data/Kalpha_tab.dat' in the table Kalphatab :
+open (unit=51,file='sources/data/Kalpha_tab.dat'          ,form='formatted',status='unknown')      
 read(51,*)
 do i=1,79,1
 read(51,*) Kalphatab(i,1),Kalphatab(i,2),Kalphatab(i,3),Kalphatab(i,4),&

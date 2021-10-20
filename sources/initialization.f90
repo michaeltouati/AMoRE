@@ -48,11 +48,11 @@ real(PR), dimension(:,:), allocatable, intent(out) :: eps_tab
 integer, intent(out)                               :: N_eps_tab
 integer                                            :: reason, i
 character                                          :: str
-! Find the number of lines in the file 'sources/spectrum_tab.dat' and allocate the
+! Find the number of lines in the file 'sources/user/spectrum_tab.dat' and allocate the
 ! table eps_tab :
 reason = 0
 i = -2   
-open (unit=50,file='sources/spectrum_tab.dat',form='formatted',status='unknown')  
+open (unit=50,file='sources/user/spectrum_tab.dat',form='formatted',status='unknown')  
 do while (reason==0)
 read(50,*,IOSTAT=Reason) str
 i = i + 1
@@ -61,9 +61,9 @@ end do
 close(50)
 N_eps_tab = i
 allocate(eps_tab(1:N_eps_tab,1:2))
-!  Read the file 'sources/spectrum_tab.dat' and define the table eps_tab with the 
+!  Read the file 'sources/user/spectrum_tab.dat' and define the table eps_tab with the 
 !  corresponding values
-open (unit=40,file='sources/spectrum_tab.dat',form='formatted',status='unknown')      
+open (unit=40,file='sources/user/spectrum_tab.dat',form='formatted',status='unknown')      
 read(40,*)
 do i =1,N_eps_tab,1
 read(40,*) eps_tab(i,1),eps_tab(i,2)
@@ -291,307 +291,318 @@ end subroutine initialize_phi
 !   Initialization of all physical quantities at t=0 and at the end of each time step
 !=========================================================================================
 
+subroutine get_A_Z_ni(A1,Z1,ni1)
+  implicit none
+  real(PR), intent(out) :: A1, Z1, ni1
+  select case (Material)
+    case (1)
+      A1  = A0
+      Z1  = Z0
+      ni1 = rho/(mu*A0)
+    case (2)
+      select case (Mat)
+        case ('Al')
+          ni1 = ni_Al
+          A1  = A_Al
+          Z1  = Z_Al
+        case ('Cu')
+          ni1 = ni_Cu
+          A1  = A_Cu
+          Z1  = Z_Cu
+        case ('Ta')
+          ni1 = ni_Ta
+          A1  = A_Ta
+          Z1  = Z_Ta
+        case default
+          ni1 = rho/(mu*A0)
+          A1  = A0
+          Z1  = Z0
+      end select
+    case default
+      ni1 = rho/(mu*A0)
+      A1  = A0
+      Z1  = Z0
+  end select
+end subroutine get_A_Z_ni
+
 subroutine initialize(x_a, z_a, eps_a, ni, A, Z, Ex, Ez, By_n, By_np1,&
-nb, jbx_n, jbz_n, jrx_n, jrz_n,jbx_np1, jbz_np1, jrx_np1, jrz_np1,&
-pdepos, plost_col, plost_res, Te, Ti,&
-nK_Holes, nKalpha, nKbeta,ioniztime,&
-ud, Udcol, Udres, ue, usf, usb, usu, usd, ub, uel, uma,Sva, Sva_lp1, nua)
-implicit none
-real(PR), dimension(1:N_x), intent(in)                :: x_a
-real(PR), dimension(1:N_z), intent(in)                :: z_a
-real(PR), dimension(1:N_eps), intent(in)              :: eps_a
-real(PR), intent(out)                                 :: Ud, udcol, udres, ue, usf
-real(PR), intent(out)                                 :: usb, usu, usd, ub, uel, uma
-real(PR), intent(out), dimension(1:N_x,1:N_z)         :: Ex, Ez, By_n, By_np1
-real(PR), intent(out), dimension(1:N_x,1:N_z)         :: nb, jbx_n, jbz_n, jrx_n, jrz_n
-real(PR), intent(out), dimension(1:N_x,1:N_z)         :: jbx_np1, jbz_np1, jrx_np1, jrz_np1
-real(PR), intent(out), dimension(1:N_x,1:N_z)         :: pdepos, plost_col, plost_res
-real(PR), intent(out), dimension(1:N_x,1:N_z)         :: nK_Holes, nKalpha, nKbeta, ioniztime
-real(PR), intent(out), dimension(0:N_x+1,0:N_z+1)     :: Te, Ti
-real(PR), intent(out), dimension(0:N_x+1,0:N_z+1)     :: ni, A, Z
-real(PR), dimension(1:N_x,1:N_z,1:N_eps), intent(out) :: Sva, Sva_lp1, nua
-integer                                               :: i, k, l, reason, N_plasma_tab
-integer                                               :: Nx_plasma_tab, Nz_plasma_tab
-real(PR), dimension(:,:), allocatable                 :: plasma_tab
-integer                                               :: il, ir, im, kl, kr, km
-logical                                               :: not_found
-real(PR)                                              :: alpha_x, alpha_z, r, t
-real(PR)                                              :: beta_x, beta_z
-character                                             :: str
-select case  (Material)
-  case (1)
-    if (tabulated_plasma) then
-      !  Read the file 'sources/plasma_tab.dat' and find the number of lines :
-      reason = 0
-      i = -2
-      open (unit=50,file='sources/plasma_tab.dat',form='formatted',status='unknown')      
-      do while (reason==0)
-        read(50,*,IOSTAT=Reason) str
-        i = i + 1
-        if (str == '') reason = 1
-      end do
-      close(50)
-      N_plasma_tab = i
-      allocate(plasma_tab(1:N_plasma_tab,1:4))
-      !  Read the file 'sources/plasma_tab.dat' and define the table plasma_tab with the 
-      !  corresponding values :
-      open (unit=50,file='sources/plasma_tab.dat',form='formatted',status='unknown')      
-      read(50,*)
-      do i =1,N_plasma_tab,1
-        read(50,*) plasma_tab(i,1),plasma_tab(i,2),plasma_tab(i,3),plasma_tab(i,4)
-      end do
-      close(50)
-      ! find the number of cells on x-axis and deduce the
-      !      the number of cells on z-axis in 'sources/plasma_tab.dat' :
-      i = 1
-      reason = 0
-      do while (reason==0)
-        if ((i.ne.1)) then
-          if (plasma_tab(i,1).ne.plasma_tab(i-1,1)) then
-            reason =1
-          end if
-        end if
-        i = i + 1
-      end do
-      Nx_plasma_tab = i - 2
-      Nz_plasma_tab = N_plasma_tab / Nx_plasma_tab
-      !$omp  PARALLEL DO DEFAULT(SHARED) PRIVATE(k,i,not_found,il,ir,im,kl,kr,km,&
-      !$omp& alpha_x,beta_x,alpha_z,beta_z,r,t) COLLAPSE(2)
-      do k=1,N_z,1
-        do i=1,N_x,1
-          ! find by dichotomy the closest cell :
-          not_found = .true.
-          il = 1
-          ir = Nx_plasma_tab
-          im = (il+ir)/2
-          do while (not_found)
-            if ((plasma_tab((im-1)*Nz_plasma_tab+1,1)) <= x_a(i)) then
-              il = im
-            else
-              ir = im
-            end if
-            im = (il+ir)/2
-            not_found = (ir - il) > 1   
-          end do
-          not_found = .true.
-          kl = 1
-          kr = Nz_plasma_tab
-          km = (kl+kr)/2
-          do while (not_found)
-            if ((plasma_tab((im-1)*Nz_plasma_tab+km,2)) <= z_a(k)) then
-              kl = km
-            else
-              kr = km
-            end if
-            km = (kl+kr)/2
-            not_found = (kr - kl) > 1   
-          end do
-          if ((im.ne.Nx_plasma_tab).and.(km.ne.Nz_plasma_tab)) then
-            ! linear interpolation
-            alpha_x = (plasma_tab(im*Nz_plasma_tab+km,1) - x_a(i))&
-                    / (plasma_tab(im*Nz_plasma_tab+km,1) - plasma_tab((im-1)*Nz_plasma_tab+km,1))
-            beta_x  = (x_a(i) - plasma_tab((im-1)*Nz_plasma_tab+km,1))&
-                    / (plasma_tab(im*Nz_plasma_tab+km,1) - plasma_tab((im-1)*Nz_plasma_tab+km,1))
-            alpha_z = (plasma_tab((im-1)*Nz_plasma_tab+km+1,2) - z_a(k))&
-                    / (plasma_tab((im-1)*Nz_plasma_tab+km+1,2) - plasma_tab((im-1)*Nz_plasma_tab+km,2))
-            beta_z  = (z_a(k) - plasma_tab((im-1)*Nz_plasma_tab+km,2))&
-                    / (plasma_tab((im-1)*Nz_plasma_tab+km+1,2) - plasma_tab((im-1)*Nz_plasma_tab+km,2))
-            r = (alpha_x * ((alpha_z * plasma_tab((im-1)*Nz_plasma_tab+km  ,3))&
-                           +(beta_z  * plasma_tab((im-1)*Nz_plasma_tab+km+1,3))))&
-              + (beta_x  * ((alpha_z * plasma_tab( im   *Nz_plasma_tab+km  ,3))&
-                           +(beta_z  * plasma_tab( im   *Nz_plasma_tab+km+1,3))))
-            t = (alpha_x * ((alpha_z * plasma_tab((im-1)*Nz_plasma_tab+km  ,4))&
-                           +(beta_z  * plasma_tab((im-1)*Nz_plasma_tab+km+1,4))))&
-              + (beta_x  * ((alpha_z * plasma_tab( im   *Nz_plasma_tab+km  ,4))&
-                           +(beta_z  * plasma_tab( im   *Nz_plasma_tab+km+1,4))))
-          else if ((im == Nx_plasma_tab).and.(km.ne.Nz_plasma_tab)) then
-            alpha_z = (plasma_tab((im-1)*Nz_plasma_tab+km+1,2) - z_a(k))&
-                    / (plasma_tab((im-1)*Nz_plasma_tab+km+1,2) - plasma_tab((im-1)*Nz_plasma_tab+km,2))
-            beta_z  = (z_a(k) - plasma_tab((im-1)*Nz_plasma_tab+km,2))&
-                    / (plasma_tab((im-1)*Nz_plasma_tab+km+1,2) - plasma_tab((im-1)*Nz_plasma_tab+km,2))
-            r = (alpha_z * plasma_tab((im-1)*Nz_plasma_tab+km  ,3))&
-              + (beta_z  * plasma_tab((im-1)*Nz_plasma_tab+km+1,3))
-            t = (alpha_z * plasma_tab((im-1)*Nz_plasma_tab+km  ,4))&
-              + (beta_z  * plasma_tab((im-1)*Nz_plasma_tab+km+1,4))
-          else if ((im.ne.Nx_plasma_tab).and.(km == Nz_plasma_tab)) then
-            alpha_x = (plasma_tab(im * Nz_plasma_tab+km,1) - x_a(i))&
-                    / (plasma_tab(im * Nz_plasma_tab+km,1) - plasma_tab((im-1)*Nz_plasma_tab+km,1))
-            beta_x  = (x_a(i) - plasma_tab((im-1)*Nz_plasma_tab+km,1))&
-                    / (plasma_tab(im*Nz_plasma_tab+km,1) - plasma_tab((im-1)*Nz_plasma_tab+km,1))
-            r = (alpha_x * plasma_tab((im-1)*Nz_plasma_tab+km,3))&
-              + (beta_x  * plasma_tab( im   *Nz_plasma_tab+km,3))
-            t = (alpha_x * plasma_tab((im-1)*Nz_plasma_tab+km,4))&
-              + (beta_x  * plasma_tab( im   *Nz_plasma_tab+km,4))
-          else
-            r = plasma_tab((im-1)*Nz_plasma_tab+km,3)
-            t = plasma_tab((im-1)*Nz_plasma_tab+km,4)
-          end if
-          A(i,k)     = A0
-          Z(i,k)     = Z0
-          ni(i,k) = r / (A0 * mu)
-          Te(i,k) = t * eV
-          Ti(i,k) = t * eV
+                      nb, jbx_n, jbz_n, jrx_n, jrz_n,jbx_np1, jbz_np1, jrx_np1, jrz_np1,&
+                      pdepos, plost_col, plost_res, Te, Ti,&
+                      nK_Holes, nKalpha, nKbeta,ioniztime,&
+                      ud, Udcol, Udres, ue, usf, usb, usu, usd, ub, uel, uma,Sva, Sva_lp1, nua)
+  implicit none
+  real(PR), dimension(1:N_x), intent(in)                :: x_a
+  real(PR), dimension(1:N_z), intent(in)                :: z_a
+  real(PR), dimension(1:N_eps), intent(in)              :: eps_a
+  real(PR), intent(out)                                 :: Ud, udcol, udres, ue, usf
+  real(PR), intent(out)                                 :: usb, usu, usd, ub, uel, uma
+  real(PR), intent(out), dimension(1:N_x,1:N_z)         :: Ex, Ez, By_n, By_np1
+  real(PR), intent(out), dimension(1:N_x,1:N_z)         :: nb, jbx_n, jbz_n, jrx_n, jrz_n
+  real(PR), intent(out), dimension(1:N_x,1:N_z)         :: jbx_np1, jbz_np1, jrx_np1, jrz_np1
+  real(PR), intent(out), dimension(1:N_x,1:N_z)         :: pdepos, plost_col, plost_res
+  real(PR), intent(out), dimension(1:N_x,1:N_z)         :: nK_Holes, nKalpha, nKbeta, ioniztime
+  real(PR), intent(out), dimension(0:N_x+1,0:N_z+1)     :: Te, Ti
+  real(PR), intent(out), dimension(0:N_x+1,0:N_z+1)     :: ni, A, Z
+  real(PR), dimension(1:N_x,1:N_z,1:N_eps), intent(out) :: Sva, Sva_lp1, nua
+  integer                                               :: i, k, l, reason, N_plasma_tab
+  integer                                               :: Nx_plasma_tab, Nz_plasma_tab
+  real(PR), dimension(:,:), allocatable                 :: plasma_tab
+  integer                                               :: il, ir, im, kl, kr, km
+  logical                                               :: not_found
+  real(PR)                                              :: alpha_x, alpha_z, r, t
+  real(PR)                                              :: beta_x, beta_z
+  real(PR)                                              :: A1, Z1, ni1
+  character                                             :: str
+  !
+  call get_A_Z_ni(A1, Z1,ni1)
+  !
+  select case  (Material)
+    case (1)
+      if (tabulated_plasma) then
+        !  Read the file 'sources/user/plasma_tab.dat' and find the number of lines :
+        reason = 0
+        i = -2
+        open (unit=50,file='sources/user/plasma_tab.dat',form='formatted',status='unknown')      
+        do while (reason==0)
+          read(50,*,IOSTAT=Reason) str
+          i = i + 1
+          if (str == '') reason = 1
         end do
-      end do
-      !$omp END PARALLEL DO
-      deallocate(plasma_tab)
-      ! guard cells :
-      do i = 0,N_x+1,1
-        A(i,0)      = A(i,1)
-        A(i,N_z+1)  = A(i,N_z)
-        Z(i,0)      = Z(i,1)
-        Z(i,N_z+1)  = Z(i,N_z)
-        ni(i,0)     = ni(i,1)
-        ni(i,N_z+1) = ni(i,N_z)
-        Te(i,0)     = Te(i,1)
-        Te(i,N_z+1) = Te(i,N_z)
-        Ti(i,0)     = Ti(i,1)
-        Ti(i,N_z+1) = Ti(i,N_z)
-      end do
-      do k = 1,N_z,1
-        A(0,k)      = A(1,k)
-        A(N_x+1,k)  = A(N_x,k)
-        Z(0,k)      = Z(1,k)
-        Z(N_x+1,k)  = Z(N_x,k)
-        ni(0,k)     = ni(1,k)
-        ni(N_x+1,k) = ni(N_x,k)
-        Te(0,k)     = Te(1,k)
-        Te(N_x+1,k) = Te(N_x,k)
-        Ti(0,k)     = Ti(1,k)
-        Ti(N_x+1,k) = Ti(N_x,k)
-      end do
-    else
+        close(50)
+        N_plasma_tab = i
+        allocate(plasma_tab(1:N_plasma_tab,1:4))
+        !  Read the file 'sources/user/plasma_tab.dat' and define the table plasma_tab with the 
+        !  corresponding values :
+        open (unit=50,file='sources/user/plasma_tab.dat',form='formatted',status='unknown')      
+        read(50,*)
+        do i =1,N_plasma_tab,1
+          read(50,*) plasma_tab(i,1),plasma_tab(i,2),plasma_tab(i,3),plasma_tab(i,4)
+        end do
+        close(50)
+        ! find the number of cells on x-axis and deduce the
+        !      the number of cells on z-axis in 'sources/user/plasma_tab.dat' :
+        i = 1
+        reason = 0
+        do while (reason==0)
+          if ((i.ne.1)) then
+            if (plasma_tab(i,1).ne.plasma_tab(i-1,1)) then
+              reason =1
+            end if
+          end if
+          i = i + 1
+        end do
+        Nx_plasma_tab = i - 2
+        Nz_plasma_tab = N_plasma_tab / Nx_plasma_tab
+        !$omp  PARALLEL DO DEFAULT(SHARED) PRIVATE(k,i,not_found,il,ir,im,kl,kr,km,&
+        !$omp& alpha_x,beta_x,alpha_z,beta_z,r,t) COLLAPSE(2)
+        do k=1,N_z,1
+          do i=1,N_x,1
+            ! find by dichotomy the closest cell :
+            not_found = .true.
+            il = 1
+            ir = Nx_plasma_tab
+            im = (il+ir)/2
+            do while (not_found)
+              if ((plasma_tab((im-1)*Nz_plasma_tab+1,1)) <= x_a(i)) then
+                il = im
+              else
+                ir = im
+              end if
+              im = (il+ir)/2
+              not_found = (ir - il) > 1   
+            end do
+            not_found = .true.
+            kl = 1
+            kr = Nz_plasma_tab
+            km = (kl+kr)/2
+            do while (not_found)
+              if ((plasma_tab((im-1)*Nz_plasma_tab+km,2)) <= z_a(k)) then
+                kl = km
+              else
+                kr = km
+              end if
+              km = (kl+kr)/2
+              not_found = (kr - kl) > 1   
+            end do
+            if ((im.ne.Nx_plasma_tab).and.(km.ne.Nz_plasma_tab)) then
+              ! linear interpolation
+              alpha_x = (plasma_tab(im*Nz_plasma_tab+km,1) - x_a(i))&
+                      / (plasma_tab(im*Nz_plasma_tab+km,1) - plasma_tab((im-1)*Nz_plasma_tab+km,1))
+              beta_x  = (x_a(i) - plasma_tab((im-1)*Nz_plasma_tab+km,1))&
+                      / (plasma_tab(im*Nz_plasma_tab+km,1) - plasma_tab((im-1)*Nz_plasma_tab+km,1))
+              alpha_z = (plasma_tab((im-1)*Nz_plasma_tab+km+1,2) - z_a(k))&
+                      / (plasma_tab((im-1)*Nz_plasma_tab+km+1,2) - plasma_tab((im-1)*Nz_plasma_tab+km,2))
+              beta_z  = (z_a(k) - plasma_tab((im-1)*Nz_plasma_tab+km,2))&
+                      / (plasma_tab((im-1)*Nz_plasma_tab+km+1,2) - plasma_tab((im-1)*Nz_plasma_tab+km,2))
+              r = (alpha_x * ((alpha_z * plasma_tab((im-1)*Nz_plasma_tab+km  ,3))&
+                             +(beta_z  * plasma_tab((im-1)*Nz_plasma_tab+km+1,3))))&
+                + (beta_x  * ((alpha_z * plasma_tab( im   *Nz_plasma_tab+km  ,3))&
+                             +(beta_z  * plasma_tab( im   *Nz_plasma_tab+km+1,3))))
+              t = (alpha_x * ((alpha_z * plasma_tab((im-1)*Nz_plasma_tab+km  ,4))&
+                             +(beta_z  * plasma_tab((im-1)*Nz_plasma_tab+km+1,4))))&
+                + (beta_x  * ((alpha_z * plasma_tab( im   *Nz_plasma_tab+km  ,4))&
+                             +(beta_z  * plasma_tab( im   *Nz_plasma_tab+km+1,4))))
+            else if ((im == Nx_plasma_tab).and.(km.ne.Nz_plasma_tab)) then
+              alpha_z = (plasma_tab((im-1)*Nz_plasma_tab+km+1,2) - z_a(k))&
+                      / (plasma_tab((im-1)*Nz_plasma_tab+km+1,2) - plasma_tab((im-1)*Nz_plasma_tab+km,2))
+              beta_z  = (z_a(k) - plasma_tab((im-1)*Nz_plasma_tab+km,2))&
+                      / (plasma_tab((im-1)*Nz_plasma_tab+km+1,2) - plasma_tab((im-1)*Nz_plasma_tab+km,2))
+              r = (alpha_z * plasma_tab((im-1)*Nz_plasma_tab+km  ,3))&
+                + (beta_z  * plasma_tab((im-1)*Nz_plasma_tab+km+1,3))
+              t = (alpha_z * plasma_tab((im-1)*Nz_plasma_tab+km  ,4))&
+                + (beta_z  * plasma_tab((im-1)*Nz_plasma_tab+km+1,4))
+            else if ((im.ne.Nx_plasma_tab).and.(km == Nz_plasma_tab)) then
+              alpha_x = (plasma_tab(im * Nz_plasma_tab+km,1) - x_a(i))&
+                      / (plasma_tab(im * Nz_plasma_tab+km,1) - plasma_tab((im-1)*Nz_plasma_tab+km,1))
+              beta_x  = (x_a(i) - plasma_tab((im-1)*Nz_plasma_tab+km,1))&
+                      / (plasma_tab(im*Nz_plasma_tab+km,1) - plasma_tab((im-1)*Nz_plasma_tab+km,1))
+              r = (alpha_x * plasma_tab((im-1)*Nz_plasma_tab+km,3))&
+                + (beta_x  * plasma_tab( im   *Nz_plasma_tab+km,3))
+              t = (alpha_x * plasma_tab((im-1)*Nz_plasma_tab+km,4))&
+                + (beta_x  * plasma_tab( im   *Nz_plasma_tab+km,4))
+            else
+              r = plasma_tab((im-1)*Nz_plasma_tab+km,3)
+              t = plasma_tab((im-1)*Nz_plasma_tab+km,4)
+            end if
+            A(i,k)  = A1
+            Z(i,k)  = Z1
+            ni(i,k) = r / (A1 * mu)
+            Te(i,k) = t * eV
+            Ti(i,k) = t * eV
+          end do
+        end do
+        !$omp END PARALLEL DO
+        deallocate(plasma_tab)
+        ! guard cells :
+        do i = 0,N_x+1,1
+          A(i,0)      = A(i,1)
+          A(i,N_z+1)  = A(i,N_z)
+          Z(i,0)      = Z(i,1)
+          Z(i,N_z+1)  = Z(i,N_z)
+          ni(i,0)     = ni(i,1)
+          ni(i,N_z+1) = ni(i,N_z)
+          Te(i,0)     = Te(i,1)
+          Te(i,N_z+1) = Te(i,N_z)
+          Ti(i,0)     = Ti(i,1)
+          Ti(i,N_z+1) = Ti(i,N_z)
+        end do
+        do k = 1,N_z,1
+          A(0,k)      = A(1,k)
+          A(N_x+1,k)  = A(N_x,k)
+          Z(0,k)      = Z(1,k)
+          Z(N_x+1,k)  = Z(N_x,k)
+          ni(0,k)     = ni(1,k)
+          ni(N_x+1,k) = ni(N_x,k)
+          Te(0,k)     = Te(1,k)
+          Te(N_x+1,k) = Te(N_x,k)
+          Ti(0,k)     = Ti(1,k)
+          Ti(N_x+1,k) = Ti(N_x,k)
+        end do
+      else
+        !$omp PARALLEL DO DEFAULT(SHARED) PRIVATE(i,k) COLLAPSE(2)
+        do i=0,N_x+1,1
+          do k=0,N_z+1,1
+            A(i,k)     = A1
+            Z(i,k)     = Z1
+            ni(i,k)    = ni1
+            Te(i,k)    = T_ini 
+            Ti(i,k)    = T_ini
+          end do
+        end do
+        !$omp END PARALLEL DO
+      end if
+    case (2)
       !$omp PARALLEL DO DEFAULT(SHARED) PRIVATE(i,k) COLLAPSE(2)
       do i=0,N_x+1,1
         do k=0,N_z+1,1
-          A(i,k)     = A0
-          Z(i,k)     = Z0
-          ni(i,k)    = rho / (mu * A0)
-          Te(i,k)    = T_ini 
-          Ti(i,k)    = T_ini
+          ni(i,k)    = ni1
+          A(i,k)     = A1
+          Z(i,k)     = Z1
+          Te(i,k)    = Tamb 
+          Ti(i,k)    = Tamb
         end do
       end do
       !$omp END PARALLEL DO
+  end select
+  if (Tracer==1) then
+    !$omp PARALLEL DO DEFAULT(SHARED) PRIVATE(i,k) COLLAPSE(2)
+    do i=0,N_x+1,1
+      do k=1,N_z,1
+        if ( (z_a(k) >= z_tracer_start) .and. (z_a(k) < z_tracer_stop) ) then
+          A(i,k)     = A_tracer
+          ni(i,k)    = rho_tracer / (mu * A_tracer)
+          Z(i,k)     = Z_tracer
+        end if
+      end do
+    end do
+    !$omp END PARALLEL DO
+    ! guard cells
+    if (z_a(1) == z_tracer_start) then
+      !$omp PARALLEL DO DEFAULT(SHARED) PRIVATE(i) COLLAPSE(1)
+      do i=0,N_x+1,1
+        ni(i,0) = ni(i,1)
+        A(i,0)  = A(i,1)
+        Z(i,0)  = Z(i,1)
+      end do
+      !$omp END PARALLEL DO
     end if
-  case (2)
-    select case (Mat)
-      case ('Al')
-        !$omp PARALLEL DO DEFAULT(SHARED) PRIVATE(i,k) COLLAPSE(2)
-        do i=0,N_x+1,1
-          do k=0,N_z+1,1
-            ni(i,k)    = ni_Al
-            A(i,k)     = A_Al
-            Z(i,k)     = Z_Al
-            Te(i,k)    = Tamb 
-            Ti(i,k)    = Tamb
-          end do
-        end do
-        !$omp END PARALLEL DO
-      case ('Cu')
-        !$omp PARALLEL DO DEFAULT(SHARED) PRIVATE(i,k) COLLAPSE(2)
-        do i=0,N_x+1,1
-          do k=0,N_z+1,1
-            ni(i,k)    = ni_Cu
-            A(i,k)     = A_Cu
-            Z(i,k)     = Z_Cu
-            Te(i,k)    = Tamb 
-            Ti(i,k)    = Tamb
-          end do
-        end do
-        !$omp END PARALLEL DO
-      case ('Ta')
-        !$omp PARALLEL DO DEFAULT(SHARED) PRIVATE(i,k) COLLAPSE(2)
-        do i=0,N_x+1,1
-          do k=0,N_z+1,1
-            ni(i,k)    = ni_Ta
-            A(i,k)     = A_Ta
-            Z(i,k)     = Z_Ta
-            Te(i,k)    = Tamb 
-            Ti(i,k)    = Tamb
-          end do
-        end do
-        !$omp END PARALLEL DO
-    end select
-end select
-if (Tracer==1) then
+    if (z_a(N_z) == z_tracer_stop) then
+      !$omp PARALLEL DO DEFAULT(SHARED) PRIVATE(i) COLLAPSE(1)
+      do i=0,N_x+1,1
+        ni(i,N_z+1) = ni(i,N_z)
+        A(i,N_z+1)  = A(i,N_z)
+        Z(i,N_z+1)  = Z(i,N_z)
+      end do
+      !$omp END PARALLEL DO
+    end if
+  end if
   !$omp PARALLEL DO DEFAULT(SHARED) PRIVATE(i,k) COLLAPSE(2)
-  do i=0,N_x+1,1
+  do i=1,N_x,1
     do k=1,N_z,1
-      if ( (z_a(k) >= z_tracer_start) .and. (z_a(k) < z_tracer_stop) ) then
-        A(i,k)     = A_tracer
-        ni(i,k)    = rho_tracer / (mu * A_tracer)
-        Z(i,k)     = Z_tracer
-      end if
+      Ex(i,k)          = 0._PR
+      Ez(i,k)          = 0._PR
+      By_n(i,k)        = 0._PR
+      By_np1(i,k)      = 0._PR
+      nb(i,k)          = 0._PR
+      jbx_n(i,k)       = 0._PR
+      jbz_n(i,k)       = 0._PR
+      jrx_n(i,k)       = 0._PR
+      jrz_n(i,k)       = 0._PR           
+      jbx_np1(i,k)     = 0._PR
+      jbz_np1(i,k)     = 0._PR
+      jrx_np1(i,k)     = 0._PR
+      jrz_np1(i,k)     = 0._PR          
+      pdepos(i,k)      = 0._PR
+      plost_col(i,k)   = 0._PR
+      plost_res(i,k)   = 0._PR
+      nK_Holes(i,k)    = 0._PR
+      nKalpha(i,k)     = 0._PR
+      nKbeta(i,k)      = 0._PR
+      ioniztime(i,k)   = 0._PR
     end do
   end do
-  !$omp END PARALLEL DO
-  ! guard cells
-  if (z_a(1) == z_tracer_start) then
-    !$omp PARALLEL DO DEFAULT(SHARED) PRIVATE(i) COLLAPSE(1)
-    do i=0,N_x+1,1
-      ni(i,0) = ni(i,1)
-      A(i,0)  = A(i,1)
-      Z(i,0)  = Z(i,1)
-    end do
-    !$omp END PARALLEL DO
-  end if
-  if (z_a(N_z) == z_tracer_stop) then
-    !$omp PARALLEL DO DEFAULT(SHARED) PRIVATE(i) COLLAPSE(1)
-    do i=0,N_x+1,1
-      ni(i,N_z+1) = ni(i,N_z)
-      A(i,N_z+1)  = A(i,N_z)
-      Z(i,N_z+1)  = Z(i,N_z)
-    end do
-    !$omp END PARALLEL DO
-  end if
-end if
-!$omp PARALLEL DO DEFAULT(SHARED) PRIVATE(i,k) COLLAPSE(2)
-do i=1,N_x,1
-  do k=1,N_z,1
-    Ex(i,k)          = 0._PR
-    Ez(i,k)          = 0._PR
-    By_n(i,k)        = 0._PR
-    By_np1(i,k)      = 0._PR
-    nb(i,k)          = 0._PR
-    jbx_n(i,k)       = 0._PR
-    jbz_n(i,k)       = 0._PR
-    jrx_n(i,k)       = 0._PR
-    jrz_n(i,k)       = 0._PR           
-    jbx_np1(i,k)     = 0._PR
-    jbz_np1(i,k)     = 0._PR
-    jrx_np1(i,k)     = 0._PR
-    jrz_np1(i,k)     = 0._PR          
-    pdepos(i,k)      = 0._PR
-    plost_col(i,k)   = 0._PR
-    plost_res(i,k)   = 0._PR
-    nK_Holes(i,k)    = 0._PR
-    nKalpha(i,k)     = 0._PR
-    nKbeta(i,k)      = 0._PR
-    ioniztime(i,k)   = 0._PR
-  end do
-end do
-ud    = 0._PR
-udcol = 0._PR
-udres = 0._PR
-ue    = 0._PR
-usf   = 0._PR
-usb   = 0._PR
-usu   = 0._PR
-usd   = 0._PR 
-ub    = 0._PR
-uel   = 0._PR
-uma   = 0._PR
-do l=1,N_eps,1
-  do k=1,N_z,1
-    do i=1,N_x,1
-      Sva(i,k,l)     = S_tot(A(i,k), Z(i,k), ni(i,k), Te(i,k), Ti(i,k), eps_a(l)) &
-      &* vit(eps_a(l))
-      Sva_lp1(i,k,l) = S_tot(A(i,k), Z(i,k), ni(i,k), Te(i,k), Ti(i,k), eps_a(l)+d_eps) &
-      &* vit(eps_a(l)+d_eps)
-      nua(i,k,l)     = nu_tot(Z(i,k), ni(i,k), Te(i,k), Ti(i,k), eps_a(l)) 
+  ud    = 0._PR
+  udcol = 0._PR
+  udres = 0._PR
+  ue    = 0._PR
+  usf   = 0._PR
+  usb   = 0._PR
+  usu   = 0._PR
+  usd   = 0._PR 
+  ub    = 0._PR
+  uel   = 0._PR
+  uma   = 0._PR
+  do l=1,N_eps,1
+    do k=1,N_z,1
+      do i=1,N_x,1
+        Sva(i,k,l)     = S_tot(A(i,k), Z(i,k), ni(i,k), Te(i,k), Ti(i,k), eps_a(l)) &
+        &* vit(eps_a(l))
+        Sva_lp1(i,k,l) = S_tot(A(i,k), Z(i,k), ni(i,k), Te(i,k), Ti(i,k), eps_a(l)+d_eps) &
+        &* vit(eps_a(l)+d_eps)
+        nua(i,k,l)     = nu_tot(Z(i,k), ni(i,k), Te(i,k), Ti(i,k), eps_a(l)) 
+      end do
     end do
   end do
-end do
 end subroutine initialize
 
 subroutine initialize_next_step(phin, phinp1,&

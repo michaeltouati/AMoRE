@@ -557,11 +557,11 @@ real(PR), dimension(:,:), allocatable, intent(inout) :: eta_tab
 integer, intent(out)                                 :: N_eta_tab
 integer                                              :: reason, i
 character                                            :: str
-! Find the number of lines in the file 's/resistivity_tab.dat' and allocate the
+! Find the number of lines in the file 'sources/user/resistivity_tab.dat' and allocate the
 ! table eta_tab :
 reason = 0
 i = -2
-open (unit=50,file='sources/resistivity_tab.dat',form='formatted',status='unknown')      
+open (unit=50,file='sources/user/resistivity_tab.dat',form='formatted',status='unknown')      
 do while (reason==0)
 read(50,*,IOSTAT=Reason) str
 i = i + 1
@@ -570,9 +570,9 @@ end do
 close(50)
 N_eta_tab = i
 allocate(eta_tab(1:N_eta_tab,1:2))
-!  Read the file 'sources/resistivity_tab.dat' and define the table eta_tab with the 
+!  Read the file 'sources/user/resistivity_tab.dat' and define the table eta_tab with the 
 !  corresponding values
-open (unit=40,file='sources/resistivity_tab.dat',form='formatted',status='unknown')      
+open (unit=40,file='sources/user/resistivity_tab.dat',form='formatted',status='unknown')      
 read(40,*)
 do i =1,N_eta_tab,1
 read(40,*) eta_tab(i,1),eta_tab(i,2)
