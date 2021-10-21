@@ -103,7 +103,7 @@
 #
 #bi_temp        .false.
 #
-#magnetic_diff .false.
+#magnetic_diff .true.
 #
 #backward 1
 #
