@@ -45,7 +45,7 @@ Type
 ```sh
 make plot
 ```
-to plot all the simulation results that are stored in the directory 'diag'. It can also be plotted separately all 2D spatial density plots of relativistic electron beam and target species hydrodynamic moments as well as the self-generated electromagnetic fields and target transport coefficients at each damped time step by typing
+to plot all the simulation results that are stored in the directory 'results'. It can also be plotted separately all 2D spatial density plots of relativistic electron beam and target species hydrodynamic moments as well as the self-generated electromagnetic fields and target transport coefficients at each damped time step by typing
 ```sh
 make plot_maps
 ```
