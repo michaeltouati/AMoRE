@@ -171,7 +171,7 @@ TEST_DIR += Laser-solid-interaction/Both-sides-refluxing
 TEST_DIR += Solids/Al
 TEST_DIR += Solids/Cu
 TEST_DIR += Solids/Ta
-TEST_DIR += Solids/CH
+TEST_DIR += Solids/CH-like
 TEST_DIR += Solids/C-vitreous
 TEST_DIR += Plasmas/H
 TEST_DIR += Plasmas/Be
@@ -207,9 +207,9 @@ test :
 			mv sources/user/resistivity_tab.dat sources/user/resistivity_tab-old.dat ; \
 			cp test-cases/Tests/Solids/C-vitreous/resistivity_tab.dat sources/user/ ; \
 		fi ; \
-		if [ $${tst} = Solids/CH ]; then \
+		if [ $${tst} = Solids/CH-like ]; then \
 			mv sources/user/resistivity_tab.dat sources/user/resistivity_tab-old.dat ; \
-			cp test-cases/Tests/Solids/CH/resistivity_tab.dat sources/user/ ; \
+			cp test-cases/Tests/Solids/CH-like/resistivity_tab.dat sources/user/ ; \
 		fi ; \
 		cp test-cases/Tests/$${tst}/input-deck . ; \
 		./amore > test.output ; \
@@ -227,7 +227,7 @@ test :
 		if [ $${tst} = Solids/C-vitreous ]; then \
 			mv sources/user/resistivity_tab-old.dat sources/user/resistivity_tab.dat ; \
 		fi ; \
-		if [ $${tst} = Solids/CH ]; then \
+		if [ $${tst} = Solids/CH-like ]; then \
 			mv sources/user/resistivity_tab-old.dat sources/user/resistivity_tab.dat ; \
 		fi ; \
 	done

@@ -34,7 +34,7 @@ TEST_DIR+=' Laser-solid-interaction/Both-sides-refluxing'
 TEST_DIR+=' Solids/Al'
 TEST_DIR+=' Solids/Cu'
 TEST_DIR+=' Solids/Ta'
-TEST_DIR+=' Solids/CH'
+TEST_DIR+=' Solids/CH-like'
 TEST_DIR+=' Solids/C-vitreous'
 TEST_DIR+=' Plasmas/H'
 TEST_DIR+=' Plasmas/Be'
@@ -47,7 +47,7 @@ TEST_DIR+=' Plasmas/Be'
 cd ../..
 mv input-deck input-deck-old
 for tst in ${TEST_DIR}; do \
-	if [[ ${tst} = Solids/C-vitreous || ${tst} = Solids/CH ]]; then \
+	if [[ ${tst} = Solids/C-vitreous || ${tst} = Solids/CH-like ]]; then \
 		mv sources/user/resistivity_tab.dat sources/user/resistivity_tab-old.dat ; \
 		cp test-cases/Tests/${tst}/resistivity_tab.dat sources/user/ ; \
 	fi
@@ -55,7 +55,7 @@ for tst in ${TEST_DIR}; do \
 	./amore > output 
 	mv output test-cases/Tests/${tst}/ ; \
 	echo ${tst}'/output file generated'
-	if [[ ${tst} = Solids/C-vitreous || ${tst} = Solids/CH ]]; then \
+	if [[ ${tst} = Solids/C-vitreous || ${tst} = Solids/CH-like ]]; then \
 		mv sources/user/resistivity_tab-old.dat sources/user/resistivity_tab.dat ; \
 	fi
 done
