@@ -205,6 +205,8 @@ TEST_DIR += Spectrum/Boltzmannian
 TEST_DIR += Spectrum/Bi-temperature
 TEST_DIR += Spectrum/Modified-bi-temperature
 # TEST_DIR += Spectrum/Tabulated
+TEST_DIR += X-rays/Kalpha
+TEST_DIR += X-rays/Tracer
 # TEST_DIR += New-features/Example
 
 RED   =$(shell tput setaf 1)

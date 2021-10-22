@@ -296,11 +296,11 @@
 #
 #tabulated_resistivity .false.
 #
-#Tracer 1
+#Tracer 0
 #
-#z_tracer_start 3.
+#z_tracer_start 50.
 #
-#z_tracer_stop 6.
+#z_tracer_stop 55.
 #
 #Z_tracer 29.
 #

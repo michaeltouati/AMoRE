@@ -43,6 +43,8 @@ TEST_DIR+=' Spectrum/Gaussian'
 TEST_DIR+=' Spectrum/Boltzmannian'
 TEST_DIR+=' Spectrum/Bi-temperature'
 TEST_DIR+=' Spectrum/Modified-bi-temperature'
+TEST_DIR+=' X-rays/Kalpha'
+TEST_DIR+=' X-rays/Tracer'
 # TEST_DIR+=' Spectrum/Tabulated'
 # TEST_DIR+=' New-features/'
 
