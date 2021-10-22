@@ -59,7 +59,7 @@
  t = 0.00000000000000E+00 fs
  ( iteration :           1 )
  ==========================
- * Time integrated injected energy = 0.80514766021971E-03 J
+ * Time integrated injected energy = 0.80514765742984E-03 J
  * Instantaneous beam energy       = 0.00000000000000E+00 J
  * Energy deposited :              = 0.00000000000000E+00 J
     * due to collisions            = 0.00000000000000E+00 J
@@ -73,87 +73,87 @@
     * downward                     = 0.00000000000000E+00 J
  -> ENERGY CONSERVATION ERROR      =100.00 %
  ==========================
- t = 0.30871672671732E+02 fs
+ t = 0.30872409611228E+02 fs
  ( iteration :           8 )
  ==========================
- * Time integrated injected energy = 0.29149746515131E+00 J
- * Instantaneous beam energy       = 0.21973085358072E+00 J
- * Energy deposited :              = 0.13363448322397E-01 J
-    * due to collisions            = 0.22138595262476E-03 J
-    * due to Ohmic heating         = 0.13141973120012E-01 J
- * Instantaneous electric energy   = 0.60637059854253E-04 J
- * Instantaneous magnetic energy   = 0.11391143817333E-05 J
- * Time integrated escaped energy  = 0.39330142679344E-02 J
-    * forward                      = 0.39330142679344E-02 J
+ * Time integrated injected energy = 0.29152149524953E+00 J
+ * Instantaneous beam energy       = 0.21975022378303E+00 J
+ * Energy deposited :              = 0.13364669952006E-01 J
+    * due to collisions            = 0.22140771337358E-03 J
+    * due to Ohmic heating         = 0.13143172998332E-01 J
+ * Instantaneous electric energy   = 0.60635620094931E-04 J
+ * Instantaneous magnetic energy   = 0.11366187621522E-05 J
+ * Time integrated escaped energy  = 0.39334764645968E-02 J
+    * forward                      = 0.39334764645968E-02 J
     * backward                     = 0.00000000000000E+00 J
-    * upward                       = 0.16253993042230E-10 J
-    * downward                     = 0.16253993042230E-10 J
- -> ENERGY CONSERVATION ERROR      = 18.67 %
+    * upward                       = 0.16256238817458E-10 J
+    * downward                     = 0.16256238817458E-10 J
+ -> ENERGY CONSERVATION ERROR      = 18.66 %
  ==========================
- t = 0.61331196613763E+02 fs
+ t = 0.61332402888031E+02 fs
  ( iteration :          22 )
  ==========================
- * Time integrated injected energy = 0.18223784749672E+01 J
- * Instantaneous beam energy       = 0.12751192023843E+01 J
- * Energy deposited :              = 0.26998375268898E+00 J
-    * due to collisions            = 0.50006533469292E-02 J
-    * due to Ohmic heating         = 0.26498599582997E+00 J
- * Instantaneous electric energy   = 0.57861803571264E-04 J
- * Instantaneous magnetic energy   = 0.22057536034529E-03 J
- * Time integrated escaped energy  = 0.32362561247719E+00 J
-    * forward                      = 0.32362561247719E+00 J
+ * Time integrated injected energy = 0.18224042632170E+01 J
+ * Instantaneous beam energy       = 0.12751151474038E+01 J
+ * Energy deposited :              = 0.26999406251205E+00 J
+    * due to collisions            = 0.50009273689987E-02 J
+    * due to Ohmic heating         = 0.26499603140912E+00 J
+ * Instantaneous electric energy   = 0.57860053234959E-04 J
+ * Instantaneous magnetic energy   = 0.22054779665937E-03 J
+ * Time integrated escaped energy  = 0.32365476352480E+00 J
+    * forward                      = 0.32365476352480E+00 J
     * backward                     = 0.00000000000000E+00 J
-    * upward                       = 0.21711867516894E-07 J
-    * downward                     = 0.21711867516894E-07 J
+    * upward                       = 0.21714885763562E-07 J
+    * downward                     = 0.21714885763562E-07 J
  -> ENERGY CONSERVATION ERROR      = -2.56 %
  ==========================
- t = 0.91220553848839E+02 fs
+ t = 0.91222675858635E+02 fs
  ( iteration :          33 )
  ==========================
- * Time integrated injected energy = 0.19816819298315E+01 J
- * Instantaneous beam energy       = 0.57257031217052E+00 J
- * Energy deposited :              = 0.39392333770903E+00 J
-    * due to collisions            = 0.10447851179496E-01 J
-    * due to Ohmic heating         = 0.38348038195155E+00 J
- * Instantaneous electric energy   = 0.13511837421143E-04 J
- * Instantaneous magnetic energy   = 0.29994552661196E-03 J
- * Time integrated escaped energy  = 0.10499134071823E+01 J
-    * forward                      = 0.10499134071823E+01 J
-    * backward                     = 0.58849465880474E-06 J
-    * upward                       = 0.18645900256840E-06 J
-    * downward                     = 0.18645900256840E-06 J
+ * Time integrated injected energy = 0.19816788588646E+01 J
+ * Instantaneous beam energy       = 0.57251575021749E+00 J
+ * Energy deposited :              = 0.39392567101952E+00 J
+    * due to collisions            = 0.10448053457834E-01 J
+    * due to Ohmic heating         = 0.38348251240553E+00 J
+ * Instantaneous electric energy   = 0.13509760883906E-04 J
+ * Instantaneous magnetic energy   = 0.29990616968479E-03 J
+ * Time integrated escaped energy  = 0.10499633048007E+01 J
+    * forward                      = 0.10499633048007E+01 J
+    * backward                     = 0.58875087199228E-06 J
+    * upward                       = 0.18647441127531E-06 J
+    * downward                     = 0.18647441127531E-06 J
  -> ENERGY CONSERVATION ERROR      = -1.77 %
  ==========================
- t = 0.12196840257848E+03 fs
+ t = 0.12197172920696E+03 fs
  ( iteration :          42 )
  ==========================
- * Time integrated injected energy = 0.19816819298315E+01 J
- * Instantaneous beam energy       = 0.17459377878177E+00 J
- * Energy deposited :              = 0.40822061391479E+00 J
-    * due to collisions            = 0.12492821400368E-01 J
-    * due to Ohmic heating         = 0.39573285514900E+00 J
- * Instantaneous electric energy   = 0.16699764676686E-05 J
- * Instantaneous magnetic energy   = 0.29724243594092E-03 J
- * Time integrated escaped energy  = 0.13574476279336E+01 J
-    * forward                      = 0.13574476279336E+01 J
-    * backward                     = 0.16344060558349E-04 J
-    * upward                       = 0.42522106152453E-06 J
-    * downward                     = 0.42522106152453E-06 J
+ * Time integrated injected energy = 0.19816788588646E+01 J
+ * Instantaneous beam energy       = 0.17456350777806E+00 J
+ * Energy deposited :              = 0.40822036035892E+00 J
+    * due to collisions            = 0.12492844389011E-01 J
+    * due to Ohmic heating         = 0.39573257790003E+00 J
+ * Instantaneous electric energy   = 0.16694768275893E-05 J
+ * Instantaneous magnetic energy   = 0.29720206409486E-03 J
+ * Time integrated escaped energy  = 0.13574791942927E+01 J
+    * forward                      = 0.13574791942927E+01 J
+    * backward                     = 0.16328845775642E-04 J
+    * upward                       = 0.42523527419869E-06 J
+    * downward                     = 0.42523527419869E-06 J
  -> ENERGY CONSERVATION ERROR      =  2.07 %
  ==========================
- t = 0.14941900799390E+03 fs
+ t = 0.14942336500906E+03 fs
  ( iteration :          49 )
  ==========================
- * Time integrated injected energy = 0.19816819298315E+01 J
- * Instantaneous beam energy       = 0.78905995192752E-01 J
- * Energy deposited :              = 0.41003102016288E+00 J
-    * due to collisions            = 0.13175106407537E-01 J
-    * due to Ohmic heating         = 0.39686082478243E+00 J
- * Instantaneous electric energy   = 0.30736230852063E-06 J
- * Instantaneous magnetic energy   = 0.28669414831388E-03 J
- * Time integrated escaped energy  = 0.14218449798664E+01 J
-    * forward                      = 0.14218449798664E+01 J
-    * backward                     = 0.60832543876533E-03 J
-    * upward                       = 0.60237016189484E-06 J
-    * downward                     = 0.60237016189484E-06 J
+ * Time integrated injected energy = 0.19816788588646E+01 J
+ * Instantaneous beam energy       = 0.78888938107375E-01 J
+ * Energy deposited :              = 0.41003028591652E+00 J
+    * due to collisions            = 0.13175024237670E-01 J
+    * due to Ohmic heating         = 0.39686017200194E+00 J
+ * Instantaneous electric energy   = 0.30724091283576E-06 J
+ * Instantaneous magnetic energy   = 0.28665543399861E-03 J
+ * Time integrated escaped energy  = 0.14218674778971E+01 J
+    * forward                      = 0.14218674778971E+01 J
+    * backward                     = 0.60792128080711E-03 J
+    * upward                       = 0.60236950346050E-06 J
+    * downward                     = 0.60236950346050E-06 J
  -> ENERGY CONSERVATION ERROR      =  3.53 %

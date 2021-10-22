@@ -77,7 +77,7 @@ real(PR), parameter, public :: fs = 1.E-15_PR
 ! 1 micron in cm :
 real(PR), parameter, public :: microns = 1.E-4_PR
 ! ~Ambiant temperature [K] (26.85 Celsius degrees) :
-real(PR), parameter, public :: Tamb=300._PR
+real(PR), parameter, public :: Tamb=293.15_PR
 
 !=====================================================================================
 !                 indices of the zero and first order angular moments
