@@ -1,16 +1,16 @@
 ## Written by Michaël J TOUATI
 
-[AMoRE](https://github.com/michaeltouati/AMoRE) (Angular Momentum model Of Relativistic Electron beam transport) is a Fortran code parallelized with OpenMP and using Python3 for post-processing that allows for fast simulations of relativistic electron beam transport in solid or dense plasma while describing the full relativistic beam electron phase-space evolution. 
+[AMoRE](https://github.com/michaeltouati/AMoRE) (Angular Momentum model Of Relativistic Electron beam transport) is a Fortran code parallelized with OpenMP and using Python3 for post-processing that allows for the fast simulation of a relativistic electron beam transport in a solid or in a dense plasma while describing the full 3D-3P relativistic beam electron phase-space evolution. 
 
 It computes the two first angular moments of the relativistic beam electrons Vlasov-Fokker-Planck-Belaiev-Budker kinetic equation, completed with the Minerbo maximum angular entropy closure. The kinetic equation is coupled with the target electrons and ions Magneto-Hydrodynamic equations considering time scales on which the return current has already set up. 
 
-[AMoRE](https://github.com/michaeltouati/AMoRE) thus takes into account both collective effects, with the self-generated electromagnetic fields, and collisional effects, with the slowing down of beam electrons in collisions with plasmons, bound and free electrons and their angular scattering on both ions and electrons. More pieces of information can be found in my [PhD manuscript](https://tel.archives-ouvertes.fr/tel-01238782/document) and in this [peer-reviewed article](https://iopscience.iop.org/article/10.1088/1367-2630/16/7/073014/pdf). Citations to these references are appreciated for publications of scientific results using AMoRE in peer-reviewed journals. 
+[AMoRE](https://github.com/michaeltouati/AMoRE) thus takes into account both collective effects, with the self-generated electromagnetic fields, and collisional effects, with the slowing down of beam electrons in collisions with plasmons, bound and free electrons and their angular scattering on both ions and electrons. More pieces of information can be found in my [PhD manuscript](https://tel.archives-ouvertes.fr/tel-01238782/document) and in this [peer-reviewed article](https://iopscience.iop.org/article/10.1088/1367-2630/16/7/073014/pdf). Citations to these references are recommended and appreciated for publications of scientific results using [AMoRE](https://github.com/michaeltouati/AMoRE) in peer-reviewed journals. 
 
-Python scripts, using the Matplotlib and Numpy packages, are provided to automatically extract and plot the stored simulation results. The simulation parameters are described in the input-deck and they can be modified without having to recompile the code. Compilation rules can be modified in the makefile depending on the user compiler preferences. Tools for testing the compilation of the code and tools for checking the simulation parameters are provided.
+Python scripts, using the Matplotlib and Numpy packages, are provided to automatically extract and plot the stored simulation results. The simulation parameters are described in the [input-deck](https://github.com/michaeltouati/AMoRE/blob/main/input-deck) and they can be modified without having to recompile the code. Compilation rules can be modified in the [makefile](https://github.com/michaeltouati/AMoRE/blob/main/makefile) depending on the user compiler preferences. Tools for testing the compilation of the code and tools for checking the simulation parameters are provided.
 
 # Compiling the code
 
-Modify the [makefile](https://github.com/michaeltouati/AMoRE/blob/main/Makefile) as a function of the Fortran compiler installed on your computer and then type
+Modify the [makefile](https://github.com/michaeltouati/AMoRE/blob/main/makefile) as a function of the Fortran compiler installed on your computer and then type
 ```sh
 make
 ```
@@ -24,7 +24,7 @@ The tests consist in comparing file1 and file2 where :
 
 # Running a simulation
 
-Fill the wished input-deck [init_parameters](https://github.com/michaeltouati/AMoRE/blob/main/init_parameters) (all parameters are described inside), eventually check them by typing
+Fill the wished [input-deck](https://github.com/michaeltouati/AMoRE/blob/main/input-deck) (all parameters are described inside), eventually check them by typing
 ```sh
 ./check-input-deck
 ```
@@ -75,5 +75,5 @@ that plots respectively :
 * the transport coefficients of the solid/liquid/Warm-Dense-Matter/plasma where the beam is propagating through (ionization state, thermal capacities, electrical and thermal conductivities as well as electron-ion/lattice coupling factor) and 
 * the time evolution of the different energy contributions in the beam transport (injected electron beam energy, collisional and collective electron beam energy losses, instantaneous electron beam energy in the target and electron beam energy escaping from the target). 
 
-The python scripts are located in the directory [sources/tools](https://github.com/michaeltouati/AMoRE/tree/main/sources/tools).
+The python scripts are located in the directory [sources/plot](https://github.com/michaeltouati/AMoRE/tree/main/sources/tools).
 The plots will be located in the directory 'figures'.
