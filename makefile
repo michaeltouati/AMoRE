@@ -76,17 +76,17 @@ OPTS = -O2 -fopenmp
 SRC_PATH    = sources/
 SRC_PATH_PY = sources/plot/
 
-SRCS = acuracy.f90 \
-	constants.f90 \
-	physics_library.f90 \
+SRCS = Acuracy.f90 \
+	Constants.f90 \
+	Physics_library.f90 \
 	Fokker_Planck_coef.f90 \
-	input.f90 \
-	transport_coef.f90 \
+	Input.f90 \
+	Transport_coef.f90 \
 	VFP.f90 \
-	initialization.f90 \
-	diagnostics.f90 \
+	Initialization.f90 \
+	Diagnostics.f90 \
 	EM_fields.f90 \
-	temperatures.f90 \
+	Heat_equations.f90 \
 	AMoRE.f90
 
 OBJTS := $(SRCS:%.f90=%.o)

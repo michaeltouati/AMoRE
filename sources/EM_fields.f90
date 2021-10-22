@@ -21,7 +21,7 @@
 !!                                                                   !!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! Initial commit written by Michaël J TOUATI - Oct. 2015
-module EM_fields
+module em_fields
 
 use acuracy
 use constants
@@ -459,4 +459,4 @@ end if
 end do
 end subroutine conj_grad
 
-end module EM_fields
+end module em_fields

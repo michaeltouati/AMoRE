@@ -21,12 +21,12 @@
 !!                                                                   !!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! Initial commit written by Michaël J TOUATI - Oct. 2015
-module VFP
+module vfp
 
 use acuracy
 use constants
 use physics_library
-use Fokker_Planck_coef
+use fokker_planck_coef
 use input
 
 implicit none
@@ -897,4 +897,4 @@ usb = usb + sum(usb_temp_z(1:N_x,1:N_eps))
 deallocate(usu_temp_x, usd_temp_x, ue_temp_z, usf_temp_z, usb_temp_z)
 end subroutine boundary_cond
 
-end module VFP
+end module vfp

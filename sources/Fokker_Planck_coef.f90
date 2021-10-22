@@ -21,7 +21,7 @@
 !!                                                                   !!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! Initial commit written by Michaël J TOUATI - Oct. 2015
-module Fokker_Planck_coef
+module fokker_planck_coef
 
 use acuracy
 use constants
@@ -268,4 +268,4 @@ nup    = nu_p(Z, ni, Te, Ti, nrj)
 nu_tot = nui + nuef + nueb + nup
 end function nu_tot
 
-end module Fokker_Planck_coef
+end module fokker_planck_coef

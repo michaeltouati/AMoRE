@@ -26,11 +26,11 @@ program main
 use acuracy
 use constants
 use input
-use VFP
+use vfp
 use diagnostics
 use initialization
-use EM_fields
-use temperatures
+use em_fields
+use heat_equations
 
 ! Declaration of variables :
 implicit none
