@@ -89,17 +89,32 @@ SRCS = Acuracy.f90 \
 	Heat_equations.f90 \
 	AMoRE.f90
 
+SRCS_CHK = Acuracy.f90 \
+	Constants.f90 \
+	Physics_library.f90 \
+	Fokker_Planck_coef.f90 \
+	Input.f90 \
+	Input_chk.f90
+
 OBJTS := $(SRCS:%.f90=%.o)
 
-all : amore
+OBJTS_CHK := $(SRCS_CHK:%.f90=%.o)
+
+all : check-input-deck amore \
+	remove-compilation-files
 
 amore : $(OBJTS)
 	$(F90) $(OPTS) $(OBJTS) -o amore
-	rm *.mod
-	rm *.o
 
 %.o : $(SRC_PATH)%.f90
 	$(F90) $(OPTS) -c $(SRC_PATH)$*.f90
+
+check-input-deck : $(OBJTS_CHK)
+	$(F90) $(OPTS) $(OBJTS_CHK) -o check-input-deck
+
+remove-compilation-files :
+	@rm *.mod
+	@rm *.o
 
 #############
 #############

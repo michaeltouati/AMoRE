@@ -21,7 +21,7 @@
 !!                                                                   !!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !! Initial commit written by Michaël J TOUATI - Oct. 2015
-program main
+program amore
 
 use acuracy
 use constants
@@ -255,4 +255,4 @@ Ex, Ez, nb, jbx_n, jbz_n, jbx_np1, jbz_np1, By_n, By_np1,&
 jrx_n, jrz_n, jrx_np1, jrz_np1,p_depos, p_lost_col, p_lost_res, T_e, T_i,&
 nK_holes, nKalpha, nKbeta, ioniz_rate, phi_n, phi_np1)
 
-end program main
+end program amore
