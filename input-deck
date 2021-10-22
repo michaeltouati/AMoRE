@@ -284,13 +284,13 @@
 #
 #Mat XX
 #
-#Z0  3.5
+#Z0  6.
 #
-#A0  6.50945
+#A0  12.011
 #
 #tabulated_plasma .false.
 #
-#rho   1.05
+#rho   2.1
 #
 #T_ini 2.6e-2
 #

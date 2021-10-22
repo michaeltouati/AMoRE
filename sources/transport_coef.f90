@@ -33,8 +33,8 @@ private :: nu_ee, nu_eph, nu_c, nu_ei, nu_res, nu_cond
 private :: eps_delta_T, gama_E, gama_Lorenz
 private :: A_alpha, A_beta, gama_ii, G_gama, S_11
 private :: nu_Spitzer_cond, nu_Spitzer_res
-private :: conductivity_metals, resistivity_metals
-private :: resistivity_Spitzer, resistivity_tab, resistivity_H, cond_H
+private :: conductivity_metals, resistivity_Spitzer, resistivity_metals
+private :: resistivity_tab, resistivity_H, cond_H
 public  :: capacity, ion_capacity
 public  :: Omega_ei, resis, cond, initialize_resistivity
 
