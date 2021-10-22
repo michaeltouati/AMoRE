@@ -51,7 +51,7 @@ make plot_maps
 ```
 or
 ```sh
-python3 sources/tools/plot_maps.py
+python3 sources/plot/plot_maps.py
 ```
 Similarly, the relativistic beam electron 2D-3P phase-space distribution can be plotted at the maximum beam density location and at each damped time step by typing
 ```sh
