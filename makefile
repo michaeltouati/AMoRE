@@ -116,6 +116,15 @@ remove-compilation-files :
 	@rm *.mod
 	@rm *.o
 
+#########################
+#########################
+## Checking input-deck ##
+#########################
+#########################
+
+check :
+	@./check-input-deck
+
 #############
 #############
 ## Running ##
@@ -138,7 +147,7 @@ clean_figures :
 	@rm -rf figures
 
 clean_dist :
-	@rm -rf *.mod *.o amore ${SRC_PATH_PY}__pycache__
+	@rm -rf *.mod *.o amore check-input-deck ${SRC_PATH_PY}__pycache__
 
 clean : clean_results clean_figures clean_dist
 
