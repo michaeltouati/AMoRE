@@ -120,7 +120,7 @@ logical :: diag_condition
 ! Read the simulation parameter
 call read_init_parameters  
 print *, 'Initialization of the simulation'
-write(*,*)
+write(*,*)' '
 ! Initialization of diagnostics
 call initialize_spectrum(eps_tab, N_eps_tab)
 call initialize_resistivity(eta_tab, N_eta_tab)

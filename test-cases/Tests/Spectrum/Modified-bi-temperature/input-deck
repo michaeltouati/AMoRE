@@ -101,9 +101,9 @@
 #
 #cfl               0.9
 #
-#bi_temp        .false.
+#bi_temp        .true.
 #
-#magnetic_diff .false.
+#magnetic_diff .true.
 #
 #backward 1
 #
@@ -198,7 +198,7 @@
 #
 #Delta_r    6.
 #
-#spectrum   1
+#spectrum   4
 #
 #eps0       700.
 #

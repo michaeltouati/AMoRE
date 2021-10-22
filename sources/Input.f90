@@ -262,15 +262,15 @@ subroutine read_init_parameters
     stop
   end if
 
-  write(*,*)'------------------------------------------'
-  write(*,*)' Recapitulation of simulation parameters :'
-  write(*,*)'------------------------------------------'
+  write(*,*)'-----------------------------------------'
+  write(*,*)'Recapitulation of simulation parameters :'
+  write(*,*)'-----------------------------------------'
   write(*,*)'* Simulation :'
   write(*,*)'  simu = ',trim(simu)
-  write(*,*)'------------------------------------------'
+  write(*,*)'-----------------------------------------'
   write(*,*)'* Number of OpenMP threads :'
   write(*,'(A,1I4)')'   N_threads = ',N_threads
-  write(*,*)'------------------------------------------'
+  write(*,*)'-----------------------------------------'
   write(*,*)'* Simulation properties : '
   write(*,'(A,1I2)')'   hll_order                 = ',hll_order
   write(*,'(A,1L2)')'   coll_implicit_scheme      = ',coll_implicit_scheme
@@ -280,13 +280,13 @@ subroutine read_init_parameters
   write(*,'(A,1I2)')'   backward                  = ',backward
   write(*,'(A,1L2)')'   irradiated_side_refluxing = ',irradiated_side_refluxing
   write(*,'(A,1L2)')'   Kalpha                    = ',Kalpha
-  write(*,*)'------------------------------------------'
+  write(*,*)'-----------------------------------------'
   write(*,*)'* Simulation time properties : '
   write(*,'(A,1E21.14)')'   cfl          = ',cfl
   write(*,'(A,1E21.14)')'   Delta_t_diag = ',Delta_t_diag
   write(*,'(A,1E21.14)')'   L_t          = ',L_t
-  write(*,*)'------------------------------------------'
-  write(*,*)'* Relativistic electron beam properties : '
+  write(*,*)'-----------------------------------------'
+  write(*,*)'* Relativistic electron beam properties :'
   write(*,'(A,1E21.14)')'   E_tot       = ',E_tot
   write(*,'(A,1E21.14)')'   sigma_t     = ',sigma_t
   write(*,'(A,1E21.14)')'   sigma_r     = ',sigma_r
@@ -313,7 +313,7 @@ subroutine read_init_parameters
     case (5)
       write(*,*)'   tabulated'
   end select
-  write(*,*)'------------------------------------------'
+  write(*,*)'-----------------------------------------'
   write(*,*)'* Simulation box properties : '
   write(*,'(A,1E21.14)')'   d_z     = ',d_z
   write(*,'(A,1E21.14)')'   L_z     = ',L_z
@@ -322,7 +322,7 @@ subroutine read_init_parameters
   write(*,'(A,1E21.14)')'   eps_min = ',eps_min
   write(*,'(A,1E21.14)')'   d_eps   = ',d_eps
   write(*,'(A,1E21.14)')'   L_eps   = ',L_eps
-  write(*,*)'------------------------------------------'
+  write(*,*)'-----------------------------------------'
   write(*,*)'* Target properties : '
   write(*,'(A,1I2)')'   Material              = ',Material
   select case (Material)
@@ -348,13 +348,13 @@ subroutine read_init_parameters
     write(*,'(A,1E21.14)')'   rho_tracer            = ',rho_tracer
   end if
   write(*,'(A,1L2)')'   tabulated_resistivity = ',tabulated_resistivity
-  write(*,*)'------------------------------------------'
-  write(*,*)'* Deduced simulation parameters : '
-  write(*,'(A,1I5,A)')'   N_z   = ',N_z
-  write(*,'(A,1I5,A)')'   N_x   = ',N_x
-  write(*,'(A,1I5,A)')'   N_eps = ',N_eps
-  write(*,*)'------------------------------------------'
-  write(*,*)
+  write(*,*)'-----------------------------------------'
+  write(*,*)'* Deduced simulation parameters :'
+  write(*,'(A,1I6)')'   N_z   = ',N_z
+  write(*,'(A,1I6)')'   N_x   = ',N_x
+  write(*,'(A,1I6)')'   N_eps = ',N_eps
+  write(*,*)'-----------------------------------------'
+  write(*,*)' '
 end subroutine read_init_parameters
 
 subroutine get_str(str)
