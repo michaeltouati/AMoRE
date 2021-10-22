@@ -73,5 +73,5 @@ that plots respectively :
 * the transport coefficients of the solid/liquid/Warm-Dense-Matter/plasma where the beam is propagating through (ionization state, thermal capacities, electrical and thermal conductivities as well as electron-ion/lattice coupling factor) and 
 * the time evolution of the different energy contributions in the beam transport (injected electron beam energy, collisional and collective electron beam energy losses, instantaneous electron beam energy in the target and electron beam energy escaping from the target). 
 
-The python scripts are located in the directory [sources/plot](https://github.com/michaeltouati/AMoRE/tree/main/sources/tools).
+The python scripts are located in the directory [sources/plot](https://github.com/michaeltouati/AMoRE/tree/main/sources/plot).
 The plots will be located in the directory 'figures'.
