@@ -77,4 +77,4 @@ The python scripts are located in the directory [sources/plot](https://github.co
 The plots will be located in the directory 'figures'.
 
 # License
-When you submit code changes, your submissions are understood to be under the same [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) that covers [ESVM](https://github.com/michaeltouati/AMoRE). 
+When you submit code changes, your submissions are understood to be under the same [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) that covers [AMoRE](https://github.com/michaeltouati/AMoRE). 
