@@ -13,8 +13,8 @@
 [![Open pull requests](https://img.shields.io/github/issues-pr/michaeltouati/AMoRE)](https://github.com/michaeltouati/AMoRE/pulls)
 [![Closed pull requests](https://img.shields.io/github/issues-pr-closed/michaeltouati/AMoRE)](https://github.com/michaeltouati/AMoRE/pulls)
 [![Clones : 14 days](https://img.shields.io/badge/dynamic/json?color=success&label=Clones&query=count&url=https://github.com/michaeltouati/AMoRE/blob/master/.github/clone.json?raw=True&logo=github)](https://github.com/michaeltouati/AMoRE/actions/workflows/clones.yml)
-[![Downloads](https://img.shields.io/github/downloads/michaeltouati/AMoRE/total)](https://github.com/michaeltouati/AMoRE/releases)
-![My Stats](https://github-readme-stats.vercel.app/api?username=michaeltouati&show_icons=true)
+<!-- [![Downloads](https://img.shields.io/github/downloads/michaeltouati/AMoRE/total)](https://github.com/michaeltouati/AMoRE/releases) -->
+<!-- ![My Stats](https://github-readme-stats.vercel.app/api?username=michaeltouati&show_icons=true) -->
 
 [AMoRE](https://github.com/michaeltouati/AMoRE) (Angular Momentum model Of Relativistic Electron beam transport) is a Fortran code, parallelized with OpenMP and using Python3 for post-processing, that allows for the fast simulation of a relativistic electron beam transport in a solid or in a dense plasma while describing the full beam electron phase-space evolution. 
 
