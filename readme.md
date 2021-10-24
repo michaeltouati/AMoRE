@@ -10,7 +10,7 @@
 [![Closed issues](https://img.shields.io/github/issues-closed/michaeltouati/AMoRE)](https://github.com/michaeltouati/AMoRE/issues)
 [![Open pull requests](https://img.shields.io/github/issues-pr/michaeltouati/AMoRE)](https://github.com/michaeltouati/AMoRE/pulls)
 [![Closed pull requests](https://img.shields.io/github/issues-pr-closed/michaeltouati/AMoRE)](https://github.com/michaeltouati/AMoRE/pulls)
-[![Clones : 14 days](https://img.shields.io/badge/dynamic/json?color=success&label=Clone&query=count&url=https://github.com/michaeltouati/AMoRE/blob/master/.github/clone.json?raw=True&logo=github)](https://github.com/michaeltouati/AMoRE/actions/workflows/clones.yml)
+[![Clones : 14 days](https://img.shields.io/badge/dynamic/json?color=success&label=Clones&query=count&url=https://github.com/michaeltouati/AMoRE/blob/master/.github/clone.json?raw=True&logo=github)](https://github.com/michaeltouati/AMoRE/actions/workflows/clones.yml)
 [![Tests check](https://img.shields.io/github/workflow/status/michaeltouati/AMoRE/Tests)](https://github.com/michaeltouati/AMoRE/actions/workflows/tests.yml)
 <!-- [![Downloads](https://img.shields.io/github/downloads/michaeltouati/AMoRE/total)](https://github.com/michaeltouati/AMoRE/releases) -->
 <!-- ![My Stats](https://github-readme-stats.vercel.app/api?username=michaeltouati&show_icons=true) -->
