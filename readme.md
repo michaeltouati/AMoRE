@@ -96,5 +96,3 @@ The plots will be located in the directory 'figures'.
 
 # License
 [AMoRE](https://github.com/michaeltouati/AMoRE) is distributed under the terms of the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) license. 
-
-## Written by Michaël J TOUATI
