@@ -23,7 +23,8 @@ jobs:
     
     - name: make plot
       run: |
-        pip3 install numpy pylatex matplotlib
+        apt-get install texlive
+        pip3 install numpy matplotlib
         make plot
       
     - name: make clean
