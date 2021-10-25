@@ -7,15 +7,15 @@
 [<img src='https://img.shields.io/badge/latex-%23008080.svg?style=for-the-badge&logo=latex&logoColor=white' height="20">](https://www.latex-project.org//)
 [![GPLv3 License](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Compilation check](https://github.com/michaeltouati/AMoRE/actions/workflows/compilation.yml/badge.svg?branch=master)](https://github.com/michaeltouati/AMoRE/actions/workflows/compilation.yml)
-[![Tests check](https://github.com/michaeltouati/AMoRE/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/michaeltouati/AMoRE/actions/workflows/tests.yml)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
+[![Downloads](https://img.shields.io/github/downloads/michaeltouati/AMoRE/total)](https://github.com/michaeltouati/AMoRE/releases)
+[![Views : 14 days](https://img.shields.io/badge/dynamic/json?color=success&label=Views%20(<15%20days)&query=count&url=https://github.com/michaeltouati/AMoRE/blob/master/.github/view.json?raw=True&logo=github)](https://github.com/michaeltouati/AMoRE/actions/workflows/views.yml)
+[![Clones : 14 days](https://img.shields.io/badge/dynamic/json?color=success&label=Clones%20(<15%20days)&query=count&url=https://github.com/michaeltouati/AMoRE/blob/master/.github/clone.json?raw=True&logo=github)](https://github.com/michaeltouati/AMoRE/actions/workflows/clones.yml)
+[![Tests check](https://github.com/michaeltouati/AMoRE/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/michaeltouati/AMoRE/actions/workflows/tests.yml)
 [![Open issues](https://img.shields.io/github/issues/michaeltouati/AMoRE)](https://github.com/michaeltouati/AMoRE/issues)
 [![Closed issues](https://img.shields.io/github/issues-closed/michaeltouati/AMoRE)](https://github.com/michaeltouati/AMoRE/issues)
 [![Open pull requests](https://img.shields.io/github/issues-pr/michaeltouati/AMoRE)](https://github.com/michaeltouati/AMoRE/pulls)
 [![Closed pull requests](https://img.shields.io/github/issues-pr-closed/michaeltouati/AMoRE)](https://github.com/michaeltouati/AMoRE/pulls)
-[![Clones : 14 days](https://img.shields.io/badge/dynamic/json?color=success&label=Clones%20(<15%20days)&query=count&url=https://github.com/michaeltouati/AMoRE/blob/master/.github/clone.json?raw=True&logo=github)](https://github.com/michaeltouati/AMoRE/actions/workflows/clones.yml)
-[![Views : 14 days](https://img.shields.io/badge/dynamic/json?color=success&label=Views%20(<15%20days)&query=count&url=https://github.com/michaeltouati/AMoRE/blob/master/.github/view.json?raw=True&logo=github)](https://github.com/michaeltouati/AMoRE/actions/workflows/views.yml)
-[![Downloads](https://img.shields.io/github/downloads/michaeltouati/AMoRE/total)](https://github.com/michaeltouati/AMoRE/releases)
 <!-- ![My Stats](https://github-readme-stats.vercel.app/api?username=michaeltouati&show_icons=true) -->
 
 ## Written by Michaël J TOUATI
