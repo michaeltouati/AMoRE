@@ -22,24 +22,19 @@ jobs:
 
       - name: Parse clone count using REST API
         run: |
-          git clone https://github.com/${GITHUB_ACTOR}/${REPOSITORY}.git
-          cd ${REPOSITORY}/
           curl --user "${{ github.actor }}:${{ secrets.SECRET_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/repos/${{ github.repository }}/traffic/clones \
             > .github/clone.json
+      - name: Add to git repo
+        run: |
           git add .
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           git commit -m "Automated clone.json update"
-          git pull
-      # - name: Push
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+      #- name: Push
       #  uses: ad-m/github-push-action@master
       #  with:
       #    github_token: ${{ secrets.GITHUB_TOKEN }}
-      # - name: Pushing to the protected branch 'protected'
-      #   uses: CasperWA/push-protected@v2
-      #   with:
-      #     token: ${{ secrets.GITHUB_TOKEN }}
-      #     branch: master
-      #     unprotect_reviews: true
