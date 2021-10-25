@@ -30,6 +30,7 @@ jobs:
             > .github/clone.json
           OUTPUT=$(diff .github/clone.json .github/clone_old.json)
           echo "::set-output name=OUTPUT::$OUTPUT"
+          rm -f .github/clone_old.json
       - name: Add to git repo
         if: steps.file.outputs.OUTPUT == ''
         run: |
