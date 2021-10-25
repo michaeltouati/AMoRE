@@ -26,13 +26,13 @@ jobs:
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/repos/${{ github.repository }}/traffic/clones \
             > .github/clone.json
-      - name: Compare and remove backup clone count file
+      - name: Compare
         id : compare
         run: |
           OUTPUT=$(git diff)
           echo "::set-output name=OUTPUT::$OUTPUT"
       - name: Add to git repo
-        if: steps.compare.outputs.OUTPUT == ''
+        if: ${{ steps.compare.outputs.OUTPUT == '' }}
         run: |
           git add .
           git config --global user.name "GitHub Action"
