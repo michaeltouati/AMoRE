@@ -33,7 +33,7 @@ jobs:
           git config --global user.email "action@github.com"
           git commit -m "Automated clone.json update"
       - name: Get Date
-        run: echo "DATE=$(date +%Y-%m-%d %H:%M:%S)" >> $GITHUB_ENV
+        run: echo "DATE=$(date +%Y/%m/%d-%H:%M:%S)" >> $GITHUB_ENV
       - name: Create Pull Request
         id: cpr
         uses: peter-evans/create-pull-request@v3
