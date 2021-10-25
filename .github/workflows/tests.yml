@@ -23,3 +23,6 @@ jobs:
       
     - name: make clean
       run: make clean
+      
+    - name: make plot
+      run: make plot
