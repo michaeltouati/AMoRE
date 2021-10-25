@@ -26,23 +26,15 @@ jobs:
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/repos/${{ github.repository }}/traffic/clones \
             > .github/clone.json
-      - name: Login
-        run: |
-          gh auth login --with-token
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Add to git repo
         run: |
           git add .
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           git commit -m "Automated clone.json update"
-
-          
       - name: Push
+        run : |
+          echo "$GITHUB_CONTEXT"
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Logout
-        run:  |
-          gh auth logout
