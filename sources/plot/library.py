@@ -105,16 +105,8 @@ def find_energy_bins(file_name):
 	psi0_file0.close()
 	return [Neps,e0]
 
-def read_and_plot_curve(filename,xlabel,ylabel,title,name,logx,logy):
-	x = []
-	y = []
-	file = open(filename, 'r')
-	for line in file:
-		line      = line.strip()
-		array     = line.split()
-		x.append(float(array[0]))
-		y.append(float(array[1]))
-	file.close()   
+def read_and_plot_curve(filename,xlabel,ylabel,title,name,logx,logy,font_size,font):
+	[x,y] = read_file_and_define_two_first_cols(filename) 
 	fig=plt.figure()
 	plt.rc('text', usetex=True)
 	if logx==1:
@@ -122,58 +114,31 @@ def read_and_plot_curve(filename,xlabel,ylabel,title,name,logx,logy):
 			plt.semilogx(x, y,linewidth=2)	
 		else:
 			plt.loglog(x, y,linewidth=2)
-	#font = {'family': 'non-serif',
-	#		'style':  'normal',
-	font = {'style':  'normal',
-        	'color':  'black',
-    	    'weight': 'normal',
-        	'size': 16,
-       	 }
 	plt.title(title, fontdict=font)
-	plt.xticks(fontsize=16)
+	plt.xticks(fontsize=font_size)
 	plt.xlabel(xlabel, fontdict=font)
 	plt.ylabel(ylabel, fontdict=font)
-	plt.yticks(fontsize=16)
+	plt.yticks(fontsize=font_size)
+	plt.grid(which='both', axis='both')
 	fig.savefig(name,bbox_inches='tight')
 	plt.close(fig)
 	return;
 
-def read_and_plot_two_log_curve(filename1,filename2,label1,label2,loc,xlabel,ylabel,title,name):
-	x1 = []
-	y1 = []
-	file1 = open(filename1, 'r')
-	for line in file1:
-		line      = line.strip()
-		array     = line.split()
-		x1.append(float(array[0]))
-		y1.append(float(array[1]))
-	file1.close() 
-	x2 = []
-	y2 = []
-	file2 = open(filename2, 'r')
-	for line in file2:
-		line      = line.strip()
-		array     = line.split()
-		x2.append(float(array[0]))
-		y2.append(float(array[1]))
-	file2.close()   
+def read_and_plot_two_log_curve(filename1,filename2,label1,label2,loc,xlabel,ylabel,title,name,font_size,font):
+	[x1,y1] = read_file_and_define_two_first_cols(filename1)
+	[x2,y2] = read_file_and_define_two_first_cols(filename2)
 	fig=plt.figure()
 	plt.rc('text', usetex=True)
 	plt.loglog(x1, y1,'red',linewidth=2,label=label1)
 	plt.loglog(x2, y2,'blue',linewidth=2,label=label2)
-	#font = {'family': 'non-serif',
-	font = {'style':  'normal',
-        	'color':  'black',
-    	    'weight': 'normal',
-        	'size': 16,
-       	 }
 	plt.title(title, fontdict=font)
-	plt.xticks(fontsize=16)
+	plt.xticks(fontsize=font_size)
 	plt.xlabel(xlabel, fontdict=font)
 	plt.ylabel(ylabel, fontdict=font)
-	plt.yticks(fontsize=16)
-	leg = plt.legend(loc=loc,fontsize=16, fancybox=True)
+	plt.yticks(fontsize=font_size)
+	leg = plt.legend(loc=loc,fontsize=font_size, fancybox=True)
 	leg.get_frame().set_alpha(0.5)
+	plt.grid(which='both', axis='both')
 	fig.savefig(name,bbox_inches='tight')
 	plt.close(fig)
 	return;
@@ -186,6 +151,7 @@ def read_file_and_define_first_col(filename,time):
 		time.append(float(array[0]))
 	file.close()   
 	return;
+
 def read_file_and_define_second_col(filename,vector):
 	file = open(filename, 'r')
 	for line in file:
@@ -194,7 +160,19 @@ def read_file_and_define_second_col(filename,vector):
 		vector.append(float(array[1]))
 	file.close()   
 	return;
-	
+
+def read_file_and_define_two_first_cols(filename):
+	x0 = []
+	y0 = []
+	file = open(filename, 'r')
+	for line in file:
+		line      = line.strip()
+		array     = line.split()
+		x0.append(float(array[0]))
+		y0.append(float(array[1]))
+	file.close()
+	return [x0,y0]
+
 def read_and_plot_2D_pcolormesh(filename,N1,N2,cmap,title,name,log):
 	N1 = int(N1)
 	N2 = int(N2)

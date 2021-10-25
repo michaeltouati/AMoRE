@@ -21,8 +21,31 @@
 ##                                                                   ##
 #######################################################################
 ## Initial commit written by Michaël J TOUATI - Oct. 2015
-import os
+"""
+Read and plot data :
+* E (kEV) | dE_dS (keV/microns) / nu (/s)
+  * stopping_power[keV_Microns-1]vsEps[keV].dat
+  * ang_coll_rate[s-1]vsEps[keV].dat
+* dT (eV) | Plasma transport coefficient (SI) from files :
+  * zeffvsTe[eV].dat
+  * resistivity[SI]vsTe[eV]_Te_eq_Ti.dat
+  * resistivity[SI]vsTe[eV]_Ti_eq_Tamb.dat
+  * conductivity[SI]vsTe[eV]_Te_eq_Ti.dat
+  * conductivity[SI]vsTe[eV]_Ti_eq_Tamb.dat
+  * G[SI]vsTe[eV]_Te_eq_Ti.dat
+  * G[SI]vsTe[eV]_Ti_eq_Tamb.dat
+  * electron_capacity[SI]vsTe[eV].dat
+  * ion_capacity[SI]vsTe[eV].dat
+"""
 import library as lib
+
+FONT_SIZE = 16
+
+FONT = {'style':  'normal',
+        'color':  'black',
+        'weight': 'normal',
+        'size': FONT_SIZE,
+        }
 
 simu_name=lib.get_results_dir()
 
@@ -41,69 +64,69 @@ results_dir = 'results/'+simu_name+'/'
 
 print(' Ionization state Z*')
 lib.read_and_plot_curve(results_dir+'zeffvsTe[eV].dat',
-						r'$\mathbf{T_e}\,(\mathrm{eV})$',
-						r'$\mathbf{Z^*}\,()$',
+						r'$T_e\,(\mathrm{eV})$',
+						r'$Z^*\,()$',
 						'Ionization state',
 						subdir+'Zf.png',
-						1,0)
+						1,0,FONT_SIZE,FONT)
 print('  ')
-print(' Stopping power S')
+print(' Stopping power dE/ds')
 lib.read_and_plot_curve(results_dir+'stopping_power[keV_Microns-1]vsEps[keV].dat',
-						r'$\mathbf{\varepsilon}\,(\mathrm{keV})$',
-						r'$\mathbf{S}\,(\mathrm{keV}/\mu\mathrm{m})$',
+						r'$\varepsilon\,(\mathrm{keV})$',
+						r'$d \varepsilon / d s \,(\mathrm{keV}/\mu\mathrm{m})$',
 						'Beam electron stopping power',
-						subdir+'S.png',
-						1,1)
+						subdir+'dE_ds.png',
+						1,1,FONT_SIZE,FONT)
 print('  ')
 print(' Angular isotropization rate nu')
 lib.read_and_plot_curve(results_dir+'ang_coll_rate[s-1]vsEps[keV].dat',
-						r'$\mathbf{\varepsilon}\,(\mathrm{keV})$',
-						r'$\mathbf{\nu}\,(\mathrm{s}^{-1})$',
+						r'$\varepsilon\,(\mathrm{keV})$',
+						r'$\nu\,(\mathrm{s}^{-1})$',
 						'Beam electron isotropization rate',
 						subdir+'nu.png',
-						1,1)
+						1,1,FONT_SIZE,FONT)
 print('  ')
 print(' Electrical resistivity eta')
 lib.read_and_plot_two_log_curve(results_dir+'resistivity[SI]vsTe[eV]_Te_eq_Ti.dat',
 								results_dir+'resistivity[SI]vsTe[eV]_Ti_eq_Tamb.dat',
-								r'$\mathbf{T_i}=\mathbf{T_e}$',
-								r'$\mathbf{T_i}=293.15\,\mathrm{K}$',
+								r'$T_i=T_e$',
+								r'$T_i=293.15\,\mathrm{K}$',
 								'upper right',
-								r'$\mathbf{T_e}$',
-								r'$\mathbf{\eta}\,(\mathrm{\Omega.m})$',
+								r'$T_e$',
+								r'$\eta\,(\mathrm{\Omega.m})$',
 								'Electrical resistivity',
-								subdir+'eta.png')
+								subdir+'eta.png',FONT_SIZE,FONT)
 print('  ')
 print(' Thermal conductivity kappa')
 lib.read_and_plot_two_log_curve(results_dir+'conductivity[SI]vsTe[eV]_Te_eq_Ti.dat',
 								results_dir+'conductivity[SI]vsTe[eV]_Ti_eq_Tamb.dat',
-								r'$\mathbf{T_i}=\mathbf{T_e}$',
-								r'$\mathbf{T_i}=293.15\,\mathrm{K}$',
+								r'$T_i=T_e$',
+								r'$T_i=293.15\,\mathrm{K}$',
 								'upper left',
-								r'$\mathbf{T_e}\,(\mathrm{eV})$',
-								r'$\mathbf{\kappa}\,(\mathrm{J/m/K/s})$',
+								r'$T_e\,(\mathrm{eV})$',
+								r'$\kappa\,(\mathrm{J/m/K/s})$',
 								'Thermal conductivity',
-								subdir+'kappa.png')
+								subdir+'kappa.png',FONT_SIZE,FONT)
 print('  ')
 print(' Electron-ion/lattice coupling factor G')
 lib.read_and_plot_two_log_curve(results_dir+'G[SI]vsTe[eV]_Te_eq_Ti.dat',
 								results_dir+'G[SI]vsTe[eV]_Ti_eq_Tamb.dat',
-								r'$\mathbf{T_i}=\mathbf{T_e}$',
-								r'$\mathbf{T_i}=293.15\,\mathrm{K}$',
+								r'$T_i=T_e$',
+								r'$T_i=293.15\,\mathrm{K}$',
 								'lower center',
-								r'$\mathbf{T_e}\,(\mathrm{eV})$',
-								r'$\mathbf{\Omega_{ei}}\,(\mathrm{J}/\mathrm{m}^3/\mathrm{s/K})$',
-								'Electron-ion coupling factor',
-								subdir+'omega_ei.png')
+								r'$T_e\,(\mathrm{eV})$',
+								r'$\Omega_{ei}\,(\mathrm{J}/\mathrm{m}^3/\mathrm{s/K})$',
+								'Electron-ion/lattice coupling factor',
+								subdir+'Omega_ei.png',FONT_SIZE,FONT)
 print('  ')
 print(' Target electrons and ions thermal capacities Cve and Cvi')
 lib.read_and_plot_two_log_curve(results_dir+'electron_capacity[SI]vsTe[eV].dat',
 								results_dir+'ion_capacity[SI]vsTe[eV].dat',
-								r'$\mathbf{C_{V,e}}$',
-								r'$\mathbf{C_{V,i}}$',
+								r'$C_{V,e}$',
+								r'$C_{V,i}$',
 								'upper left',
-								r'$\mathbf{T=T_e}\,\mathrm{or}\,\mathbf{T_i}\,(\mathrm{eV})$',
-								r'$\mathbf{C_V}\,(\mathrm{J}/\mathrm{m}^3.\mathrm{K})$',
+								r'$T_e\,\mathrm{or}\,T_i\,(\mathrm{eV})$',
+								r'$C_V\,(\mathrm{J}/\mathrm{m}^3.\mathrm{K})$',
 								'Thermal capacities',
-								subdir+'Cv.png')
+								subdir+'Cv.png',FONT_SIZE,FONT)
 print('  ')
