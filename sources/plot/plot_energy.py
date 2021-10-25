@@ -21,14 +21,28 @@
 ##                                                                   ##
 #######################################################################
 ## Initial commit written by Michaël J TOUATI - Oct. 2015
-import math
-import numpy as np
-import matplotlib
+"""
+Read and plot data t (/fs) | Energy (J) from files:
+* U_b[J].dat
+* U_e[J].dat
+* U_el[J].dat
+* U_ma[J].dat
+* U_sb[J].dat
+* U_sd[J].dat
+* U_sf[J].dat
+* U_su[J].dat
+"""
 import matplotlib.pyplot as plt
-import os
+import numpy as np
 import library as lib
 
 simu_name=lib.get_results_dir()
+
+font = {'style':  'normal',
+        'color':  'black',
+        'weight': 'normal',
+        'size': 16,
+        }
 
 print(' --------------------')
 print(' Energies Scalar Plot')
@@ -40,68 +54,63 @@ subdir = 'figures/'+simu_name+'/'
 lib.create_dir(subdir)
 
 results_dir = 'results/'+simu_name+'/'
-    							
-t       = []
-lib.read_file_and_define_first_col(results_dir+'U_e[J].dat',t)
-Ue      = []
-lib.read_file_and_define_second_col(results_dir+'U_e[J].dat',Ue)
-Ub      = []
-lib.read_file_and_define_second_col(results_dir+'U_b[J].dat',Ub)
-Ud_col  = []
-lib.read_file_and_define_second_col(results_dir+'Ud_col[J].dat', Ud_col)
-Ud_res  = []
-lib.read_file_and_define_second_col(results_dir+'Ud_res[J].dat', Ud_res)
-U_el    = []
-lib.read_file_and_define_second_col(results_dir+'U_el[J].dat',   U_el)
-U_ma    = []
-lib.read_file_and_define_second_col(results_dir+'U_ma[J].dat',   U_ma)
-U_sd    = []
-lib.read_file_and_define_second_col(results_dir+'U_sd[J].dat',   U_sd)
-U_su    = []
-lib.read_file_and_define_second_col(results_dir+'U_su[J].dat',   U_su)
-U_sf    = []
-lib.read_file_and_define_second_col(results_dir+'U_sf[J].dat',   U_sf)
-U_sb    = []
-lib.read_file_and_define_second_col(results_dir+'U_sb[J].dat',   U_sb)
-if np.amax(U_el)>0:
-	coef_el = np.floor(np.log(np.amax(Ub)/np.amax(U_el))/np.log(10))
-	coef_el = 10.**coef_el
+
+T       = []
+lib.read_file_and_define_first_col(results_dir+'U_e[J].dat',T)
+U_E     = []
+lib.read_file_and_define_second_col(results_dir+'U_e[J].dat',U_E)
+U_B     = []
+lib.read_file_and_define_second_col(results_dir+'U_b[J].dat',U_B)
+U_Dcol  = []
+lib.read_file_and_define_second_col(results_dir+'Ud_col[J].dat', U_Dcol)
+U_Dres  = []
+lib.read_file_and_define_second_col(results_dir+'Ud_res[J].dat', U_Dres)
+U_EL    = []
+lib.read_file_and_define_second_col(results_dir+'U_el[J].dat',   U_EL)
+U_MA    = []
+lib.read_file_and_define_second_col(results_dir+'U_ma[J].dat',   U_MA)
+U_Sd    = []
+lib.read_file_and_define_second_col(results_dir+'U_sd[J].dat',   U_Sd)
+U_Su    = []
+lib.read_file_and_define_second_col(results_dir+'U_su[J].dat',   U_Su)
+U_Sf    = []
+lib.read_file_and_define_second_col(results_dir+'U_sf[J].dat',   U_Sf)
+U_Sb    = []
+lib.read_file_and_define_second_col(results_dir+'U_sb[J].dat',   U_Sb)
+if np.amax(U_EL)>0:
+    C_EL = np.floor(np.log(np.amax(U_B)/np.amax(U_EL))/np.log(10))
+    C_EL = 10.**C_EL
 else:
-	coef_el = 1.
-coef_ma = np.floor(np.log(np.amax(Ub)/np.amax(U_ma))/np.log(10))
-coef_ma = 10.**coef_ma
+    C_EL = 1.
+C_MA = np.floor(np.log(np.amax(U_B)/np.amax(U_MA))/np.log(10))
+C_MA = 10.**C_MA
 U_stot  = []
-U_el_n  = []
-U_ma_n  = []
-nn=len(t)-1
-for i in range(0, nn+1):
-	U_stot.append(U_su[i]+U_sd[i]+U_sf[i]+U_sb[i])
-	U_el_n.append(coef_el*U_el[i])
-	U_ma_n.append(coef_ma*U_ma[i])
-error = 100.*( Ue[nn]-(Ub[nn]+U_el[nn]+U_ma[nn]+Ud_col[nn]+Ud_res[nn]+U_stot[nn]) )/Ue[nn]
+U_EL_n  = []
+U_MA_n  = []
+N_T=len(T)-1
+for i in range(0, N_T+1):
+    U_stot.append(U_Su[i]+U_Sd[i]+U_Sf[i]+U_Sb[i])
+    U_EL_n.append(C_EL*U_EL[i])
+    U_MA_n.append(C_MA*U_MA[i])
+balance = U_E[N_T]-(U_B[N_T]+U_EL[N_T]+U_MA[N_T]+U_Dcol[N_T]+U_Dres[N_T]+U_stot[N_T])
+error   = 100.*balance/U_E[N_T]
 fig=plt.figure()
 plt.rc('text', usetex=True)
-plt.plot(t, U_el_n,'green',linewidth=2,label=r'$\mathbf{U_{E}\times}$'+str('%.0e' % coef_el))
-plt.plot(t, U_ma_n,'cyan',linewidth=2,label=r'$\mathbf{U_{B}\times}$'+str('%.0e' % coef_ma))
-plt.plot(t, Ue,'red',linewidth=2,label=r'$\mathbf{U_\mathrm{inj}}$')
-plt.plot(t, Ub,'black',linewidth=2,label=r'$\mathbf{U_b}$')
-plt.plot(t, Ud_col,'magenta',linewidth=2,label=r'$\mathbf{U_{d,\mathrm{col}}}$')
-plt.plot(t, Ud_res,'blue',linewidth=2,label=r'$\mathbf{U_{d,\mathrm{res}}}$')
-plt.plot(t, U_stot,'red',linestyle='--',linewidth=2,label=r'$\mathbf{U_\mathrm{esc}}$')
+plt.plot(T, U_EL_n,'green',linewidth=2,label=r'$\mathbf{U_{E}\times}$'+f"{C_EL:.0E}")
+plt.plot(T, U_MA_n,'cyan',linewidth=2,label=r'$\mathbf{U_{B}\times}$'+f"{C_MA:.0E}")
+plt.plot(T, U_E,'red',linewidth=2,label=r'$\mathbf{U_\mathrm{inj}}$')
+plt.plot(T, U_B,'black',linewidth=2,label=r'$\mathbf{U_b}$')
+plt.plot(T, U_Dcol,'magenta',linewidth=2,label=r'$\mathbf{U_{d,\mathrm{col}}}$')
+plt.plot(T, U_Dres,'blue',linewidth=2,label=r'$\mathbf{U_{d,\mathrm{res}}}$')
+plt.plot(T, U_stot,'red',linestyle='--',linewidth=2,label=r'$\mathbf{U_\mathrm{esc}}$')
 leg = plt.legend(loc='upper left',fontsize=16, fancybox=True)
 leg.get_frame().set_alpha(0.5)
-#font = {'family': 'non-serif',
-font = {'style':  'normal',
-        'color':  'black',
-        'weight': 'normal',
-        'size': 16,
-        }
 plt.title('Energy conservation error '+'='+str(np.floor(100*error)/100)+r'$\,\%$', fontdict=font)
 plt.xticks(fontsize=16)
 plt.xlabel('time (fs)', fontdict=font)
-plt.xlim([t[0],t[nn]])
+plt.xlim([T[0],T[N_T]])
 plt.ylabel('Energy (J)', fontdict=font)
 plt.yticks(fontsize=16)
-plt.ylim([Ue[0],1.1*Ue[nn]])
+plt.ylim([U_E[0],1.1*U_E[N_T]])
 fig.savefig(subdir+'energy_conservation.png',bbox_inches='tight')
 plt.close(fig)
