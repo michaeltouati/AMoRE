@@ -20,3 +20,11 @@ jobs:
       
     - name: make run
       run: make run
+    
+    - name: make plot
+      run: |
+        pip3 install numpy matplotlib
+        make plot
+      
+    - name: make clean
+      run: make clean
