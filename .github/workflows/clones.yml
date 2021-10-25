@@ -29,7 +29,7 @@ jobs:
       - name: Compare and remove backup clone count file
         id : compare
         run: |
-          OUTPUT=$(git diff) &&
+          OUTPUT=$(git diff)
           echo "::set-output name=OUTPUT::$OUTPUT"
       - name: Add to git repo
         if: steps.compare.outputs.OUTPUT == ''
