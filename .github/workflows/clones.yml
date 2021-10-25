@@ -32,13 +32,14 @@ jobs:
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           git commit -m "Automated clone.json update"
+          git pull
       # - name: Push
       #  uses: ad-m/github-push-action@master
       #  with:
       #    github_token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Pushing to the protected branch 'protected'
-        uses: CasperWA/push-protected@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: master
-          unprotect_reviews: true
+      # - name: Pushing to the protected branch 'protected'
+      #   uses: CasperWA/push-protected@v2
+      #   with:
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     branch: master
+      #     unprotect_reviews: true
