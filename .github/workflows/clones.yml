@@ -28,7 +28,9 @@ jobs:
             > .github/clone.json
       - name: Login
         run: |
-          gh auth login --with-token ${{ secrets.GITHUB_TOKEN }}
+          gh auth login --with-token
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Add to git repo
         run: |
           git add .
