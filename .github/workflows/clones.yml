@@ -20,9 +20,6 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      - name: Backup clone count file
-        run: |
-          mv .github/clone.json .github/clone_old.json
       - name: Parse clone count using REST API
         run: |
           curl --user "${{ github.actor }}:${{ secrets.SECRET_TOKEN }}" \
@@ -32,9 +29,8 @@ jobs:
       - name: Compare and remove backup clone count file
         id : compare
         run: |
-          OUTPUT=$(diff .github/clone.json .github/clone_old.json)
+          OUTPUT=$(git diff) &&
           echo "::set-output name=OUTPUT::$OUTPUT"
-          rm -f .github/clone_old.json
       - name: Add to git repo
         if: steps.compare.outputs.OUTPUT == ''
         run: |
