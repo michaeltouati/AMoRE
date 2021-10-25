@@ -23,7 +23,7 @@ jobs:
     
     - name: make plot
       run: |
-        pip3 install numpy matplotlib
+        pip3 install numpy pylatex matplotlib
         make plot
       
     - name: make clean
