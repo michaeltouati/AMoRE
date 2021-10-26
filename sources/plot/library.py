@@ -29,12 +29,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
 
-font_size = 16
+FONT_SIZE = 16
 
-font = {'style':  'normal',
+FONT = {'style':  'normal',
         'color':  'black',
         'weight': 'normal',
-        'size': font_size,
+        'size': FONT_SIZE,
         }
 
 def get_results_dir():
@@ -122,11 +122,11 @@ def read_and_plot_curve(filename,xlabel,ylabel,title,name,logx,logy) :
             plt.semilogx(x_plt, y_plt,linewidth=2)
         else:
             plt.loglog(x_plt, y_plt,linewidth=2)
-    plt.title(title, fontdict=font)
-    plt.xticks(fontsize=font_size)
-    plt.xlabel(xlabel, fontdict=font)
-    plt.ylabel(ylabel, fontdict=font)
-    plt.yticks(fontsize=font_size)
+    plt.title(title, fontdict=FONT)
+    plt.xticks(fontsize=FONT_SIZE)
+    plt.xlabel(xlabel, fontdict=FONT)
+    plt.ylabel(ylabel, fontdict=FONT)
+    plt.yticks(fontsize=FONT_SIZE)
     plt.grid(which='both', axis='both')
     fig.savefig(name,bbox_inches='tight')
     plt.close(fig)
@@ -141,12 +141,12 @@ def read_and_plot_two_log_curve(filename1,filename2,
     plt.rc('text', usetex=True)
     plt.loglog(x_1, y_1,'red',linewidth=2,label=label1)
     plt.loglog(x_2, y_2,'blue',linewidth=2,label=label2)
-    plt.title(title, fontdict=font)
-    plt.xticks(fontsize=font_size)
-    plt.xlabel(xlabel, fontdict=font)
-    plt.ylabel(ylabel, fontdict=font)
-    plt.yticks(fontsize=font_size)
-    leg = plt.legend(loc=loc,fontsize=font_size, fancybox=True)
+    plt.title(title, fontdict=FONT)
+    plt.xticks(fontsize=FONT_SIZE)
+    plt.xlabel(xlabel, fontdict=FONT)
+    plt.ylabel(ylabel, fontdict=FONT)
+    plt.yticks(fontsize=FONT_SIZE)
+    leg = plt.legend(loc=loc,fontsize=FONT_SIZE, fancybox=True)
     leg.get_frame().set_alpha(0.5)
     plt.grid(which='both', axis='both')
     fig.savefig(name,bbox_inches='tight')
@@ -240,19 +240,19 @@ def read_and_plot_2d_pcolormesh(filename,n_1,n_2,cmap,title,name,log):
                 plt.rc('text', usetex=True)
                 plt.pcolormesh(z_map,x_map,p_map,cmap=cmap,norm=norm,shading='gouraud')
                 cbar=plt.colorbar()
-                cbar.ax.tick_params(labelsize=font_size)
+                cbar.ax.tick_params(labelsize=FONT_SIZE)
                 plt.gca().set_aspect('equal')
                 if log!=1:
-                    plot_title = str('%.0e' % (10.**(-power_log10)))+r'$\times$'
+                    plot_title = f"{10**(-power_log10):.0E}"+r'$\times$'
                     plot_title = plot_title + title+' at '+str_time+' fs'
-                    plt.title(plot_title, fontdict=font)
+                    plt.title(plot_title, fontdict=FONT)
                 else:
-                    plt.title(title+' at '+str_time+' fs', fontdict=font)
-                plt.xticks(fontsize=font_size)
-                plt.xlabel(r'$z\,(\mu\mathrm{m})$', fontdict=font)
+                    plt.title(title+' at '+str_time+' fs', fontdict=FONT)
+                plt.xticks(fontsize=FONT_SIZE)
+                plt.xlabel(r'$z\,(\mu\mathrm{m})$', fontdict=FONT)
                 plt.xlim([np.amin(z_plt[(n_t-1)*n_3:n_t*n_3]),np.amax(z_plt[(n_t-1)*n_3:n_t*n_3])])
-                plt.ylabel(r'$x\,(\mu\mathrm{m})$', fontdict=font)
-                plt.yticks(fontsize=font_size)
+                plt.ylabel(r'$x\,(\mu\mathrm{m})$', fontdict=FONT)
+                plt.yticks(fontsize=FONT_SIZE)
                 plt.ylim([np.amin(x_plt[(n_t-1)*n_3:n_t*n_3]),np.amax(x_plt[(n_t-1)*n_3:n_t*n_3])])
                 fig.savefig(name+str(n_t)+'.png',bbox_inches='tight')
                 plt.close(fig)
@@ -306,18 +306,18 @@ def read_and_plot_2d_pcolormesh_abs(filenamez,filenamex,n_1,n_2,cmap,title,name)
                     plt.rc('text', usetex=True)
                     plt.pcolormesh(z_map,x_map,p_map,cmap=cmap,norm=norm,shading='gouraud')
                     cbar=plt.colorbar()
-                    cbar.ax.tick_params(labelsize=font_size)
+                    cbar.ax.tick_params(labelsize=FONT_SIZE)
                     plt.gca().set_aspect('equal')
-                    plot_title = str('%.0e' % (10**(-power_log10)))
+                    plot_title = f"{10**(-power_log10):.0E}"
                     plot_title = plot_title +r'$\times$'+title+' at '+str_time+' fs'
-                    plt.title(plot_title, fontdict=font)
-                    plt.xticks(fontsize=font_size)
-                    plt.xlabel(r'$z\,(\mu\mathrm{m})$', fontdict=font)
+                    plt.title(plot_title, fontdict=FONT)
+                    plt.xticks(fontsize=FONT_SIZE)
+                    plt.xlabel(r'$z\,(\mu\mathrm{m})$', fontdict=FONT)
                     z_plt_min = np.amin(z_plt[(n_t-1)*n_3:n_t*n_3])
                     z_plt_max = np.amax(z_plt[(n_t-1)*n_3:n_t*n_3])
                     plt.xlim([z_plt_min,z_plt_max])
-                    plt.ylabel(r'$x\,(\mu\mathrm{m})$', fontdict=font)
-                    plt.yticks(fontsize=font_size)
+                    plt.ylabel(r'$x\,(\mu\mathrm{m})$', fontdict=FONT)
+                    plt.yticks(fontsize=FONT_SIZE)
                     x_plt_min = np.amin(x_plt[(n_t-1)*n_3:n_t*n_3])
                     x_plt_max = np.amax(x_plt[(n_t-1)*n_3:n_t*n_3])
                     plt.ylim([x_plt_min,x_plt_max])
@@ -445,14 +445,14 @@ def read_and_plot_distribution(n_e, e_0, mu_grk, n_mu_grk,
                         plot_title = plot_title + str(int(time[n_0]))
                         plot_title = plot_title + r'$\mathrm{fs})\,$'
                         plot_title = plot_title + r'$(\mathrm{cm}^{-3}.\mathrm{m_e c}^{-3}))$'
-                        plt.title(plot_title,fontdict=font)
-                        plt.xticks(fontsize=font_size)
+                        plt.title(plot_title,fontdict=FONT)
+                        plt.xticks(fontsize=FONT_SIZE)
                         p_z_min = np.matrix(p_z).min()
                         p_z_max = np.matrix(p_z).max()
-                        plt.xlabel(r'$p_z\,(m_e c)$', fontdict=font)
+                        plt.xlabel(r'$p_z\,(m_e c)$', fontdict=FONT)
                         plt.xlim([p_z_min-1,p_z_max+1])
-                        plt.ylabel(r'$p_x\,(m_e c)$', fontdict=font)
-                        plt.yticks(fontsize=font_size)
+                        plt.ylabel(r'$p_x\,(m_e c)$', fontdict=FONT)
+                        plt.yticks(fontsize=FONT_SIZE)
                         p_x_min = np.matrix(p_x).min()
                         p_x_max = np.matrix(p_x).max()
                         plt.ylim([p_x_min-1.,p_x_max+1.])
@@ -462,7 +462,8 @@ def read_and_plot_distribution(n_e, e_0, mu_grk, n_mu_grk,
                         pos_y_2 = pos_y_1
                         txt_xlabel = r'$x_0=$'+str(np.floor(100*x_0[n_0])/100)+r'$\mu\mathrm{m}$'
                         txt_ylabel = r'$z_0=$'+str(np.floor(100*z_0[n_0])/100)+r'$\mu\mathrm{m}$'
-                        plt.text(pos_x_1, pos_y_1, txt_xlabel, color='red',fontsize=font_size)
-                        plt.text(pos_x_2, pos_y_2, txt_ylabel, color='red',fontsize=font_size)
-                        fig.savefig(name+str(i)+'/'+fb_mu+str(i)+'_'+str(n_t)+'.png',bbox_inches='tight')
+                        plt.text(pos_x_1, pos_y_1, txt_xlabel, color='red',fontsize=FONT_SIZE)
+                        plt.text(pos_x_2, pos_y_2, txt_ylabel, color='red',fontsize=FONT_SIZE)
+                        file_name = name+str(i)+'/'+fb_mu+str(i)+'_'+str(n_t)+'.png'
+                        fig.savefig(file_name,bbox_inches='tight')
                         plt.close(fig)
