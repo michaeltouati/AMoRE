@@ -273,7 +273,7 @@ def read_and_plot_2d_pcolormesh(filename,n_1,n_2,cmap,title,name,log):
                     plot_title += title+'\n at '+str_time+' fs'
                     plt.title(plot_title, fontdict=FONT)
                 else:
-                    plt.title(title+' at '+str_time+' fs', fontdict=FONT)
+                    plt.title(title+'\n at '+str_time+' fs', fontdict=FONT)
                 plt.xticks(fontsize=FONT_SIZE)
                 plt.xlabel(r'$z\,(\mu\mathrm{m})$', fontdict=FONT)
                 plt.xlim([np.amin(z_plt[(n_t-1)*n_3:n_t*n_3]),np.amax(z_plt[(n_t-1)*n_3:n_t*n_3])])
@@ -486,7 +486,7 @@ def read_and_plot_distribution(**kwargs):
                         p_x_max = np.matrix(p_x).max()
                         plt.ylim([p_x_min-1.,p_x_max+1.])
                         pos_x = p_z_min-0.5
-                        pos_y = p_x_min-1. + 0.85*(p_x_max-p_x_min+2.)
+                        pos_y = p_x_min-1. + 0.875*(p_x_max-p_x_min+2.)
                         txt_plt  =  r'$x_0\,=$'
                         txt_plt +=str(np.floor(100*x_0[n_0])/100)+r'$\,\mu\mathrm{m},\,$'
                         txt_plt += r'$z_0=$'+str(np.floor(100*z_0[n_0])/100)+r'$\,\mu\mathrm{m}$'

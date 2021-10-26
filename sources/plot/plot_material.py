@@ -84,7 +84,7 @@ lib.read_and_plot_two_log_curve(results_dir+'resistivity[SI]vsTe[eV]_Te_eq_Ti.da
 								r'$T_i=T_e$',
 								r'$T_i=293.15\,\mathrm{K}$',
 								'upper right',
-								r'$T_e$',
+								r'$T_e\,(\mathrm{eV})$',
 								r'$\eta\,(\mathrm{\Omega.m})$',
 								'Electrical resistivity',
 								subdir+'eta.png')
