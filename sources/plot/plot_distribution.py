@@ -21,8 +21,22 @@
 ##                                                                   ##
 #######################################################################
 ## Initial commit written by Michaël J TOUATI - Oct. 2015
+"""
+Read and plot the electron beam distribution function from its
+two first momentum angular moments files t (fs) | x (microns) | z (microns) | F :
+* psi0_x[cm-3_keV-1].dat
+* psi1x_x[cm-3_keV-1].dat or psi1x_z[cm-3_keV-1].dat
+* psi1z_x[cm-3_keV-1].dat or psi1z_z[cm-3_keV-1].dat
+"""
 import library as lib
-import os
+
+FONT_SIZE = 16
+
+FONT = {'style':  'normal',
+        'color':  'black',
+        'weight': 'normal',
+        'size': FONT_SIZE,
+        }
 
 simu_name=lib.get_results_dir()
 
@@ -44,20 +58,21 @@ results_dir = 'results/'+simu_name+'/'
 [N_eps,eps] = lib.find_energy_bins(results_dir+'psi0_x[cm-3_keV-1].dat')
 
 print(' At the location where the beam density is maximum at a given location on x-axis')
+print('  ')
 subdir2 = subdir+'fb_x/'
 lib.create_dir(subdir2)
 lib.read_and_plot_distribution(N_eps,eps,2,N_x,
 							   results_dir+'psi0_x[cm-3_keV-1].dat',
 							   results_dir+'psi1x_x[cm-3_keV-1].dat',
 							   results_dir+'psi1z_x[cm-3_keV-1].dat',
-							   subdir2+'fb_x')
-print('  ')								
+							   subdir2+'fb_x', FONT_SIZE, FONT)
+
 print(' At the location where the beam density is maximum at a given depth')
+print('  ')
 subdir2 = subdir+'fb_z/'
 lib.create_dir(subdir2)
 lib.read_and_plot_distribution(N_eps,eps,1,N_z,
 							   results_dir+'psi0_z[cm-3_keV-1].dat',
 							   results_dir+'psi1x_z[cm-3_keV-1].dat',
 							   results_dir+'psi1z_z[cm-3_keV-1].dat',
-							   subdir2+'fb_z')
-print('  ')
+							   subdir2+'fb_z', FONT_SIZE, FONT)

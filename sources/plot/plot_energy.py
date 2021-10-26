@@ -22,7 +22,7 @@
 #######################################################################
 ## Initial commit written by Michaël J TOUATI - Oct. 2015
 """
-Read and plot data t (/fs) | Energy (J) from files:
+Read and plot data t (fs) | Energy (J) from files:
 * U_b[J].dat
 * U_e[J].dat
 * U_el[J].dat
@@ -57,28 +57,17 @@ lib.create_dir(subdir)
 
 results_dir = 'results/'+simu_name+'/'
 
-T       = []
-lib.read_file_and_define_first_col(results_dir+'U_e[J].dat',T)
-U_E     = []
-lib.read_file_and_define_second_col(results_dir+'U_e[J].dat',U_E)
-U_B     = []
-lib.read_file_and_define_second_col(results_dir+'U_b[J].dat',U_B)
-U_Dcol  = []
-lib.read_file_and_define_second_col(results_dir+'Ud_col[J].dat', U_Dcol)
-U_Dres  = []
-lib.read_file_and_define_second_col(results_dir+'Ud_res[J].dat', U_Dres)
-U_EL    = []
-lib.read_file_and_define_second_col(results_dir+'U_el[J].dat',   U_EL)
-U_MA    = []
-lib.read_file_and_define_second_col(results_dir+'U_ma[J].dat',   U_MA)
-U_Sd    = []
-lib.read_file_and_define_second_col(results_dir+'U_sd[J].dat',   U_Sd)
-U_Su    = []
-lib.read_file_and_define_second_col(results_dir+'U_su[J].dat',   U_Su)
-U_Sf    = []
-lib.read_file_and_define_second_col(results_dir+'U_sf[J].dat',   U_Sf)
-U_Sb    = []
-lib.read_file_and_define_second_col(results_dir+'U_sb[J].dat',   U_Sb)
+T      = lib.read_file_and_define_first_col(results_dir+'U_e[J].dat')
+U_E    = lib.read_file_and_define_second_col(results_dir+'U_e[J].dat')
+U_B    = lib.read_file_and_define_second_col(results_dir+'U_b[J].dat')
+U_Dcol = lib.read_file_and_define_second_col(results_dir+'Ud_col[J].dat')
+U_Dres = lib.read_file_and_define_second_col(results_dir+'Ud_res[J].dat')
+U_EL   = lib.read_file_and_define_second_col(results_dir+'U_el[J].dat')
+U_MA   = lib.read_file_and_define_second_col(results_dir+'U_ma[J].dat')
+U_Sd   = lib.read_file_and_define_second_col(results_dir+'U_sd[J].dat')
+U_Su   = lib.read_file_and_define_second_col(results_dir+'U_su[J].dat')
+U_Sf   = lib.read_file_and_define_second_col(results_dir+'U_sf[J].dat')
+U_Sb   = lib.read_file_and_define_second_col(results_dir+'U_sb[J].dat')
 if np.amax(U_EL)>0:
     C_EL = np.floor(np.log(np.amax(U_B)/np.amax(U_EL))/np.log(10))
     C_EL = 10.**C_EL
