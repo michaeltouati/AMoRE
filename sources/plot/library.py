@@ -29,6 +29,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
 
+font_size = 16
+
+font = {'style':  'normal',
+        'color':  'black',
+        'weight': 'normal',
+        'size': font_size,
+        }
+
 def get_results_dir():
     """
     Return AMoRE simulation name
@@ -105,7 +113,7 @@ def find_energy_bins(file_name):
                 break
     return [n_eps,np.array(e_0)]
 
-def read_and_plot_curve(filename,xlabel,ylabel,title,name,logx,logy,font_size,font) :
+def read_and_plot_curve(filename,xlabel,ylabel,title,name,logx,logy) :
     [x_plt,y_plt] = read_file_and_define_two_first_cols(filename)
     fig=plt.figure()
     plt.rc('text', usetex=True)
@@ -126,7 +134,7 @@ def read_and_plot_curve(filename,xlabel,ylabel,title,name,logx,logy,font_size,fo
 def read_and_plot_two_log_curve(filename1,filename2,
                                 label1,label2,
                                 loc,xlabel,ylabel,title,
-                                name,font_size,font):
+                                name):
     [x_1,y_1] = read_file_and_define_two_first_cols(filename1)
     [x_2,y_2] = read_file_and_define_two_first_cols(filename2)
     fig=plt.figure()
@@ -173,7 +181,7 @@ def read_file_and_define_two_first_cols(filename):
             y_0.append(float(array[1]))
     return [x_0,y_0]
 
-def read_and_plot_2d_pcolormesh(filename,n_1,n_2,cmap,title,name,log,font_size,font):
+def read_and_plot_2d_pcolormesh(filename,n_1,n_2,cmap,title,name,log):
     n_1   = int(n_1)
     n_2   = int(n_2)
     n_3   = n_1*n_2
@@ -249,7 +257,7 @@ def read_and_plot_2d_pcolormesh(filename,n_1,n_2,cmap,title,name,log,font_size,f
                 fig.savefig(name+str(n_t)+'.png',bbox_inches='tight')
                 plt.close(fig)
 
-def read_and_plot_2d_pcolormesh_abs(filenamez,filenamex,n_1,n_2,cmap,title,name,font_size,font):
+def read_and_plot_2d_pcolormesh_abs(filenamez,filenamex,n_1,n_2,cmap,title,name):
     n_1 = int(n_1)
     n_2 = int(n_2)
     n_3 = n_1*n_2
@@ -318,7 +326,7 @@ def read_and_plot_2d_pcolormesh_abs(filenamez,filenamex,n_1,n_2,cmap,title,name,
 
 def read_and_plot_distribution(n_e, e_0, mu_grk, n_mu_grk,
                                filename_psi0, filename_psi1x, filename_psi1z,
-                               name, font_size, font):
+                               name):
     n_e           = int(n_e)
     n_mu_grk      = int(n_mu_grk)
     n_e_n_mu_grk  = n_e*n_mu_grk

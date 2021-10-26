@@ -33,14 +33,6 @@ import library as lib
 import matplotlib.pyplot as plt
 from matplotlib import cm
 
-FONT_SIZE=16
-
-FONT = {'style':  'normal',
-        'color':  'black',
-        'weight': 'normal',
-        'size': FONT_SIZE,
-        }
-
 simu_name=lib.get_results_dir()
 
 print(' -------------------------------------')
@@ -61,20 +53,20 @@ print('  ')
 
 [t,dN_dz] = lib.read_file_and_define_two_first_cols(results_dir+'fast_electron_temporal_distr.dat')
 maxval    = np.max(dN_dz)
-unit      = 10.**(1.+np.int(np.log(maxval)/np.log(10.)))
-dN_dz     = np.array(dN_dz) / unit
+UNIT      = 10.**(1.+int(np.log(maxval)/np.log(10.)))
+dN_dz     = np.array(dN_dz) / UNIT
 fig=plt.figure()
 plt.rc('text', usetex=True)
 plt.plot(t, dN_dz,'black',linewidth=2)
 TTL = 'Injected Fast Electron Longitudinal Distribution'
 Y_LABEL = r'$f_z \left (z=0,\,t \right )\,($'
-Y_LABEL = Y_LABEL +f"{unit:.0E}"+r'$/\mu\mathrm{m})$'
-plt.title(TTL, fontdict=FONT)
-plt.xticks(fontsize=FONT_SIZE)
-plt.xlabel(r'$t\,(\mathrm{fs})$', fontdict=FONT)
+Y_LABEL = Y_LABEL +f"{UNIT:.0E}"+r'$/\mu\mathrm{m})$'
+plt.title(TTL, fontdict=lib.font)
+plt.xticks(fontsize=lib.font_size)
+plt.xlabel(r'$t\,(\mathrm{fs})$', fontdict=lib.font)
 plt.xlim([np.min(t),np.max(t)])
-plt.ylabel(Y_LABEL, fontdict=FONT)
-plt.yticks(fontsize=FONT_SIZE)
+plt.ylabel(Y_LABEL, fontdict=lib.font)
+plt.yticks(fontsize=lib.font_size)
 plt.ylim([np.min(dN_dz),1.1*np.max(dN_dz)])
 fig.savefig(subdir+'injected_fast_e_temporal_distr.png',bbox_inches='tight')
 plt.close(fig)
@@ -84,20 +76,20 @@ print('  ')
 
 [eps,dN_dE] = lib.read_file_and_define_two_first_cols(results_dir+'fast_electron_spectrum.dat')
 maxval    = np.max(dN_dE)
-unit      = 10.**(1.+np.int(np.log(maxval)/np.log(10.)))
-dN_dE     = np.array(dN_dE) / unit
+UNIT      = 10.**(1.+int(np.log(maxval)/np.log(10.)))
+dN_dE     = np.array(dN_dE) / UNIT
 fig=plt.figure()
 plt.rc('text', usetex=True)
 plt.plot(eps, dN_dE,'black',linewidth=2)
 TTL = 'Injected Fast Electron Energy Spectrum'
-plt.title(TTL, fontdict=FONT)
-plt.xticks(fontsize=FONT_SIZE)
-plt.xlabel(r'$\varepsilon\,(\mathrm{keV})$', fontdict=FONT)
+plt.title(TTL, fontdict=lib.font)
+plt.xticks(fontsize=lib.font_size)
+plt.xlabel(r'$\varepsilon\,(\mathrm{keV})$', fontdict=lib.font)
 plt.xlim([np.min(eps),np.max(eps)])
 Y_LABEL = r'$f_\varepsilon (\varepsilon)\,($'
-Y_LABEL = Y_LABEL +f"{unit:.0E}"+r'$/\mathrm{keV})$'
-plt.ylabel(Y_LABEL, fontdict=FONT)
-plt.yticks(fontsize=FONT_SIZE)
+Y_LABEL = Y_LABEL +f"{UNIT:.0E}"+r'$/\mathrm{keV})$'
+plt.ylabel(Y_LABEL, fontdict=lib.font)
+plt.yticks(fontsize=lib.font_size)
 plt.ylim([np.min(dN_dE),1.1*np.max(dN_dE)])
 fig.savefig(subdir+'injected_fast_e_energy_spectrum.png',bbox_inches='tight')
 plt.close(fig)
@@ -107,20 +99,20 @@ print('  ')
 
 [x,dN_dx] = lib.read_file_and_define_two_first_cols(results_dir+'fast_electron_spatial_distr.dat')
 maxval    = np.max(dN_dx)
-unit      = 10.**(1.+np.int(np.log(maxval)/np.log(10.)))
-dN_dx     = np.array(dN_dx) / unit
+UNIT      = 10.**(1.+int(np.log(maxval)/np.log(10.)))
+dN_dx     = np.array(dN_dx) / UNIT
 fig=plt.figure()
 plt.rc('text', usetex=True)
 plt.plot(x, dN_dx,'black',linewidth=2)
 TTL = 'Injected Fast Electron Transverse Distribution'
-plt.title(TTL, fontdict=FONT)
-plt.xticks(fontsize=FONT_SIZE)
-plt.xlabel(r'$x\,(\mu\mathrm{m})$', fontdict=FONT)
+plt.title(TTL, fontdict=lib.font)
+plt.xticks(fontsize=lib.font_size)
+plt.xlabel(r'$x\,(\mu\mathrm{m})$', fontdict=lib.font)
 plt.xlim([np.min(x),np.max(x)])
 Y_LABEL = r'$f_x (x)\,($'
-Y_LABEL = Y_LABEL +f"{unit:.0E}"+r'$/\mu\mathrm{m})$'
-plt.ylabel(Y_LABEL, fontdict=FONT)
-plt.yticks(fontsize=FONT_SIZE)
+Y_LABEL = Y_LABEL +f"{UNIT:.0E}"+r'$/\mu\mathrm{m})$'
+plt.ylabel(Y_LABEL, fontdict=lib.font)
+plt.yticks(fontsize=lib.font_size)
 plt.ylim([np.min(dN_dx),1.1*np.max(dN_dx)])
 fig.savefig(subdir+'injected_fast_e_transverse_distribution.png',bbox_inches='tight')
 plt.close(fig)
@@ -146,10 +138,10 @@ with open(results_dir+'fast_electron_angular_distr.dat', 'r', encoding='utf-8') 
         p.append(float(array[2]))
 Maxval = np.max(p)
 Minval = np.min(p)
-unit   = 10.**(1.+np.int(np.log(maxval)/np.log(10.)))
-p      = np.array(p) / unit
-Maxval = Maxval / unit
-Minval = Minval / unit
+UNIT   = 10.**(1.+int(np.log(maxval)/np.log(10.)))
+p      = np.array(p) / UNIT
+Maxval = Maxval / UNIT
+Minval = Minval / UNIT
 for i in range(0,N2):
     for k in range(0,N1):
         Theta[k][i]=theta[i*N1+k]
@@ -159,18 +151,18 @@ cmap = plt.get_cmap('jet')
 norm = cm.colors.Normalize(vmax=Maxval, vmin=Minval)
 fig=plt.figure()
 plt.rc('text', usetex=True)
-plt.pcolormesh(Theta,X,P,cmap=cmap,norm=norm,vmax=Maxval,vmin=Minval)
+plt.pcolormesh(Theta,X,P,cmap=cmap,norm=norm,shading='gouraud')
 cbar=plt.colorbar()
-cbar.ax.tick_params(labelsize=FONT_SIZE)
+cbar.ax.tick_params(labelsize=lib.font_size)
 TTL = 'Injected Fast Electron Angular Distribution '
 TTL = TTL + r'$f_\theta \left (x,\,\theta \right )\,($'
-TTL = TTL + f"{unit:.0E}" + r'$/\mathrm{rad})$'
-plt.title(TTL, fontdict=FONT)
-plt.xticks(fontsize=16)
-plt.xlabel(r'$\theta\,(^\mathrm{o})$', fontdict=FONT)
+TTL = TTL + f"{UNIT:.0E}" + r'$/\mathrm{rad})$'
+plt.title(TTL, fontdict=lib.font)
+plt.xticks(fontsize=lib.font_size)
+plt.xlabel(r'$\theta\,(^\mathrm{o})$', fontdict=lib.font)
 plt.xlim([np.min(theta),np.max(theta)])
-plt.ylabel(r'$x\,(\mu\mathrm{m})$', fontdict=FONT)
-plt.yticks(fontsize=16)
+plt.ylabel(r'$x\,(\mu\mathrm{m})$', fontdict=lib.font)
+plt.yticks(fontsize=lib.font_size)
 plt.ylim([np.min(x2),np.max(x2)])
 fig.savefig(subdir+'injected_fast_e_angular_distribution.png',bbox_inches='tight')
 plt.close(fig)

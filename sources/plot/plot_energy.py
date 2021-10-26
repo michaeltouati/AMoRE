@@ -36,14 +36,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import library as lib
 
-FONT_SIZE = 16
-
-FONT = {'style':  'normal',
-        'color':  'black',
-        'weight': 'normal',
-        'size': FONT_SIZE,
-        }
-
 simu_name=lib.get_results_dir()
 
 print(' --------------------')
@@ -94,14 +86,16 @@ plt.plot(T, U_B,'black',linewidth=2,label=r'$\mathbf{U_b}$')
 plt.plot(T, U_Dcol,'magenta',linewidth=2,label=r'$\mathbf{U_{d,\mathrm{col}}}$')
 plt.plot(T, U_Dres,'blue',linewidth=2,label=r'$\mathbf{U_{d,\mathrm{res}}}$')
 plt.plot(T, U_stot,'red',linestyle='--',linewidth=2,label=r'$\mathbf{U_\mathrm{esc}}$')
-leg = plt.legend(loc='upper left',fontsize=FONT_SIZE, fancybox=True)
+leg = plt.legend(loc='upper left',fontsize=lib.font_size, fancybox=True)
 leg.get_frame().set_alpha(0.5)
-plt.title('Energy conservation error '+'='+str(np.floor(100*error)/100)+r'$\,\%$', fontdict=FONT)
-plt.xticks(fontsize=FONT_SIZE)
-plt.xlabel('time (fs)', fontdict=FONT)
+TTL = 'Energy conservation error '
+TTL = TTL + '='+str(np.floor(100*error)/100)+r'$\,\%$'
+plt.title(TTL, fontdict=lib.font)
+plt.xticks(fontsize=lib.font_size)
+plt.xlabel('time (fs)', fontdict=lib.font)
 plt.xlim([T[0],T[N_T]])
-plt.ylabel('Energy (J)', fontdict=FONT)
-plt.yticks(fontsize=FONT_SIZE)
+plt.ylabel('Energy (J)', fontdict=lib.font)
+plt.yticks(fontsize=lib.font_size)
 plt.ylim([U_E[0],1.1*U_E[N_T]])
 fig.savefig(subdir+'energy_conservation.png',bbox_inches='tight')
 plt.close(fig)
