@@ -58,11 +58,17 @@ def get_results_dir():
     return name
 
 def create_dir(name):
+    """
+    Create directory entitled name
+    """
     dir_name= os.path.dirname(name)
     if not os.path.exists(dir_name):
         os.mkdir(dir_name)
 
 def find_spatial_simulation_box_dimension(file_name):
+    """
+    Return AMoRE simulation spatial bins numbers
+    """
     t_0  = []
     x_0  = []
     with open(file_name, 'r', encoding='utf-8') as nb_file0 :
@@ -90,9 +96,12 @@ def find_spatial_simulation_box_dimension(file_name):
                 n_x_n_z = counter
                 break
     n_x = n_x_n_z / n_z
-    return [n_z,n_x]
+    return [int(n_z),int(n_x)]
 
 def find_energy_bins(file_name):
+    """
+    Return AMoRE simulation beam electrons kinetic energy bins number
+    """
     x_0  = []
     e_0  = []
     with open(file_name, 'r', encoding='utf-8') as psi0_file0 :
@@ -111,9 +120,12 @@ def find_energy_bins(file_name):
             if x_0[counter]!=x_0[counter-1]:
                 n_eps = counter
                 break
-    return [n_eps,np.array(e_0)]
+    return [int(n_eps),np.array(e_0)]
 
 def read_and_plot_curve(filename,xlabel,ylabel,title,name,logx,logy) :
+    """
+    Read and plot AMoRE scalar simulation result file entitled filename
+    """
     [x_plt,y_plt] = read_file_and_define_two_first_cols(filename)
     fig=plt.figure()
     plt.rc('text', usetex=True)
@@ -135,6 +147,9 @@ def read_and_plot_two_log_curve(filename1,filename2,
                                 label1,label2,
                                 loc,xlabel,ylabel,title,
                                 name):
+    """
+    Read and plot two AMoRE scalar simulation result files entitled filename1(2)
+    """
     [x_1,y_1] = read_file_and_define_two_first_cols(filename1)
     [x_2,y_2] = read_file_and_define_two_first_cols(filename2)
     fig=plt.figure()
@@ -153,15 +168,23 @@ def read_and_plot_two_log_curve(filename1,filename2,
     plt.close(fig)
 
 def read_file_and_define_first_col(filename):
-    time = []
+    """
+    Read and return the first column of an
+    AMoRE simulation result file entitled filename
+    """
+    vector = []
     with open(filename, 'r', encoding='utf-8') as file :
         for line in file:
             line      = line.strip()
             array     = line.split()
-            time.append(float(array[0]))
-    return np.array(time)
+            vector.append(float(array[0]))
+    return np.array(vector)
 
 def read_file_and_define_second_col(filename):
+    """
+    Read and return the second column of an
+    AMoRE simulation result file entitled filename
+    """
     vector = []
     with open(filename, 'r', encoding='utf-8') as file :
         for line in file:
@@ -171,6 +194,10 @@ def read_file_and_define_second_col(filename):
     return np.array(vector)
 
 def read_file_and_define_two_first_cols(filename):
+    """
+    Read and return the two first columns of
+    an AMoRE simulation result file entitled filename
+    """
     x_0 = []
     y_0 = []
     with open(filename, 'r', encoding='utf-8') as file :
@@ -182,6 +209,9 @@ def read_file_and_define_two_first_cols(filename):
     return [x_0,y_0]
 
 def read_and_plot_2d_pcolormesh(filename,n_1,n_2,cmap,title,name,log):
+    """
+    Read and plot an AMoRE 2D map simulation result file entitled filename
+    """
     n_1   = int(n_1)
     n_2   = int(n_2)
     n_3   = n_1*n_2
@@ -222,12 +252,7 @@ def read_and_plot_2d_pcolormesh(filename,n_1,n_2,cmap,title,name,log):
                         z_map[i][k]=z_plt[(n_t-1)*n_3+i*n_2+k]
                         x_map[i][k]=x_plt[(n_t-1)*n_3+i*n_2+k]
                         p_map[i][k]=p_plt[(n_t-1)*n_3+i*n_2+k]
-                cmap = plt.get_cmap(cmap)
-                file_list = ('diag/jb_z[A_cm-2].dat',
-                             'diag/je_z[A_cm-2].dat',
-                             'diag/E_z[V_m-1].dat',
-                             'diag/B_y[Tesla].dat')
-                if filename in file_list :
+                if cmap == 'seismic' :
                     max_val_a = np.amax(p_plt[(n_t-1)*n_3:n_t*n_3])
                     max_val_b = abs(np.amin(p_plt[(n_t-1)*n_3:n_t*n_3]))
                     max_val = max(max_val_a,max_val_b)
@@ -238,13 +263,14 @@ def read_and_plot_2d_pcolormesh(filename,n_1,n_2,cmap,title,name,log):
                 norm = cm.colors.Normalize(vmax=max_val, vmin=min_val)
                 fig=plt.figure()
                 plt.rc('text', usetex=True)
-                plt.pcolormesh(z_map,x_map,p_map,cmap=cmap,norm=norm,shading='gouraud')
+                plt.pcolormesh(z_map,x_map,p_map,
+                    cmap=plt.get_cmap(cmap),norm=norm,shading='gouraud')
                 cbar=plt.colorbar()
                 cbar.ax.tick_params(labelsize=FONT_SIZE)
                 plt.gca().set_aspect('equal')
                 if log!=1:
-                    plot_title = f"{10**(-power_log10):.0E}"+r'$\times$'
-                    plot_title = plot_title + title+' at '+str_time+' fs'
+                    plot_title  = f"{10**(-power_log10):.0E}"+r'$\times$'
+                    plot_title += title+'\n at '+str_time+' fs'
                     plt.title(plot_title, fontdict=FONT)
                 else:
                     plt.title(title+' at '+str_time+' fs', fontdict=FONT)
@@ -258,6 +284,10 @@ def read_and_plot_2d_pcolormesh(filename,n_1,n_2,cmap,title,name,log):
                 plt.close(fig)
 
 def read_and_plot_2d_pcolormesh_abs(filenamez,filenamex,n_1,n_2,cmap,title,name):
+    """
+    Read and plot the absolute value of a vactor from its two
+    AMoRE 2D map simulation result file entitled filename1(2)
+    """
     n_1 = int(n_1)
     n_2 = int(n_2)
     n_3 = n_1*n_2
@@ -308,8 +338,8 @@ def read_and_plot_2d_pcolormesh_abs(filenamez,filenamex,n_1,n_2,cmap,title,name)
                     cbar=plt.colorbar()
                     cbar.ax.tick_params(labelsize=FONT_SIZE)
                     plt.gca().set_aspect('equal')
-                    plot_title = f"{10**(-power_log10):.0E}"
-                    plot_title = plot_title +r'$\times$'+title+' at '+str_time+' fs'
+                    plot_title  = f"{10**(-power_log10):.0E}"
+                    plot_title += r'$\times$'+title+' at '+str_time+' fs'
                     plt.title(plot_title, fontdict=FONT)
                     plt.xticks(fontsize=FONT_SIZE)
                     plt.xlabel(r'$z\,(\mu\mathrm{m})$', fontdict=FONT)
@@ -324,27 +354,28 @@ def read_and_plot_2d_pcolormesh_abs(filenamez,filenamex,n_1,n_2,cmap,title,name)
                     fig.savefig(name+str(n_t)+'.png',bbox_inches='tight')
                     plt.close(fig)
 
-def read_and_plot_distribution(n_e, e_0, mu_grk, n_mu_grk,
-                               filename_psi0, filename_psi1x, filename_psi1z,
-                               name):
-    n_e           = int(n_e)
-    n_mu_grk      = int(n_mu_grk)
-    n_e_n_mu_grk  = n_e*n_mu_grk
+def read_and_plot_distribution(**kwargs):
+    """
+    Plot the beam electron distribution from the
+    AMoRE elecron beam distribution angular moment simulation result files entitled
+    filename_psi0, filename_psi1x, filename_psi1z
+    """
+    n_e_n_mu_grk  = kwargs['n_e']*kwargs['n_mu_grk']
     n_theta       = 500
     theta         = np.linspace(0., 2. * np.pi, n_theta)
-    gamma_l       = np.zeros(n_e)
-    p_b           = np.zeros(n_e)
-    v_b           = np.zeros(n_e)
-    p_z           = np.zeros((n_theta,n_e))
-    p_x           = np.zeros((n_theta,n_e))
+    gamma_l       = np.zeros(kwargs['n_e'])
+    p_b           = np.zeros(kwargs['n_e'])
+    v_b           = np.zeros(kwargs['n_e'])
+    p_z           = np.zeros((n_theta,kwargs['n_e']))
+    p_x           = np.zeros((n_theta,kwargs['n_e']))
     c_light       = 2.9979e8
     m_ele         = 9.1091e-31
     kev_in_joules = 1.6022e-16
     mc2           = (m_ele*c_light)**2.
     mc3           = (m_ele*c_light)**3.
     unit = (1./kev_in_joules)*(c_light/mc2)*mc3
-    for l_eps in range(0,n_e):
-        gamma_l[l_eps]=1. + (e_0[l_eps]/511.)
+    for l_eps in range(0,kwargs['n_e']):
+        gamma_l[l_eps]=1. + (kwargs['e_0'][l_eps]/511.)
         p_b[l_eps]=np.sqrt((gamma_l[l_eps]**2.)-1.)
         v_b[l_eps]=np.sqrt(1.-(gamma_l[l_eps]**(-2.)))
         for i_theta in range(0,n_theta):
@@ -356,24 +387,26 @@ def read_and_plot_distribution(n_e, e_0, mu_grk, n_mu_grk,
     f_0   = []
     f1x   = []
     f1z   = []
-    o_x   = np.zeros(n_e)
-    o_z   = np.zeros(n_e)
-    o_m   = np.zeros(n_e)
-    a_x   = np.zeros(n_e)
-    a_z   = np.zeros(n_e)
-    a_m   = np.zeros(n_e)
-    norma = np.zeros(n_e)
-    distr = np.zeros((n_theta,n_e))
-    with open(filename_psi0,  'r', encoding='utf-8') as psi0_file :
-        with open(filename_psi1x, 'r', encoding='utf-8') as psi1x_file :
-            with open(filename_psi1z, 'r', encoding='utf-8') as psi1z_file :
+    o_x   = np.zeros(kwargs['n_e'])
+    o_z   = np.zeros(kwargs['n_e'])
+    o_m   = np.zeros(kwargs['n_e'])
+    a_x   = np.zeros(kwargs['n_e'])
+    a_z   = np.zeros(kwargs['n_e'])
+    a_m   = np.zeros(kwargs['n_e'])
+    norma = np.zeros(kwargs['n_e'])
+    distr = np.zeros((n_theta,kwargs['n_e']))
+    with open(kwargs['filename_psi0'],  'r', encoding='utf-8') as psi0_file :
+        with open(kwargs['filename_psi1x'], 'r', encoding='utf-8') as psi1x_file :
+            with open(kwargs['filename_psi1z'], 'r', encoding='utf-8') as psi1z_file :
                 counter = 0
-                if mu_grk == 1: #z
+                if kwargs['mu_grk'] == 1: #z
                     colx = 3
                     colz = 1
-                elif mu_grk == 2: #x
+                    fb_mu = '/fb_z'
+                elif kwargs['mu_grk'] == 2: #x
                     colx = 1
                     colz = 3
+                    fb_mu = '/fb_x'
                 for line in psi0_file:
                     line      = line.strip()
                     array     = line.split()
@@ -395,9 +428,9 @@ def read_and_plot_distribution(n_e, e_0, mu_grk, n_mu_grk,
                             line_z  = line_z.strip()
                             array_z = line_z.split()
                             f1z.append(float(array_z[4]))
-                        i =1 + int(n_mu_grk/2.)
-                        for l_eps in range(0,n_e):
-                            n_0 = (n_t-1)*n_e_n_mu_grk+(i-1)*n_e+l_eps
+                        i =1 + int(kwargs['n_mu_grk']/2.)
+                        for l_eps in range(0,kwargs['n_e']):
+                            n_0 = (n_t-1)*n_e_n_mu_grk+(i-1)*kwargs['n_e']+l_eps
                             if f_0[n_0]!=0.:
                                 o_x[l_eps]=f1x[n_0]/f_0[n_0]
                                 o_z[l_eps]=f1z[n_0]/f_0[n_0]
@@ -428,11 +461,7 @@ def read_and_plot_distribution(n_e, e_0, mu_grk, n_mu_grk,
                                     phi_var += a_z[l_eps]*np.cos(theta[i_theta])
                                     distr[i_theta][l_eps] = norma[l_eps]*np.exp(phi_var)
                                 distr[i_theta][l_eps]=np.log(1.+distr[i_theta][l_eps])/np.log(10.)
-                        create_dir(name+str(i)+'/')
-                        if mu_grk == 1: #z
-                            fb_mu = '/fb_z'
-                        elif mu_grk ==2: #x
-                            fb_mu = '/fb_x'
+                        create_dir(kwargs['name']+str(i)+'/')
                         fig=plt.figure()
                         plt.rc('text', usetex=True)
                         cmap = plt.get_cmap('nipy_spectral')
@@ -441,10 +470,10 @@ def read_and_plot_distribution(n_e, e_0, mu_grk, n_mu_grk,
                         norm = cm.colors.Normalize(vmax=distr_max, vmin=distr_min)
                         plt.pcolormesh(p_z,p_x,distr,cmap=cmap,norm=norm,shading='gouraud')
                         plt.colorbar()
-                        plot_title = r'$\log_{10}(\mathbf{f_b}(x_0,\,z_0,\,\mathbf{p},\,t=$'
-                        plot_title = plot_title + str(int(time[n_0]))
-                        plot_title = plot_title + r'$\mathrm{fs})\,$'
-                        plot_title = plot_title + r'$(\mathrm{cm}^{-3}.\mathrm{m_e c}^{-3}))$'
+                        plot_title  = r'$\log_{10}(f_b(x_0,\,z_0,\,p_x,\,p_{y_0},\,p_z,\,t=$'
+                        plot_title += f"{time[n_0]:1.4E}"
+                        plot_title += r'$\mathrm{fs})\,$'
+                        plot_title += r'$(\mathrm{cm}^{-3}.\mathrm{m_e c}^{-3}))$'
                         plt.title(plot_title,fontdict=FONT)
                         plt.xticks(fontsize=FONT_SIZE)
                         p_z_min = np.matrix(p_z).min()
@@ -456,14 +485,13 @@ def read_and_plot_distribution(n_e, e_0, mu_grk, n_mu_grk,
                         p_x_min = np.matrix(p_x).min()
                         p_x_max = np.matrix(p_x).max()
                         plt.ylim([p_x_min-1.,p_x_max+1.])
-                        pos_x_1 = p_z_min-0.5
-                        pos_y_1 = p_x_max*(10./11.)
-                        pos_x_2 = 0.5*(p_z_max+0.5)
-                        pos_y_2 = pos_y_1
-                        txt_xlabel = r'$x_0=$'+str(np.floor(100*x_0[n_0])/100)+r'$\mu\mathrm{m}$'
-                        txt_ylabel = r'$z_0=$'+str(np.floor(100*z_0[n_0])/100)+r'$\mu\mathrm{m}$'
-                        plt.text(pos_x_1, pos_y_1, txt_xlabel, color='red',fontsize=FONT_SIZE)
-                        plt.text(pos_x_2, pos_y_2, txt_ylabel, color='red',fontsize=FONT_SIZE)
-                        file_name = name+str(i)+'/'+fb_mu+str(i)+'_'+str(n_t)+'.png'
+                        pos_x = p_z_min-0.5
+                        pos_y = p_x_min-1. + 0.85*(p_x_max-p_x_min+2.)
+                        txt_plt  =  r'$x_0\,=$'
+                        txt_plt +=str(np.floor(100*x_0[n_0])/100)+r'$\,\mu\mathrm{m},\,$'
+                        txt_plt += r'$z_0=$'+str(np.floor(100*z_0[n_0])/100)+r'$\,\mu\mathrm{m}$'
+                        txt_plt += ' and \n'+r'$p_{y_0}=0\,\mathrm{m_e c}$'
+                        plt.text(pos_x, pos_y, txt_plt,  color='red',fontsize=FONT_SIZE)
+                        file_name = kwargs['name']+str(i)+'/'+fb_mu+str(i)+'_'+str(n_t)+'.png'
                         fig.savefig(file_name,bbox_inches='tight')
                         plt.close(fig)

@@ -70,7 +70,7 @@ lib.create_dir(subdir2)
 lib.read_and_plot_2d_pcolormesh(results_dir+'ne[cm-3].dat',
                                 N_x,N_z,
                                 'jet',
-                                r'$\mathbf{n_e}\,(\mathrm{cm}^{-3})$',
+                                r'$n_e\,(\mathrm{cm}^{-3})$',
                                 subdir2+'ne_',
                                 0)
 print('  ')
@@ -80,7 +80,7 @@ lib.create_dir(subdir2)
 lib.read_and_plot_2d_pcolormesh(results_dir+'nb[cm-3].dat',
                                 N_x,N_z,
                                 'Blues',
-                                r'$\mathbf{n_b}\,(\mathrm{cm}^{-3})$',
+                                r'$n_b\,(\mathrm{cm}^{-3})$',
                                 subdir2+'nb_',
                                 0)
 print('  ')
@@ -90,7 +90,7 @@ lib.create_dir(subdir2)
 lib.read_and_plot_2d_pcolormesh(results_dir+'ni[cm-3].dat',
                                 N_x,N_z,
                                 'jet',
-                                r'$\mathbf{n_i}\,(\mathrm{cm}^{-3})$',
+                                r'$n_i\,(\mathrm{cm}^{-3})$',
                                 subdir2+'ni_',
                                 0)
 print('  ')
@@ -100,7 +100,7 @@ lib.create_dir(subdir2)
 lib.read_and_plot_2d_pcolormesh(results_dir+'jb_z[A_cm-2].dat',
                                 N_x,N_z,
                                 'seismic',
-                                r'$\mathbf{j_{b,z}}\,(\mathrm{A/cm}^{2})$',
+                                r'$j_{b,z}\,(\mathrm{A/cm}^{2})$',
                                 subdir2+'jbz_',
                                 0)
 # print('  ')
@@ -110,7 +110,7 @@ lib.create_dir(subdir2)
 lib.read_and_plot_2d_pcolormesh(results_dir+'jb_x[A_cm-2].dat',
                                 N_x,N_z,
                                 'seismic',
-                                r'$\mathbf{j_{b,x}}\,(\mathrm{A/cm}^{2})$',
+                                r'$j_{b,x}\,(\mathrm{A/cm}^{2})$',
                                 subdir2+'jbx_',
                                 0)
 # print('  ')
@@ -121,7 +121,7 @@ lib.read_and_plot_2d_pcolormesh(results_dir+'jb_x[A_cm-2].dat',
 #                                     results_dir+'jb_x[A_cm-2].dat',
 #                                     N_x,N_z,
 #                                     'Reds',
-#                                     r'$|\mathbf{j_b}\,(\mathrm{A/cm}^{2})|$',
+#                                     r'$|\mathbf{j_b}|\,(\mathrm{A/cm}^{2})$',
 #                                     subdir2+'jb_')
 print('  ')
 print(' Return current density jez')
@@ -130,7 +130,7 @@ lib.create_dir(subdir2)
 lib.read_and_plot_2d_pcolormesh(results_dir+'je_z[A_cm-2].dat',
                                 N_x,N_z,
                                 'seismic',
-                                r'$\mathbf{j_{e,z}}\,(\mathrm{A/cm}^{2})$',
+                                r'$j_{e,z}\,(\mathrm{A/cm}^{2})$',
                                 subdir2+'jez_',
                                 0)
 print('  ')
@@ -140,7 +140,7 @@ lib.create_dir(subdir2)
 lib.read_and_plot_2d_pcolormesh(results_dir+'je_x[A_cm-2].dat',
                                 N_x,N_z,
                                 'seismic',
-                                r'$\mathbf{j_{e,x}}\,(\mathrm{A/cm}^{2})$',
+                                r'$j_{e,x}\,(\mathrm{A/cm}^{2})$',
                                 subdir2+'jex_',
                                 0)
 # print('  ')
@@ -151,7 +151,7 @@ lib.read_and_plot_2d_pcolormesh(results_dir+'je_x[A_cm-2].dat',
 #                                     results_dir+'je_x[A_cm-2].dat',
 #                                     N_x,N_z,
 #                                     'Reds',
-#                                     r'$|\mathbf{j_e}\,(\mathrm{A/cm}^{2})|$',
+#                                     r'$|\mathbf{j_e}|\,(\mathrm{A/cm}^{2})$',
 #                                     subdir2+'je_')
 print('  ')
 print(' Electric field Ex')
@@ -160,7 +160,7 @@ lib.create_dir(subdir2)
 lib.read_and_plot_2d_pcolormesh(results_dir+'E_x[V_m-1].dat',
                                 N_x,N_z,
                                 'seismic',
-                                r'$\mathbf{E_{x}}\,(\mathrm{V/m})$',
+                                r'$E_{x}\,(\mathrm{V/m})$',
                                 subdir2+'Ex_',
                                 0)
 print('  ')
@@ -170,7 +170,7 @@ lib.create_dir(subdir2)
 lib.read_and_plot_2d_pcolormesh(results_dir+'E_z[V_m-1].dat',
                                 N_x,N_z,
                                 'seismic',
-                                r'$\mathbf{E_{z}}\,(\mathrm{V/m})$',
+                                r'$E_{z}\,(\mathrm{V/m})$',
                                 subdir2+'Ez_',
                                 0)
 # print('  ')
@@ -181,7 +181,7 @@ lib.read_and_plot_2d_pcolormesh(results_dir+'E_z[V_m-1].dat',
 #                                     results_dir+'E_x[V_m-1].dat',
 #                                     N_x,N_z,
 #                                     'Reds',
-#                                     r'$|\mathbf{E}\,(\mathrm{V/m})|$',
+#                                     r'$|\mathbf{E}|\,(\mathrm{V/m})$',
 #                                     subdir2+'E_')
 print('  ')
 print(' Magnetic field By')
@@ -190,7 +190,7 @@ lib.create_dir(subdir2)
 lib.read_and_plot_2d_pcolormesh(results_dir+'B_y[Tesla].dat',
                                 N_x,N_z,
                                 'seismic',
-                                r'$\mathbf{B_y}\,(\mathrm{T})$',
+                                r'$B_y\,(\mathrm{T})$',
                                 subdir2+'By_',
                                 0)
 print('  ')
@@ -200,7 +200,7 @@ lib.create_dir(subdir2)
 lib.read_and_plot_2d_pcolormesh(results_dir+'We[erg_s-1_cm-3].dat',
                                 N_x,N_z,
                                 'OrRd',
-                                r'$\mathbf{W_e}\,(\mathrm{erg/s.cm}^{3})$',
+                                r'$W_e\,(\mathrm{erg/s.cm}^{3})$',
                                 subdir2+'We_',
                                 0)
 print('  ')
@@ -210,7 +210,7 @@ lib.create_dir(subdir2)
 lib.read_and_plot_2d_pcolormesh(results_dir+'Wi[erg_s-1_cm-3].dat',
                                 N_x,N_z,
                                 'OrRd',
-                                r'$\mathbf{W_i}\,(\mathrm{erg/s.cm}^{3})$',
+                                r'$W_i\,(\mathrm{erg/s.cm}^{3})$',
                                 subdir2+'Wi_',
                                 0)
 print('  ')
@@ -220,7 +220,7 @@ lib.create_dir(subdir2)
 lib.read_and_plot_2d_pcolormesh(results_dir+'Te[eV].dat',
                                 N_x,N_z,
                                 'jet',
-                                r'$\log_{10}{\left(\mathbf{T_e}\,(\mathrm{eV})\right)}$',
+                                r'$\log_{10}{\left(T_e\,(\mathrm{eV})\right)}$',
                                 subdir2+'Te_',
                                 1)
 print('  ')
@@ -230,7 +230,7 @@ lib.create_dir(subdir2)
 lib.read_and_plot_2d_pcolormesh(results_dir+'Ti[eV].dat',
                                 N_x,N_z,
                                 'jet',
-                                r'$\log_{10}{\left(\mathbf{T_i}\,(\mathrm{eV})\right)}$',
+                                r'$\log_{10}{\left(T_i\,(\mathrm{eV})\right)}$',
                                 subdir2+'Ti_',
                                 1)
 print('  ')
@@ -240,14 +240,14 @@ lib.create_dir(subdir2)
 lib.read_and_plot_2d_pcolormesh(results_dir+'resis[Ohm.m].dat',
                                 N_x,N_z,
                                 'terrain',
-                                r'$\log_{10}{\left (\mathbf{\eta}\,(\Omega.\mathrm{m}) \right )}$',
+                                r'$\log_{10}{\left (\eta\,(\Omega.\mathrm{m}) \right )}$',
                                 subdir2+'eta_',
                                 1)
 print('  ')
 print(' Thermal conductivity kappa')
 subdir2 = subdir+'kappa/'
 lib.create_dir(subdir2)
-TTL = r'$\log_{10}\Big (\mathbf{\kappa}\,$'
+TTL = r'$\log_{10}\Big (\kappa\,$'
 TTL = TTL + r'$(\mathrm{erg/m.K.s}) \Big )$'
 lib.read_and_plot_2d_pcolormesh(results_dir+'Kappa_e[erg_m-1_K-1_s-1].dat',
                                 N_x,N_z,
@@ -262,7 +262,7 @@ lib.create_dir(subdir2)
 lib.read_and_plot_2d_pcolormesh(results_dir+'K_shell_ioniz_rate_[s-1].dat',
                                 N_x,N_z,
                                 'OrRd',
-                                r'$\mathbf{\nu_K}\,(\mathrm{s}^{-1})$',
+                                r'$\nu_K\,(\mathrm{s}^{-1})$',
                                 subdir2+'nuK_',
                                 0)
 print('  ')
@@ -272,7 +272,7 @@ lib.create_dir(subdir2)
 lib.read_and_plot_2d_pcolormesh(results_dir+'n_Kalpha[cm-3].dat',
                                 N_x,N_z,
                                 'hot',
-                                r'$\mathbf{n_{K\alpha}}\,(\mathrm{cm}^{-3}.\mathrm{sr}^{-1})$',
+                                r'$n_{K\alpha}\,(\mathrm{cm}^{-3}.\mathrm{sr}^{-1})$',
                                 subdir2+'nKa_',
                                 0)
 print('  ')
@@ -282,7 +282,7 @@ lib.create_dir(subdir2)
 lib.read_and_plot_2d_pcolormesh(results_dir+'n_Kbeta[cm-3].dat',
                                 N_x,N_z,
                                 'hot',
-                                r'$\mathbf{n_{K\beta}}\,(\mathrm{cm}^{-3}.\mathrm{sr}^{-1})$',
+                                r'$n_{K\beta}\,(\mathrm{cm}^{-3}.\mathrm{sr}^{-1})$',
                                 subdir2+'nKb_',
                                 0)
 print('  ')

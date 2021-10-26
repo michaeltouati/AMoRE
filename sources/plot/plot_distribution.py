@@ -53,18 +53,24 @@ print(' At the location where the beam density is maximum at a given location on
 print('  ')
 subdir2 = subdir+'fb_x/'
 lib.create_dir(subdir2)
-lib.read_and_plot_distribution(N_eps,eps,2,N_x,
-							   results_dir+'psi0_x[cm-3_keV-1].dat',
-							   results_dir+'psi1x_x[cm-3_keV-1].dat',
-							   results_dir+'psi1z_x[cm-3_keV-1].dat',
-							   subdir2+'fb_x')
+lib.read_and_plot_distribution(n_e=N_eps,
+                               e_0=eps,
+                               mu_grk=2,
+                               n_mu_grk=N_x,
+                               filename_psi0=results_dir+'psi0_x[cm-3_keV-1].dat',
+                               filename_psi1x=results_dir+'psi1x_x[cm-3_keV-1].dat',
+                               filename_psi1z=results_dir+'psi1z_x[cm-3_keV-1].dat',
+                               name=subdir2+'fb_x')
 
 print(' At the location where the beam density is maximum at a given depth')
 print('  ')
 subdir2 = subdir+'fb_z/'
 lib.create_dir(subdir2)
-lib.read_and_plot_distribution(N_eps,eps,1,N_z,
-							   results_dir+'psi0_z[cm-3_keV-1].dat',
-							   results_dir+'psi1x_z[cm-3_keV-1].dat',
-							   results_dir+'psi1z_z[cm-3_keV-1].dat',
-							   subdir2+'fb_z')
+lib.read_and_plot_distribution(n_e=N_eps,
+                               e_0=eps,
+                               mu_grk=1,
+                               n_mu_grk=N_z,
+                               filename_psi0=results_dir+'psi0_z[cm-3_keV-1].dat',
+                               filename_psi1x=results_dir+'psi1x_z[cm-3_keV-1].dat',
+                               filename_psi1z=results_dir+'psi1z_z[cm-3_keV-1].dat',
+                               name=subdir2+'fb_z')
