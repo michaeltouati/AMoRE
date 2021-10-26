@@ -30,6 +30,6 @@ jobs:
       run: |
         pylint sources/plot/plot_energy.py
         pylint sources/plot/plot_material.py
-        # pylint sources/plot/plot_initialization.py
+        pylint sources/plot/plot_initialization.py
         # pylint sources/plot/plot_maps.py
         # pylint sources/plot/plot_distribution.py

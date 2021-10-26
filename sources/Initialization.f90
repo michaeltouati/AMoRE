@@ -30,9 +30,9 @@ use fokker_planck_coef
 use input
 
 implicit none
-private :: calcul_Vb0_Intfeps_nrjmean_Intfx
-public  :: initialize_spectrum,function_energy, function_space, function_theta, function_time
-public  :: initialize_phi, initialize, initialize_next_step
+public :: calcul_Vb0_Intfeps_nrjmean_Intfx
+public :: initialize_spectrum,function_energy, function_space, function_theta, function_time
+public :: initialize_phi, initialize, initialize_next_step
 
 contains
 
@@ -170,8 +170,8 @@ real(PR)              :: function_time
 function_time = exp(- (t-t_c)**2._PR/(2*(sigma_t**2._PR)) ) / (Vb*sqrt(2._PR*pi*((sigma_t*fs)**2._PR)))
 end function function_time
 
-subroutine calcul_Vb0_Intfeps_nrjmean_Intfx(eps_tab,xa,epsa,Vb, Intfeps, nrj_mean, Intfx)
-! input  : eps_tab = tabulated values of the electron beam kinetic energy spectrum if chosen by the user
+subroutine calcul_Vb0_Intfeps_nrjmean_Intfx(eps_tab, xa, epsa, Vb, Intfeps, nrj_mean, Intfx)
+! input  : eps_tab  = tabulated values of the electron beam kinetic energy spectrum if chosen by the user
 !          xa       = array containing all transverse position x(i) in (microns)
 !          epsa     = array containing all kinetic energies epsa(l) in (keV)
 ! output : Vb       = injected fast e- beam kinetic energy flux mean velocity in (cm/s)

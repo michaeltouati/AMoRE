@@ -272,89 +272,97 @@ end subroutine plasma_diagnostics
 !=========================================================================================
 
 subroutine electron_diagnostics(eps_tab,xa,epsa)
-implicit none
-! inputs
-real(PR), dimension(1:N_eps_tab,1:2), intent(in) :: eps_tab
-real(PR), dimension(1:N_x), intent(in)   :: xa
-real(PR), dimension(1:N_eps), intent(in) :: epsa
-! locals
-integer                              :: i, k, l, n
-real(PR)                             :: delta, omega0, a2, theta0, alpha, alpha_x, alpha_z
-real(PR), dimension(1:N_eps)         :: dN_dE
-real(PR), dimension(1:N_x)           :: dN_dx
-integer, parameter                   :: N_theta   = 360
-real(PR), parameter                  :: theta_max = 90., dtt = 0.25
-integer                              :: N_tt
-real(PR), dimension(:),allocatable   :: tt, dN_dtt
-real(PR), dimension(1:N_theta)       :: theta
-real(PR), dimension(1:N_x,1:N_theta) :: dN_dtheta
-!
-! Create and or Open Files where data will be stored 
-open (unit=1,file ='results/'//trim(simu)//'/fast_electron_spectrum.dat'     ,form='formatted',status='unknown')
-open (unit=2,file ='results/'//trim(simu)//'/fast_electron_angular_distr.dat',form='formatted',status='unknown')
-open (unit=3,file ='results/'//trim(simu)//'/fast_electron_spatial_distr.dat',form='formatted',status='unknown')
-open (unit=4,file ='results/'//trim(simu)//'/fast_electron_temporal_distr.dat',form='formatted',status='unknown')
-! Fast Electron Kinetic Energy Spectrum
-delta = epsa(2) - epsa(1)
-do l=1,N_eps,1
-dN_dE(l) = function_energy(eps_tab,epsa(l))
-end do
-dN_dE = dN_dE / (sum(dN_dE(1:N_eps))*delta)
-do l=1,N_eps,1
-write(1,*) epsa(l), dN_dE(l)
-end do
-! Fast Electron Angular Distribution
-delta = 2.*theta_max / N_theta
-if (sigma_theta.ne.0._PR) then
-a2 = 1._PR / ((pi*sigma_theta/180._PR)**2._PR)
-omega0 = (1._PR/tanh(a2)) - (1._PR /a2)
-else
-omega0 = 1._PR
-end if
-do i=1,N_x,1
-theta0 = function_theta(xa(i))
-alpha   = 3. * omega0               / ( 1. - ((0.5*(omega0**2.))*(1.+(omega0**2.))) )
-alpha_z = 3. * omega0 * cos(theta0) / ( 1. - ((0.5*(omega0**2.))*(1.+(omega0**2.))) )
-alpha_x = 3. * omega0 * sin(theta0) / ( 1. - ((0.5*(omega0**2.))*(1.+(omega0**2.))) )
-do k=1,N_theta,1
-theta(k) = - theta_max + (real(k)-1.)*delta
-theta(k) = pi*theta(k)/180.
-dN_dtheta(i,k) = alpha * exp( ( alpha_x * sin(theta(k)) ) + ( alpha_z * cos(theta(k)) ) ) / ( 4.*pi * sinh(alpha) )
-theta(k) = 180.*theta(k)/pi
-end do
-dN_dtheta(i,1:N_theta) = dN_dtheta(i,1:N_theta) / ( sum(dN_dtheta(i,1:N_theta))*delta )
-end do
-do i=1,N_x,1
-do k=1,N_theta,1
-write(2,*) xa(i), theta(k), dN_dtheta(i,k)
-end do
-end do
-! Fast Electron Spatial Distribution
-delta = xa(2) - xa(1)
-do i=1,N_x,1
-dN_dx(i) = function_space(xa(i))
-end do
-dN_dx = dN_dx / (sum(dN_dx(1:N_x))*delta)
-do i=1,N_x,1
-write(3,*) xa(i), dN_dx(i)
-end do
-! Fast Electron Temporal Distribution
-N_tt = int(L_t / dtt)
-allocate(tt(1:N_tt),dN_dtt(1:N_tt))
-do n=1,N_tt,1
-tt(n) = (real(n)-1.)*dtt
-dN_dtt(n) = function_time(1._PR, tt(n))
-end do
-dN_dtt = dN_dtt / sum(dN_dtt(:))
-do n=1,N_tt,1
-write(4,*) tt(n), dN_dtt(n)
-end do
-deallocate(tt,dN_dtt)
-! close the files
-close(1)
-close(2)
-close(3)
-close(4)
+  implicit none
+  ! inputs
+  real(PR), dimension(1:N_eps_tab,1:2), intent(in) :: eps_tab
+  real(PR), dimension(1:N_x), intent(in)   :: xa
+  real(PR), dimension(1:N_eps), intent(in) :: epsa
+  ! locals
+  integer                              :: i, k, l, n
+  real(PR)                             :: delta, omega0, a2, theta0, alpha, alpha_x, alpha_z
+  real(PR)                             :: N0, Vb, Intfeps, nrj_mean, Intfx
+  real(PR), dimension(1:N_eps)         :: dN_dE
+  real(PR), dimension(1:N_x)           :: dN_dx
+  integer, parameter                   :: N_theta   = 360
+  real(PR), parameter                  :: theta_max = 90., dtt = 0.25
+  integer                              :: N_tt
+  real(PR), dimension(:),allocatable   :: tt, dN_dtt
+  real(PR), dimension(1:N_theta)       :: theta
+  real(PR), dimension(1:N_x,1:N_theta) :: dN_dtheta
+  !
+  ! Create and or Open Files where data will be stored 
+  open (unit=1,file ='results/'//trim(simu)//'/fast_electron_spectrum.dat'     ,form='formatted',status='unknown')
+  open (unit=2,file ='results/'//trim(simu)//'/fast_electron_angular_distr.dat',form='formatted',status='unknown')
+  open (unit=3,file ='results/'//trim(simu)//'/fast_electron_spatial_distr.dat',form='formatted',status='unknown')
+  open (unit=4,file ='results/'//trim(simu)//'/fast_electron_temporal_distr.dat',form='formatted',status='unknown')
+  !
+  ! Total number of electrons
+  call calcul_Vb0_Intfeps_nrjmean_Intfx(eps_tab, xa, epsa, Vb, Intfeps, nrj_mean, Intfx)
+  N0 = E_tot*Joules / (nrj_mean*keV)
+  ! Fast Electron Kinetic Energy Spectrum
+  delta = epsa(2) - epsa(1)
+  do l=1,N_eps,1
+    dN_dE(l) = function_energy(eps_tab,epsa(l))
+  end do
+  dN_dE = N0*dN_dE / (sum(dN_dE(1:N_eps))*delta)
+  do l=1,N_eps,1
+    write(1,*) epsa(l), dN_dE(l)
+  end do
+  !
+  ! Fast Electron Angular Distribution
+  delta = 2.*theta_max / N_theta
+  if (sigma_theta.ne.0._PR) then
+    a2 = 1._PR / ((pi*sigma_theta/180._PR)**2._PR)
+    omega0 = (1._PR/tanh(a2)) - (1._PR /a2)
+  else
+    omega0 = 1._PR
+  end if
+  do i=1,N_x,1
+    theta0 = function_theta(xa(i))
+    alpha   = 3. * omega0               / ( 1. - ((0.5*(omega0**2.))*(1.+(omega0**2.))) )
+    alpha_z = 3. * omega0 * cos(theta0) / ( 1. - ((0.5*(omega0**2.))*(1.+(omega0**2.))) )
+    alpha_x = 3. * omega0 * sin(theta0) / ( 1. - ((0.5*(omega0**2.))*(1.+(omega0**2.))) )
+    do k=1,N_theta,1
+      theta(k) = - theta_max + (real(k)-1.)*delta
+      theta(k) = pi*theta(k)/180.
+      dN_dtheta(i,k) = alpha * exp( ( alpha_x * sin(theta(k)) ) + ( alpha_z * cos(theta(k)) ) ) / ( 4.*pi * sinh(alpha) )
+      theta(k) = 180.*theta(k)/pi
+    end do
+    dN_dtheta(i,1:N_theta) = N0*dN_dtheta(i,1:N_theta) / ( sum(dN_dtheta(i,1:N_theta))*pi*delta/180.)
+  end do
+  do i=1,N_x,1
+    do k=1,N_theta,1
+      write(2,*) xa(i), theta(k), dN_dtheta(i,k)
+    end do
+  end do
+  !
+  ! Fast Electron Spatial Distribution
+  delta = xa(2) - xa(1)
+  do i=1,N_x,1
+    dN_dx(i) = function_space(xa(i))
+  end do
+  dN_dx = N0*dN_dx / (sum(dN_dx(1:N_x))*delta)
+  do i=1,N_x,1
+    write(3,*) xa(i), dN_dx(i)
+  end do
+  !
+  ! Fast Electron Temporal Distribution
+  N_tt = int(L_t / dtt)
+  allocate(tt(1:N_tt),dN_dtt(1:N_tt))
+  do n=1,N_tt,1
+    tt(n) = (real(n)-1.)*dtt
+    dN_dtt(n) = function_time(Vb, tt(n))
+  end do
+  dN_dtt = N0*dN_dtt * microns / sum(dN_dtt(:)*Vb*dtt*fs)
+  do n=1,N_tt,1
+    write(4,*) tt(n), dN_dtt(n)
+  end do
+  deallocate(tt,dN_dtt)
+  ! close the files
+  close(1)
+  close(2)
+  close(3)
+  close(4)
 end subroutine electron_diagnostics
 
 !=========================================================================================
