@@ -122,49 +122,113 @@ def find_energy_bins(file_name):
                 break
     return [int(n_eps),np.array(e_0)]
 
-def read_and_plot_curve(filename,xlabel,ylabel,title,name,logx,logy) :
+def get_log_axis_min_value(vector):
     """
-    Read and plot AMoRE scalar simulation result file entitled filename
+    Return the maximum value 10^n with n integer
+    lower than all vector values
     """
-    [x_plt,y_plt] = read_file_and_define_two_first_cols(filename)
+    vector_min = np.log(np.min(vector))/np.log(10.)
+    vector_min = 10.**np.floor(vector_min)
+    return vector_min
+
+def get_log_axis_max_value(vector):
+    """
+    Return the minimum value 10^n with n integer
+    greater than all vector values
+    """
+    vector_max = np.log(np.max(vector))/np.log(10.)
+    vector_max = 10.**np.ceil(vector_max)
+    return vector_max
+
+def make_one_scalar_plot_figure(**kwargs):
+    """
+    Plot and save a .png image of a scalar field
+    kwargs keys :
+    * vectors  : xplot,
+                 yplot
+    * scalars  : xplot_min, xplot_max,
+                 yplot_min, yplot_max
+    * strings  : color, xlabel, ylabel,
+                 title, filename
+    * logicals : logx, logy, grid
+    """
     fig=plt.figure()
     plt.rc('text', usetex=True)
-    if logx==1:
-        if logy ==0:
-            plt.semilogx(x_plt, y_plt,linewidth=2)
+    if kwargs['logx'] :
+        if kwargs['logy'] :
+            plt.loglog(kwargs['xplot'],kwargs['yplot'],
+                       linewidth=2,color=kwargs['color'])
         else:
-            plt.loglog(x_plt, y_plt,linewidth=2)
-    plt.title(title, fontdict=FONT)
+            plt.semilogx(kwargs['xplot'],kwargs['yplot'],
+                         linewidth=2,color=kwargs['color'])
+    else :
+        plt.plot(kwargs['xplot'],kwargs['yplot'],
+                 linewidth=2,color=kwargs['color'])
+    if ('xplot_min' in kwargs) and ('xplot_max' in kwargs) :
+        plt.xlim([kwargs['xplot_min'],kwargs['xplot_max']])
+    if ('yplot_min' in kwargs) and ('yplot_max' in kwargs) :
+        plt.ylim([kwargs['yplot_min'],kwargs['yplot_max']])
+    plt.title(kwargs['title'], fontdict=FONT)
     plt.xticks(fontsize=FONT_SIZE)
-    plt.xlabel(xlabel, fontdict=FONT)
-    plt.ylabel(ylabel, fontdict=FONT)
+    plt.xlabel(kwargs['xlabel'], fontdict=FONT)
+    plt.ylabel(kwargs['ylabel'], fontdict=FONT)
     plt.yticks(fontsize=FONT_SIZE)
-    plt.grid(which='both', axis='both')
-    fig.savefig(name,bbox_inches='tight')
+    if kwargs['grid']:
+        plt.grid(which='both', axis='both')
+    fig.savefig(kwargs['filename'],bbox_inches='tight')
     plt.close(fig)
 
-def read_and_plot_two_log_curve(filename1,filename2,
-                                label1,label2,
-                                loc,xlabel,ylabel,title,
-                                name):
+def make_scalars_plot_figure(**kwargs):
     """
-    Read and plot two AMoRE scalar simulation result files entitled filename1(2)
+    Plot and save a .png image of scalar fields (maximum 9)
+    kwargs keys :
+    * vectors  : xplot,
+                 yplot1, ... yplot9
+    * scalars  : xplot_min, xplot_max,
+                 yplot_min, yplot_max
+    * strings  : legend1, ..., legend9
+                 color1, ..., color9
+                 xlabel, ylabel,
+                 title, filename
+    * logicals : logx, logy, grid
     """
-    [x_1,y_1] = read_file_and_define_two_first_cols(filename1)
-    [x_2,y_2] = read_file_and_define_two_first_cols(filename2)
     fig=plt.figure()
     plt.rc('text', usetex=True)
-    plt.loglog(x_1, y_1,'red',linewidth=2,label=label1)
-    plt.loglog(x_2, y_2,'blue',linewidth=2,label=label2)
-    plt.title(title, fontdict=FONT)
+    for i in range(1,10):
+        condition = ('yplot'+str(i) in kwargs)
+        condition = condition and ('legend'+str(i) in kwargs)
+        condition = condition and ('color'+str(i) in kwargs)
+        if condition :
+            yplot  = kwargs['yplot' +str(i)]
+            legend = kwargs['legend'+str(i)]
+            color  = kwargs['color' +str(i)]
+            if kwargs['logx'] :
+                if kwargs['logy'] :
+                    plt.loglog(kwargs['xplot'],yplot,
+                               linewidth=2,label=legend,color=color)
+                else:
+                    plt.semilogx(kwargs['xplot'],yplot,
+                                 linewidth=2,label=legend,color=color)
+            else :
+                plt.plot(kwargs['xplot'],yplot,
+                         linewidth=2,label=legend,color=color)
+    if ('xplot_min' in kwargs) and ('xplot_max' in kwargs) :
+        plt.xlim([kwargs['xplot_min'],kwargs['xplot_max']])
+    if ('yplot_min' in kwargs) and ('yplot_max' in kwargs) :
+        plt.ylim([kwargs['yplot_min'],kwargs['yplot_max']])
+    plt.title(kwargs['title'], fontdict=FONT)
     plt.xticks(fontsize=FONT_SIZE)
-    plt.xlabel(xlabel, fontdict=FONT)
-    plt.ylabel(ylabel, fontdict=FONT)
+    plt.xlabel(kwargs['xlabel'], fontdict=FONT)
+    plt.ylabel(kwargs['ylabel'], fontdict=FONT)
     plt.yticks(fontsize=FONT_SIZE)
-    leg = plt.legend(loc=loc,fontsize=FONT_SIZE, fancybox=True)
+    leg = plt.legend(fontsize=FONT_SIZE,
+                     fancybox=True,
+                     bbox_to_anchor=[1., 1.],
+                     loc='upper left')
     leg.get_frame().set_alpha(0.5)
-    plt.grid(which='both', axis='both')
-    fig.savefig(name,bbox_inches='tight')
+    if kwargs['grid']:
+        plt.grid(which='both', axis='both')
+    fig.savefig(kwargs['filename'],bbox_inches='tight')
     plt.close(fig)
 
 def read_file_and_define_first_col(filename):
