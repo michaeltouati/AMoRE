@@ -140,61 +140,23 @@ def get_log_axis_max_value(vector):
     vector_max = 10.**np.ceil(vector_max)
     return vector_max
 
-def make_one_scalar_plot_figure(**kwargs):
-    """
-    Plot and save a .png image of a scalar field
-    kwargs keys :
-    * vectors  : xplot,
-                 yplot
-    * scalars  : xplot_min, xplot_max,
-                 yplot_min, yplot_max
-    * strings  : color, xlabel, ylabel,
-                 title, filename
-    * logicals : logx, logy, grid
-    """
-    fig=plt.figure()
-    plt.rc('text', usetex=True)
-    if kwargs['logx'] :
-        if kwargs['logy'] :
-            plt.loglog(kwargs['xplot'],kwargs['yplot'],
-                       linewidth=2,color=kwargs['color'])
-        else:
-            plt.semilogx(kwargs['xplot'],kwargs['yplot'],
-                         linewidth=2,color=kwargs['color'])
-    else :
-        plt.plot(kwargs['xplot'],kwargs['yplot'],
-                 linewidth=2,color=kwargs['color'])
-    if ('xplot_min' in kwargs) and ('xplot_max' in kwargs) :
-        plt.xlim([kwargs['xplot_min'],kwargs['xplot_max']])
-    if ('yplot_min' in kwargs) and ('yplot_max' in kwargs) :
-        plt.ylim([kwargs['yplot_min'],kwargs['yplot_max']])
-    plt.title(kwargs['title'], fontdict=FONT)
-    plt.xticks(fontsize=FONT_SIZE)
-    plt.xlabel(kwargs['xlabel'], fontdict=FONT)
-    plt.ylabel(kwargs['ylabel'], fontdict=FONT)
-    plt.yticks(fontsize=FONT_SIZE)
-    if kwargs['grid']:
-        plt.grid(which='both', axis='both')
-    fig.savefig(kwargs['filename'],bbox_inches='tight')
-    plt.close(fig)
-
 def make_scalars_plot_figure(**kwargs):
     """
-    Plot and save a .png image of scalar fields (maximum 9)
+    Plot and save a .png image of scalar fields (maximum 10)
     kwargs keys :
-    * vectors  : xplot,
-                 yplot1, ... yplot9
     * scalars  : xplot_min, xplot_max,
                  yplot_min, yplot_max
-    * strings  : legend1, ..., legend9
-                 color1, ..., color9
-                 xlabel, ylabel,
+    * vectors  : xplot,
+                 yplot1, ... yplot10
+    * strings  : xlabel, ylabel,
+                 color1, ..., color10,
+                 legend1, ..., legend9
                  title, filename
     * logicals : logx, logy, grid
     """
     fig=plt.figure()
     plt.rc('text', usetex=True)
-    for i in range(1,10):
+    for i in range(1,11):
         condition = ('yplot'+str(i) in kwargs)
         condition = condition and ('legend'+str(i) in kwargs)
         condition = condition and ('color'+str(i) in kwargs)
@@ -212,6 +174,11 @@ def make_scalars_plot_figure(**kwargs):
             else :
                 plt.plot(kwargs['xplot'],yplot,
                          linewidth=2,label=legend,color=color)
+    leg = plt.legend(fontsize=FONT_SIZE,
+                     fancybox=True,
+                     bbox_to_anchor=[1., 1.],
+                     loc='upper left')
+    leg.get_frame().set_alpha(0.5)
     if ('xplot_min' in kwargs) and ('xplot_max' in kwargs) :
         plt.xlim([kwargs['xplot_min'],kwargs['xplot_max']])
     if ('yplot_min' in kwargs) and ('yplot_max' in kwargs) :
@@ -221,11 +188,44 @@ def make_scalars_plot_figure(**kwargs):
     plt.xlabel(kwargs['xlabel'], fontdict=FONT)
     plt.ylabel(kwargs['ylabel'], fontdict=FONT)
     plt.yticks(fontsize=FONT_SIZE)
-    leg = plt.legend(fontsize=FONT_SIZE,
-                     fancybox=True,
-                     bbox_to_anchor=[1., 1.],
-                     loc='upper left')
-    leg.get_frame().set_alpha(0.5)
+    if kwargs['grid']:
+        plt.grid(which='both', axis='both')
+    fig.savefig(kwargs['filename'],bbox_inches='tight')
+    plt.close(fig)
+
+def make_scalar_plot_figure(**kwargs):
+    """
+    Plot and save a .png image of scalar fields (maximum 10)
+    kwargs keys :
+    * scalars  : xplot_min, xplot_max,
+                 yplot_min, yplot_max
+    * vectors  : xplot, yplot
+    * strings  : xlabel, ylabel,
+                 color
+                 title, filename
+    * logicals : logx, logy, grid
+    """
+    fig=plt.figure()
+    plt.rc('text', usetex=True)
+    if kwargs['logx'] :
+        if kwargs['logy'] :
+            plt.loglog(kwargs['xplot'],kwargs['yplot'],
+                       linewidth=2,color=kwargs['color'])
+        else :
+            plt.semilogx(kwargs['xplot'],kwargs['yplot'],
+                         linewidth=2,color=kwargs['color'])
+    else :
+        plt.plot(kwargs['xplot'],kwargs['yplot'],
+                 linewidth=2,color=kwargs['color'])
+    if ('xplot_min' in kwargs) and ('xplot_max' in kwargs) :
+        plt.xlim([kwargs['xplot_min'],kwargs['xplot_max']])
+    if ('yplot_min' in kwargs) and ('yplot_max' in kwargs) :
+        plt.ylim([kwargs['yplot_min'],kwargs['yplot_max']])
+    plt.title(kwargs['title'], fontdict=FONT)
+    plt.xticks(fontsize=FONT_SIZE)
+    plt.xlabel(kwargs['xlabel'], fontdict=FONT)
+    plt.ylabel(kwargs['ylabel'], fontdict=FONT)
+    plt.yticks(fontsize=FONT_SIZE)
     if kwargs['grid']:
         plt.grid(which='both', axis='both')
     fig.savefig(kwargs['filename'],bbox_inches='tight')
@@ -270,7 +270,39 @@ def read_file_and_define_two_first_cols(filename):
             array     = line.split()
             x_0.append(float(array[0]))
             y_0.append(float(array[1]))
-    return [x_0,y_0]
+    return [np.array(x_0),np.array(y_0)]
+
+def make_2d_field_pcolormesh_figure(**kwargs):
+    """
+    Plot and save a .png image of a 2D field map
+    kwargs keys :
+    * scalars   : xmap_min, xmap_max,
+                  ymap_min, ymap_max,
+                  zmap_min, zmap_max
+    * 2D arrays : xmap, ymap, zmap
+    * strings   : xlabel, ylabel,
+                  colormap, title,
+                  filename
+    """
+    cmap = plt.get_cmap(kwargs['colormap'])
+    norm = cm.colors.Normalize(vmin=kwargs['zmap_min'],
+                               vmax=kwargs['zmap_max'])
+    fig=plt.figure()
+    plt.rc('text', usetex=True)
+    plt.pcolormesh(kwargs['xmap'],kwargs['ymap'],kwargs['zmap'],
+                   cmap=cmap,norm=norm,shading='gouraud')
+    cbar=plt.colorbar()
+    cbar.ax.tick_params(labelsize=FONT_SIZE)
+    plt.title(kwargs['title'], fontdict=FONT)
+    plt.xticks(fontsize=FONT_SIZE)
+    plt.xlabel(kwargs['xlabel'], fontdict=FONT)
+    plt.xlim([kwargs['xmap_min'],kwargs['xmap_max']])
+    plt.ylabel(kwargs['ylabel'], fontdict=FONT)
+    plt.yticks(fontsize=FONT_SIZE)
+    plt.ylim([kwargs['ymap_min'],kwargs['ymap_max']])
+    fig.savefig(kwargs['filename'],bbox_inches='tight')
+    plt.close(fig)
+
 
 def read_and_plot_2d_pcolormesh(filename,n_1,n_2,cmap,title,name,log):
     """

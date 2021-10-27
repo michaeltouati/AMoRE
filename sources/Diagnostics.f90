@@ -291,10 +291,10 @@ subroutine electron_diagnostics(eps_tab,xa,epsa)
   real(PR), dimension(1:N_x,1:N_theta) :: dN_dtheta
   !
   ! Create and or Open Files where data will be stored 
-  open (unit=1,file ='results/'//trim(simu)//'/fast_electron_spectrum.dat'     ,form='formatted',status='unknown')
-  open (unit=2,file ='results/'//trim(simu)//'/fast_electron_angular_distr.dat',form='formatted',status='unknown')
-  open (unit=3,file ='results/'//trim(simu)//'/fast_electron_spatial_distr.dat',form='formatted',status='unknown')
-  open (unit=4,file ='results/'//trim(simu)//'/fast_electron_temporal_distr.dat',form='formatted',status='unknown')
+  open (unit=1,file ='results/'//trim(simu)//'/electron_beam_kinetic_energy_spectrum.dat'     ,form='formatted',status='unknown')
+  open (unit=2,file ='results/'//trim(simu)//'/electron_beam_angular_distribution.dat',form='formatted',status='unknown')
+  open (unit=3,file ='results/'//trim(simu)//'/electron_beam_transverse_distribution.dat',form='formatted',status='unknown')
+  open (unit=4,file ='results/'//trim(simu)//'/electron_beam_longitudinal_distribution.dat',form='formatted',status='unknown')
   !
   ! Total number of electrons
   call calcul_Vb0_Intfeps_nrjmean_Intfx(eps_tab, xa, epsa, Vb, Intfeps, nrj_mean, Intfx)

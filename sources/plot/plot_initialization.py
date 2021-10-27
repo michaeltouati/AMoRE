@@ -30,10 +30,8 @@ Read and plot data X [X] | dN/dX [/[X]) from files:
 """
 import numpy as np
 import library as lib
-import matplotlib.pyplot as plt
-from matplotlib import cm
 
-simu_name=lib.get_results_dir()
+SIMU_NAME=lib.get_results_dir()
 
 print(' -------------------------------------')
 print(' Electron Beam Initial Properties Plot')
@@ -41,87 +39,88 @@ print(' -------------------------------------')
 print('  ')
 
 lib.create_dir('figures/')
-lib.create_dir('figures/'+simu_name+'/')
 
-subdir = 'figures/'+simu_name+'/initialization/'
-lib.create_dir(subdir)
+SIMU_DIR = 'figures/'+SIMU_NAME+'/'
+lib.create_dir(SIMU_DIR)
 
-results_dir = 'results/'+simu_name+'/'
+INI_DIR = 'figures/'+SIMU_NAME+'/initialization/'
+lib.create_dir(INI_DIR)
+
+RES_DIR = 'results/'+SIMU_NAME+'/'
 
 print(' Injected Electron Beam Longitudinal Distribution')
 print('  ')
-
-[t,dN_dz] = lib.read_file_and_define_two_first_cols(results_dir+'fast_electron_temporal_distr.dat')
-maxval    = np.max(dN_dz)
-UNIT      = 10.**(1.+int(np.log(maxval)/np.log(10.)))
-dN_dz     = np.array(dN_dz) / UNIT
-fig=plt.figure()
-plt.rc('text', usetex=True)
-plt.plot(t, dN_dz,'black',linewidth=2)
-TTL = 'Injected Fast Electron Longitudinal Distribution'
-Y_LABEL = r'$f_z \left (z=0,\,t \right )\,($'
-Y_LABEL = Y_LABEL +f"{UNIT:.0E}"+r'$/\mu\mathrm{m})$'
-plt.title(TTL, fontdict=lib.FONT)
-plt.xticks(fontsize=lib.FONT_SIZE)
-plt.xlabel(r'$t\,(\mathrm{fs})$', fontdict=lib.FONT)
-plt.xlim([np.min(t),np.max(t)])
-plt.ylabel(Y_LABEL, fontdict=lib.FONT)
-plt.yticks(fontsize=lib.FONT_SIZE)
-plt.ylim([np.min(dN_dz),1.1*np.max(dN_dz)])
-fig.savefig(subdir+'injected_fast_e_temporal_distr.png',bbox_inches='tight')
-plt.close(fig)
+RES_FILE  = RES_DIR+'electron_beam_longitudinal_distribution.dat'
+[T,DN_DZ] = lib.read_file_and_define_two_first_cols(RES_FILE)
+T_MAX     = np.max(T)
+UNIT      = lib.get_log_axis_max_value(DN_DZ)
+DN_DZ     = DN_DZ / UNIT
+DN_DZ_MAX = 1.1*np.max(DN_DZ)
+Y_LABEL   = r'$f_z \left (z=0,\,t \right )\,($'
+Y_LABEL   = Y_LABEL +f"{UNIT:.0E}"+r'$/\mu\mathrm{m})$'
+FIG_FILE  = INI_DIR+'electron_beam_longitudinal_distribution.png'
+lib.make_scalar_plot_figure(xplot=T, yplot=DN_DZ,
+                            color='red',
+                            xplot_min=0.,
+                            xplot_max=T_MAX,
+                            yplot_min=0.,
+                            yplot_max=DN_DZ_MAX,
+                            xlabel=r'$t\,(\mathrm{fs})$',
+                            ylabel=Y_LABEL,
+                            title='Injected Electron Beam Longitudinal Distribution',
+                            filename=FIG_FILE,
+                            logx=False, logy=False, grid=False)
 
 print(' Injected Electron Beam Kinetic Energy Spectrum')
 print('  ')
-
-[eps,dN_dE] = lib.read_file_and_define_two_first_cols(results_dir+'fast_electron_spectrum.dat')
-maxval    = np.max(dN_dE)
-UNIT      = 10.**(1.+int(np.log(maxval)/np.log(10.)))
-dN_dE     = np.array(dN_dE) / UNIT
-fig=plt.figure()
-plt.rc('text', usetex=True)
-plt.plot(eps, dN_dE,'black',linewidth=2)
-TTL = 'Injected Fast Electron Energy Spectrum'
-plt.title(TTL, fontdict=lib.FONT)
-plt.xticks(fontsize=lib.FONT_SIZE)
-plt.xlabel(r'$\varepsilon\,(\mathrm{keV})$', fontdict=lib.FONT)
-plt.xlim([np.min(eps),np.max(eps)])
-Y_LABEL = r'$f_\varepsilon (\varepsilon)\,($'
-Y_LABEL = Y_LABEL +f"{UNIT:.0E}"+r'$/\mathrm{keV})$'
-plt.ylabel(Y_LABEL, fontdict=lib.FONT)
-plt.yticks(fontsize=lib.FONT_SIZE)
-plt.ylim([np.min(dN_dE),1.1*np.max(dN_dE)])
-fig.savefig(subdir+'injected_fast_e_energy_spectrum.png',bbox_inches='tight')
-plt.close(fig)
+RES_FILE  = RES_DIR+'electron_beam_kinetic_energy_spectrum.dat'
+[E,DN_DE] = lib.read_file_and_define_two_first_cols(RES_FILE)
+E_MIN     = lib.get_log_axis_min_value(E)
+E_MAX     = lib.get_log_axis_max_value(E)
+DN_DE_MIN = lib.get_log_axis_min_value(DN_DE)
+DN_DE_MAX = lib.get_log_axis_max_value(DN_DE)
+FIG_FILE  = INI_DIR+'electron_beam_kinetic_energy_spectrum.png'
+lib.make_scalar_plot_figure(xplot=E, yplot=DN_DE,
+                            color='red',
+                            xplot_min=E_MIN,
+                            xplot_max=E_MAX,
+                            yplot_min=DN_DE_MIN,
+                            yplot_max=DN_DE_MAX,
+                            xlabel=r'$\varepsilon\,(\mathrm{keV})$',
+                            ylabel=r'$f_\varepsilon (\varepsilon)\,(/\mathrm{keV})$',
+                            title='Injected Electron Beam Kinetic Energy Spectrum',
+                            filename=FIG_FILE,
+                            logx=True, logy=True, grid=True)
 
 print(' Injected Electron Beam Transverse Distribution')
 print('  ')
-
-[x,dN_dx] = lib.read_file_and_define_two_first_cols(results_dir+'fast_electron_spatial_distr.dat')
-maxval    = np.max(dN_dx)
-UNIT      = 10.**(1.+int(np.log(maxval)/np.log(10.)))
-dN_dx     = np.array(dN_dx) / UNIT
-fig=plt.figure()
-plt.rc('text', usetex=True)
-plt.plot(x, dN_dx,'black',linewidth=2)
-TTL = 'Injected Fast Electron Transverse Distribution'
-plt.title(TTL, fontdict=lib.FONT)
-plt.xticks(fontsize=lib.FONT_SIZE)
-plt.xlabel(r'$x\,(\mu\mathrm{m})$', fontdict=lib.FONT)
-plt.xlim([np.min(x),np.max(x)])
+RES_FILE  = RES_DIR+'electron_beam_transverse_distribution.dat'
+[X,DN_DX] = lib.read_file_and_define_two_first_cols(RES_FILE)
+X_MIN     = np.min(X)
+X_MAX     = np.max(X)
+UNIT      = lib.get_log_axis_max_value(DN_DX)
+DN_DX     = DN_DX / UNIT
+DN_DX_MAX = 1.1*np.max(DN_DX)
 Y_LABEL = r'$f_x (x)\,($'
 Y_LABEL = Y_LABEL +f"{UNIT:.0E}"+r'$/\mu\mathrm{m})$'
-plt.ylabel(Y_LABEL, fontdict=lib.FONT)
-plt.yticks(fontsize=lib.FONT_SIZE)
-plt.ylim([np.min(dN_dx),1.1*np.max(dN_dx)])
-fig.savefig(subdir+'injected_fast_e_transverse_distribution.png',bbox_inches='tight')
-plt.close(fig)
+FIG_FILE  = INI_DIR+'electron_beam_transverse_distribution.png'
+lib.make_scalar_plot_figure(xplot=X, yplot=DN_DX,
+                            color='red',
+                            xplot_min=X_MIN,
+                            xplot_max=X_MAX,
+                            yplot_min=0.,
+                            yplot_max=DN_DX_MAX,
+                            xlabel=r'$x\,(\mu\mathrm{m})$',
+                            ylabel=Y_LABEL,
+                            title='Injected Electron Beam Transverse Distribution',
+                            filename=FIG_FILE,
+                            logx=False, logy=False, grid=False)
 
 print(' Injected Electron Beam Angular Distribution')
 print('  ')
 
 N1 = 360
-N2 = len(x)
+N2 = len(X)
 N3 = N1*N2
 Theta = np.zeros((N1,N2))
 X     = np.zeros((N1,N2))
@@ -129,40 +128,37 @@ P     = np.zeros((N1,N2))
 theta = []
 x2    = []
 p     = []
-with open(results_dir+'fast_electron_angular_distr.dat', 'r', encoding='utf-8') as file:
+with open(RES_DIR+'electron_beam_angular_distribution.dat', 'r', encoding='utf-8') as file:
     for line in file:
         line      = line.strip()
         array     = line.split()
         x2.append(float(array[0]))
         theta.append(float(array[1]))
         p.append(float(array[2]))
+UNIT   = lib.get_log_axis_max_value(p)
+p      = np.array(p) / UNIT
 Maxval = np.max(p)
 Minval = np.min(p)
-UNIT   = 10.**(1.+int(np.log(maxval)/np.log(10.)))
-p      = np.array(p) / UNIT
-Maxval = Maxval / UNIT
-Minval = Minval / UNIT
 for i in range(0,N2):
     for k in range(0,N1):
         Theta[k][i]=theta[i*N1+k]
         X[k][i]    =x2[i*N1+k]
         P[k][i]    =p[i*N1+k]
-cmap = plt.get_cmap('jet')
-norm = cm.colors.Normalize(vmax=Maxval, vmin=Minval)
-fig=plt.figure()
-plt.rc('text', usetex=True)
-plt.pcolormesh(Theta,X,P,cmap=cmap,norm=norm,shading='gouraud')
-cbar=plt.colorbar()
-cbar.ax.tick_params(labelsize=lib.FONT_SIZE)
-TTL = 'Injected Fast Electron Angular Distribution '
-TTL = TTL + r'$f_\theta \left (x,\,\theta \right )\,($'
-TTL = TTL + f"{UNIT:.0E}" + r'$/\mathrm{rad})$'
-plt.title(TTL, fontdict=lib.FONT)
-plt.xticks(fontsize=lib.FONT_SIZE)
-plt.xlabel(r'$\theta\,(^\mathrm{o})$', fontdict=lib.FONT)
-plt.xlim([np.min(theta),np.max(theta)])
-plt.ylabel(r'$x\,(\mu\mathrm{m})$', fontdict=lib.FONT)
-plt.yticks(fontsize=lib.FONT_SIZE)
-plt.ylim([np.min(x2),np.max(x2)])
-fig.savefig(subdir+'injected_fast_e_angular_distribution.png',bbox_inches='tight')
-plt.close(fig)
+TTL  = 'Injected Electron Beam Angular Distribution '
+TTL += r'$f_\theta \left (x,\,\theta \right )\,($'
+TTL += f"{UNIT:.0E}" + r'$/\mathrm{rad})$'
+FIG_FILE = INI_DIR+'electron_beam_angular_distribution.png'
+lib.make_2d_field_pcolormesh_figure(xmap=Theta,
+                                    ymap=X,
+                                    zmap=P,
+                                    colormap='jet',
+                                    xmap_min=np.min(theta),
+                                    xmap_max=np.max(theta),
+                                    ymap_min=np.min(X),
+                                    ymap_max=np.max(X),
+                                    zmap_min=np.min(p),
+                                    zmap_max=np.max(p),
+                                    xlabel=r'$\theta\,(^\mathrm{o})$',
+                                    ylabel=r'$x\,(\mu\mathrm{m})$',
+                                    title=TTL,
+                                    filename=FIG_FILE)

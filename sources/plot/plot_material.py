@@ -66,17 +66,17 @@ EPS_MAX       = lib.get_log_axis_max_value(EPS)
 DEPS_DS_MIN   = lib.get_log_axis_min_value(DEPS_DS)
 DEPS_DS_MAX   = lib.get_log_axis_max_value(DEPS_DS)
 FIG_FILE      = MAT_DIR+'dE_ds.png'
-lib.make_one_scalar_plot_figure(xplot=EPS, yplot=DEPS_DS,
-	                              color='red',
-	                              xplot_min=EPS_MIN,
-	                              xplot_max=EPS_MAX,
-	                              yplot_min=DEPS_DS_MIN,
-	                              yplot_max=DEPS_DS_MAX,
-	                              xlabel=r'$\varepsilon\,(\mathrm{keV})$',
-	                              ylabel=r'$d \varepsilon / d s \,(\mathrm{keV}/\mu\mathrm{m})$',
-	                              title='Beam electrons stopping power',
-	                              filename=FIG_FILE,
-	                              logx=True, logy=True, grid=True)
+lib.make_scalar_plot_figure(xplot=EPS, yplot=DEPS_DS,
+                            color='red',
+                            xplot_min=EPS_MIN,
+                            xplot_max=EPS_MAX,
+                            yplot_min=DEPS_DS_MIN,
+                            yplot_max=DEPS_DS_MAX,
+                            xlabel=r'$\varepsilon\,(\mathrm{keV})$',
+                            ylabel=r'$d \varepsilon / d s \,(\mathrm{keV}/\mu\mathrm{m})$',
+                            title='Beam electrons stopping power',
+                            filename=FIG_FILE,
+                            logx=True, logy=True, grid=True)
 
 print(' Angular isotropization rate nu')
 print('  ')
@@ -90,17 +90,17 @@ EPS_LBL  = r'$\varepsilon\,(\mathrm{keV})$'
 NU_LBL   = r'$\nu\,(\mathrm{s}^{-1})$'
 TTL      = 'Beam electrons isotropization rate'
 FIG_FILE = MAT_DIR+'nu.png'
-lib.make_one_scalar_plot_figure(xplot=EPS, yplot=NU,
-	                              color='red',
-	                              xplot_min=EPS_MIN,
-	                              xplot_max=EPS_MAX,
-	                              yplot_min=NU_MIN,
-	                              yplot_max=NU_MAX,
-	                              xlabel=EPS_LBL,
-	                              ylabel=NU_LBL,
-	                              title=TTL,
-	                              filename=FIG_FILE,
-	                              logx=True, logy=True, grid=True)
+lib.make_scalar_plot_figure(xplot=EPS, yplot=NU,
+                            color='red',
+                            xplot_min=EPS_MIN,
+                            xplot_max=EPS_MAX,
+                            yplot_min=NU_MIN,
+                            yplot_max=NU_MAX,
+                            xlabel=EPS_LBL,
+                            ylabel=NU_LBL,
+                            title=TTL,
+                            filename=FIG_FILE,
+                            logx=True, logy=True, grid=True)
 
 print(' Ionization state Z*')
 print('  ')
@@ -114,17 +114,17 @@ TE_LBL   = r'$T_e\,(\mathrm{eV})$'
 ZF_LBL   = r'$Z^*\,(\,)$'
 TTL      = 'Ionization state'
 FIG_FILE = MAT_DIR+'Zf.png'
-lib.make_one_scalar_plot_figure(xplot=TE, yplot=ZF,
-	                              color='red',
-	                              xplot_min=TE_MIN,
-	                              xplot_max=TE_MAX,
-	                              yplot_min=ZF_MIN,
-	                              yplot_max=ZF_MAX,
-	                              xlabel=TE_LBL,
-	                              ylabel=ZF_LBL,
-	                              title=TTL,
-	                              filename=FIG_FILE,
-	                              logx=True, logy=False, grid=True)
+lib.make_scalar_plot_figure(xplot=TE, yplot=ZF,
+                            color='red',
+                            xplot_min=TE_MIN,
+                            xplot_max=TE_MAX,
+                            yplot_min=ZF_MIN,
+                            yplot_max=ZF_MAX,
+                            xlabel=TE_LBL,
+                            ylabel=ZF_LBL,
+                            title=TTL,
+                            filename=FIG_FILE,
+                            logx=True, logy=False, grid=True)
 
 print(' Electrical resistivity eta')
 print('  ')
@@ -145,21 +145,21 @@ ETA_LBL   = r'$\eta\,(\mathrm{\Omega.m})$'
 TTL       = 'Electrical resistivity'
 FIG_FILE  = MAT_DIR+'eta.png'
 lib.make_scalars_plot_figure(xplot=TE,
-	                           yplot1=ETA1,
-	                           legend1 =r'$T_i=T_e$',
-	                           color1='red',
-	                           yplot2=ETA2,
-	                           legend2 =r'$T_i=293.15\,\mathrm{K}$',
-	                           color2='blue',
-	                           xplot_min=TE_MIN,
-	                           xplot_max=TE_MAX,
-	                           yplot_min=ETA_MIN,
-	                           yplot_max=ETA_MAX,
-	                           xlabel=TE_LBL,
-	                           ylabel=ETA_LBL,
-	                           title=TTL,
-	                           filename=FIG_FILE,
-	                           logx=True, logy=True, grid=True)
+                             yplot1=ETA1,
+                             legend1 =r'$T_i=T_e$',
+                             color1='red',
+                             yplot2=ETA2,
+                             legend2 =r'$T_i=293.15\,\mathrm{K}$',
+                             color2='blue',
+                             xplot_min=TE_MIN,
+                             xplot_max=TE_MAX,
+                             yplot_min=ETA_MIN,
+                             yplot_max=ETA_MAX,
+                             xlabel=TE_LBL,
+                             ylabel=ETA_LBL,
+                             title=TTL,
+                             filename=FIG_FILE,
+                             logx=True, logy=True, grid=True)
 
 print(' Thermal conductivity kappa')
 print('  ')
@@ -180,21 +180,21 @@ KAPPA_LBL   = r'$\kappa_e\,(\mathrm{J/m/K/s})$'
 TTL         = 'Electron thermal conductivity'
 FIG_FILE    = MAT_DIR+'kappa.png'
 lib.make_scalars_plot_figure(xplot=TE,
-	                           yplot1=KAPPA1,
-	                           legend1 =r'$T_i=T_e$',
-	                           color1='red',
-	                           yplot2=KAPPA2,
-	                           legend2 =r'$T_i=293.15\,\mathrm{K}$',
-	                           color2='blue',
-	                           xplot_min=TE_MIN,
-	                           xplot_max=TE_MAX,
-	                           yplot_min=KAPPA_MIN,
-	                           yplot_max=KAPPA_MAX,
-	                           xlabel=TE_LBL,
-	                           ylabel=KAPPA_LBL,
-	                           title=TTL,
-	                           filename=FIG_FILE,
-	                           logx=True, logy=True, grid=True)
+                             yplot1=KAPPA1,
+                             legend1 =r'$T_i=T_e$',
+                             color1='red',
+                             yplot2=KAPPA2,
+                             legend2 =r'$T_i=293.15\,\mathrm{K}$',
+                             color2='blue',
+                             xplot_min=TE_MIN,
+                             xplot_max=TE_MAX,
+                             yplot_min=KAPPA_MIN,
+                             yplot_max=KAPPA_MAX,
+                             xlabel=TE_LBL,
+                             ylabel=KAPPA_LBL,
+                             title=TTL,
+                             filename=FIG_FILE,
+                             logx=True, logy=True, grid=True)
 
 print(' Electron-ion/lattice coupling factor G')
 print('  ')
@@ -215,8 +215,8 @@ G_LBL     = r'$\Omega_{ei}\,(\mathrm{J}/\mathrm{m}^3/\mathrm{s/K})$'
 TTL       = 'Electron-ion/lattice coupling factor'
 FIG_FILE  = MAT_DIR+'Omega_ei.png'
 lib.make_scalars_plot_figure(xplot=TE,
-	                           yplot1=G1,
-	                           legend1 =r'$T_i=T_e$',
+ 	                           yplot1=G1,
+ 	                           legend1 =r'$T_i=T_e$',
 	                           color1='red',
 	                           yplot2=G2,
 	                           legend2 =r'$T_i=293.15\,\mathrm{K}$',
@@ -250,8 +250,8 @@ CV_LBL     = r'$C_{V_{e,i}}\,(\mathrm{J}/\mathrm{m}^3.\mathrm{K})$'
 TTL        = 'Thermal capacities'
 FIG_FILE   = MAT_DIR+'Cv.png'
 lib.make_scalars_plot_figure(xplot=TE,
-	                           yplot1=CV_E,
-	                           legend1 =r'$C_{V_e}$',
+ 	                           yplot1=CV_E,
+ 	                           legend1 =r'$C_{V_e}$',
 	                           color1='red',
 	                           yplot2=CV_I,
 	                           legend2 =r'$C_{V_i}$',
