@@ -135,47 +135,51 @@ lib.make_scalar_plot_figure(xplot     = X,
 print(' Injected electron beam angular distribution')
 print('  ')
 
-N1 = 360
-N2 = len(X)
-N3 = N1*N2
-Theta = np.zeros((N1,N2))
-X     = np.zeros((N1,N2))
-P     = np.zeros((N1,N2))
-theta = []
-x2    = []
-p     = []
+THETA_PLT = []
+X_PLT     = []
+P_PLT     = []
 with open(RES_DIR+'electron_beam_angular_distribution.dat', 'r', encoding='utf-8') as file:
     for line in file:
         line      = line.strip()
         array     = line.split()
-        x2.append(float(array[0]))
-        theta.append(float(array[1]))
-        p.append(float(array[2]))
-UNIT   = lib.get_log_axis_max_value(p)
-p      = np.array(p) / UNIT
-Maxval = np.max(p)
-Minval = np.min(p)
-for i in range(0,N2):
-    for k in range(0,N1):
-        Theta[k][i]=theta[i*N1+k]
-        X[k][i]    =x2[i*N1+k]
-        P[k][i]    =p[i*N1+k]
+        X_PLT.append(float(array[0]))
+        THETA_PLT.append(float(array[1]))
+        P_PLT.append(float(array[2]))
+N_THETA_N_X = len(X_PLT)
+N_X         = len(X)
+N_THETA     = int(N_THETA_N_X / N_X)
+THETA_MAP   = np.zeros((N_THETA,N_X))
+X_MAP       = np.zeros((N_THETA,N_X))
+P_MAP       = np.zeros((N_THETA,N_X))
+UNIT        = lib.get_log_axis_max_value(P_PLT)
+P_PLT       = np.array(P_PLT) / UNIT
+for i in range(0,N_X):
+    for k in range(0,N_THETA):
+        THETA_MAP[k][i] = THETA_PLT[i*N_THETA+k]
+        X_MAP[k][i]     = X_PLT[i*N_THETA+k]
+        P_MAP[k][i]     = P_PLT[i*N_THETA+k]
+THETA_MIN      = np.min(THETA_PLT)
+THETA_MAX      = np.max(THETA_PLT)
+X_MIN          = np.min(X_PLT)
+X_MAX          = np.max(X_PLT)
+P_MIN          = np.min(P_PLT)
+P_MAX          = np.max(P_PLT)
 THETA_LBL      = r'$\theta\,(^\mathrm{o})$'
 X_LBL          = r'$x\,(\mu\mathrm{m})$'
 DN_DTHETA_TTL  = 'Injected electron beam angular distribution \n'
 DN_DTHETA_TTL += r'$f_\theta \left (x,\,\theta \right )\,($'
 DN_DTHETA_TTL += f"{UNIT:.0E}" + r'$/\mathrm{rad})$'
 DN_DTHETA_FIG  = INI_DIR+'electron_beam_angular_distribution.png'
-lib.make_2d_field_pcolormesh_figure(xmap     = Theta,
-                                    ymap     = X,
-                                    zmap     = P,
+lib.make_2d_field_pcolormesh_figure(xmap     = THETA_MAP,
+                                    ymap     = X_MAP,
+                                    zmap     = P_MAP,
                                     colormap = 'jet',
-                                    xmap_min = np.min(theta),
-                                    xmap_max = np.max(theta),
-                                    ymap_min = np.min(X),
-                                    ymap_max = np.max(X),
-                                    zmap_min = np.min(p),
-                                    zmap_max = np.max(p),
+                                    xmap_min = THETA_MIN,
+                                    xmap_max = THETA_MAX,
+                                    ymap_min = X_MIN,
+                                    ymap_max = X_MAX,
+                                    zmap_min = np.min(P_PLT),
+                                    zmap_max = np.max(P_PLT),
                                     xlabel   = THETA_LBL,
                                     ylabel   = X_LBL,
                                     title    = DN_DTHETA_TTL,
