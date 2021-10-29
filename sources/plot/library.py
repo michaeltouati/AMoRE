@@ -303,6 +303,13 @@ def make_2d_field_pcolormesh_figure(**kwargs):
     plt.ylim([kwargs['ymap_min'],kwargs['ymap_max']])
     if kwargs['eq_axis'] :
         plt.gca().set_aspect('equal')
+    txt_condition = 'txt_col' in kwargs
+    txt_condition = txt_condition and ('txt_posx' in kwargs)
+    txt_condition = txt_condition and ('txt_posy' in kwargs)
+    txt_condition = txt_condition and ('txt_str'  in kwargs)
+    if txt_condition:
+        plt.text(kwargs['txt_posx'], kwargs['txt_posy'], 
+                 kwargs['txt_str'], color=kwargs['txt_col'],fontsize=FONT_SIZE)
     fig.savefig(kwargs['fig_file'],bbox_inches='tight')
     plt.close(fig)
 
@@ -526,36 +533,39 @@ def read_and_plot_distribution(**kwargs):
                                     distr[i_theta][l_eps] = norma[l_eps]*np.exp(phi_var)
                                 distr[i_theta][l_eps]=np.log(1.+distr[i_theta][l_eps])/np.log(10.)
                         create_dir(kwargs['name']+str(i)+'/')
-                        fig=plt.figure()
-                        plt.rc('text', usetex=True)
-                        cmap = plt.get_cmap('nipy_spectral')
                         distr_min = np.matrix(distr).min()
                         distr_max = np.matrix(distr).max()
-                        norm = cm.colors.Normalize(vmax=distr_max, vmin=distr_min)
-                        plt.pcolormesh(p_z,p_x,distr,cmap=cmap,norm=norm,shading='gouraud')
-                        plt.colorbar()
                         plot_title  = r'$\log_{10}(f_b(x_0,\,z_0,\,p_x,\,p_{y_0},\,p_z,\,t=$'
                         plot_title += f"{time[n_0]:1.4E}"
                         plot_title += r'$\mathrm{fs})\,$'
                         plot_title += r'$(\mathrm{cm}^{-3}.\mathrm{m_e c}^{-3}))$'
-                        plt.title(plot_title,fontdict=FONT)
-                        plt.xticks(fontsize=FONT_SIZE)
                         p_z_min = np.matrix(p_z).min()
                         p_z_max = np.matrix(p_z).max()
-                        plt.xlabel(r'$p_z\,(m_e c)$', fontdict=FONT)
-                        plt.xlim([p_z_min-1,p_z_max+1])
-                        plt.ylabel(r'$p_x\,(m_e c)$', fontdict=FONT)
-                        plt.yticks(fontsize=FONT_SIZE)
                         p_x_min = np.matrix(p_x).min()
                         p_x_max = np.matrix(p_x).max()
-                        plt.ylim([p_x_min-1.,p_x_max+1.])
                         pos_x = p_z_min-0.5
                         pos_y = p_x_min-1. + 0.875*(p_x_max-p_x_min+2.)
                         txt_plt  =  r'$x_0\,=$'
                         txt_plt +=str(np.floor(100*x_0[n_0])/100)+r'$\,\mu\mathrm{m},\,$'
                         txt_plt += r'$z_0=$'+str(np.floor(100*z_0[n_0])/100)+r'$\,\mu\mathrm{m}$'
                         txt_plt += ' and \n'+r'$p_{y_0}=0\,\mathrm{m_e c}$'
-                        plt.text(pos_x, pos_y, txt_plt,  color='red',fontsize=FONT_SIZE)
                         file_name = kwargs['name']+str(i)+'/'+fb_mu+str(i)+'_'+str(n_t)+'.png'
-                        fig.savefig(file_name,bbox_inches='tight')
-                        plt.close(fig)
+                        make_2d_field_pcolormesh_figure(xmap     = p_z,
+                                                        ymap     = p_x,
+                                                        zmap     = distr,
+                                                        colormap = 'nipy_spectral',
+                                                        xmap_min = p_z_min,
+                                                        xmap_max = p_z_max,
+                                                        ymap_min = p_x_min,
+                                                        ymap_max = p_x_max,
+                                                        zmap_min = distr_min,
+                                                        zmap_max = distr_max,
+                                                        xlabel   = r'$p_z\,(m_e c)$',
+                                                        ylabel   = r'$p_x\,(m_e c)$',
+                                                        title    = plot_title,
+                                                        txt_str  = txt_plt,
+                                                        txt_col  = 'red',
+                                                        txt_posx = pos_x,
+                                                        txt_posy = pos_y,
+                                                        eq_axis  = True,
+                                                        fig_file = file_name)
