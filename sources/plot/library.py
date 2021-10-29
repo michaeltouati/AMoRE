@@ -282,7 +282,8 @@ def make_2d_field_pcolormesh_figure(**kwargs):
     * 2D arrays : xmap, ymap, zmap
     * strings   : xlabel, ylabel,
                   colormap, title,
-                  filename
+                  fig_file
+    * logical   : eq_axis
     """
     cmap = plt.get_cmap(kwargs['colormap'])
     norm = cm.colors.Normalize(vmin=kwargs['zmap_min'],
@@ -291,7 +292,7 @@ def make_2d_field_pcolormesh_figure(**kwargs):
     plt.rc('text', usetex=True)
     plt.pcolormesh(kwargs['xmap'],kwargs['ymap'],kwargs['zmap'],
                    cmap=cmap,norm=norm,shading='gouraud')
-    cbar=plt.colorbar()
+    cbar=plt.colorbar(format='%.2f')
     cbar.ax.tick_params(labelsize=FONT_SIZE)
     plt.title(kwargs['title'], fontdict=FONT)
     plt.xticks(fontsize=FONT_SIZE)
@@ -300,155 +301,122 @@ def make_2d_field_pcolormesh_figure(**kwargs):
     plt.ylabel(kwargs['ylabel'], fontdict=FONT)
     plt.yticks(fontsize=FONT_SIZE)
     plt.ylim([kwargs['ymap_min'],kwargs['ymap_max']])
-    fig.savefig(kwargs['filename'],bbox_inches='tight')
+    if kwargs['eq_axis'] :
+        plt.gca().set_aspect('equal')
+    fig.savefig(kwargs['fig_file'],bbox_inches='tight')
     plt.close(fig)
 
+def mesh_grid(**kwargs):
+    """
+    Return 2D arrays from hydro./field AMoRE simulation results files
+    kwargs keys :
+    * 1D arrays : z_in, x_in, p_in
+    * Integers  : n_0 (for t), n_1 (for x), n_2 (for z)
+    """
+    n_3   = kwargs['n_1']*kwargs['n_2']
+    z_out = np.zeros((kwargs['n_1'],kwargs['n_2']))
+    x_out = np.zeros((kwargs['n_1'],kwargs['n_2']))
+    p_out = np.zeros((kwargs['n_1'],kwargs['n_2']))
+    for i in range(0,kwargs['n_1']):
+        for k in range(0,kwargs['n_2']):
+            index       = (kwargs['n_0']-1)*n_3
+            index      += i*kwargs['n_2']
+            index      += k
+            z_out[i][k] = kwargs['z_in'][index]
+            x_out[i][k] = kwargs['x_in'][index]
+            p_out[i][k] = kwargs['p_in'][index]
+    return [z_out, x_out, p_out]
 
-def read_and_plot_2d_pcolormesh(filename,n_1,n_2,cmap,title,name,log):
+def normalize(**kwargs):
+    """
+    Normalize 2D array to plot and modify the title in consequence
+    kwargs keys :
+    * 1D array : p_in
+    * Strings  : title, str_time
+    * Logicals : log
+    * Integers : n_0 (for t), n_1 (for x), n_2 (for z)
+    """
+    n_3       = kwargs['n_1']*kwargs['n_2']
+    index_min = (kwargs['n_0']-1) * n_3
+    index_max =  kwargs['n_0']    * n_3
+    value     = max(abs(np.amax(kwargs['p_in'][index_min:index_max])),
+                    abs(np.amin(kwargs['p_in'][index_min:index_max])))
+    power_log10 = 0.
+    plot_title  = ''
+    if kwargs['log'] :
+        plot_title  = kwargs['title']+'\n at '
+        plot_title += kwargs['str_time']+' fs'
+    else :
+        if value != 0. :
+            power_log10=np.floor(np.log(value)/np.log(10.))
+        plot_title  = f"{10**(-power_log10):.0E}"+r'$\times$'
+        plot_title += kwargs['title']+'\n at '
+        plot_title += kwargs['str_time']+' fs'
+    p_out = kwargs['p_in']
+    for index in range(index_min,index_max):
+        p_out[index] = kwargs['p_in'][index] / (10.**power_log10)
+    return [plot_title, p_out]
+
+def read_and_plot_2d_pcolormesh(**kwargs):
     """
     Read and plot an AMoRE 2D map simulation result file entitled filename
+    kwargs keys  :
+    * integers   : n_1, n_2
+    * strings    : res_file, colormap, title, fig_file
+    * Logicals   : log, eq_axis
     """
-    n_1   = int(n_1)
-    n_2   = int(n_2)
-    n_3   = n_1*n_2
     x_plt = []
     z_plt = []
     p_plt = []
-    z_map = np.zeros((n_1,n_2))
-    x_map = np.zeros((n_1,n_2))
-    p_map = np.zeros((n_1,n_2))
-    with open(filename, 'r', encoding='utf-8') as file :
+    with open(kwargs['res_file'], 'r', encoding='utf-8') as file :
         counter = 0
         for line in file:
-            line      = line.strip()
-            array     = line.split()
+            array = line.strip().split()
             x_plt.append(float(array[1]))
             z_plt.append(float(array[2]))
-            if log==1:
+            if kwargs['log'] :
                 p_plt.append(np.log(float(array[3]))/np.log(10))
             else:
                 p_plt.append(float(array[3]))
             counter = counter + 1
-            if counter % n_3 == 0:
-                time     = float(array[0])
-                str_time = f"{time:1.4E}"
-                print(' * t = '+str_time+' fs')
-                n_t   = int(counter / n_3)
-                val_a = abs(np.amax(p_plt[(n_t-1)*n_3:n_t*n_3]))
-                val_b = abs(np.amin(p_plt[(n_t-1)*n_3:n_t*n_3]))
-                val   = max(val_a,val_b)
-                if (val != 0.) and (log!=1):
-                    power_log10=np.floor(np.log(val)/np.log(10.))
-                else:
-                    power_log10 = 0.
-                for index in range((n_t-1)*n_3,n_t*n_3):
-                    p_plt[index] = p_plt[index] / (10.**power_log10)
-                for i in range(0,n_1):
-                    for k in range(0,n_2):
-                        z_map[i][k]=z_plt[(n_t-1)*n_3+i*n_2+k]
-                        x_map[i][k]=x_plt[(n_t-1)*n_3+i*n_2+k]
-                        p_map[i][k]=p_plt[(n_t-1)*n_3+i*n_2+k]
-                if cmap == 'seismic' :
-                    max_val_a = np.amax(p_plt[(n_t-1)*n_3:n_t*n_3])
-                    max_val_b = abs(np.amin(p_plt[(n_t-1)*n_3:n_t*n_3]))
-                    max_val = max(max_val_a,max_val_b)
+            if counter % (kwargs['n_1']*kwargs['n_2']) == 0:
+                print(' * t = '+f"{float(array[0]):1.4E}"+' fs')
+                n_t = int( counter / (kwargs['n_1']*kwargs['n_2']) )
+                [plot_title, p_plt]   = normalize(title    = kwargs['title'],
+                                                  log      = kwargs['log'],
+                                                  str_time = f"{float(array[0]):1.4E}",
+                                                  p_in     = p_plt,
+                                                  n_0      = n_t,
+                                                  n_1      = kwargs['n_1'],
+                                                  n_2      = kwargs['n_2'])
+                [z_map, x_map, p_map] = mesh_grid(z_in = z_plt,
+                                                  x_in = x_plt,
+                                                  p_in = p_plt,
+                                                  n_0  = n_t,
+                                                  n_1  = kwargs['n_1'],
+                                                  n_2  = kwargs['n_2'])
+                if kwargs['colormap'] == 'seismic' :
+                    max_val = max(np.matrix(p_map).max(),
+                                  abs(np.matrix(p_map).min()))
                     min_val = -max_val
                 else:
-                    max_val = np.amax(p_plt[(n_t-1)*n_3:n_t*n_3])
-                    min_val = np.amin(p_plt[(n_t-1)*n_3:n_t*n_3])
-                norm = cm.colors.Normalize(vmax=max_val, vmin=min_val)
-                fig=plt.figure()
-                plt.rc('text', usetex=True)
-                plt.pcolormesh(z_map,x_map,p_map,
-                    cmap=plt.get_cmap(cmap),norm=norm,shading='gouraud')
-                cbar=plt.colorbar()
-                cbar.ax.tick_params(labelsize=FONT_SIZE)
-                plt.gca().set_aspect('equal')
-                if log!=1:
-                    plot_title  = f"{10**(-power_log10):.0E}"+r'$\times$'
-                    plot_title += title+'\n at '+str_time+' fs'
-                    plt.title(plot_title, fontdict=FONT)
-                else:
-                    plt.title(title+'\n at '+str_time+' fs', fontdict=FONT)
-                plt.xticks(fontsize=FONT_SIZE)
-                plt.xlabel(r'$z\,(\mu\mathrm{m})$', fontdict=FONT)
-                plt.xlim([np.amin(z_plt[(n_t-1)*n_3:n_t*n_3]),np.amax(z_plt[(n_t-1)*n_3:n_t*n_3])])
-                plt.ylabel(r'$x\,(\mu\mathrm{m})$', fontdict=FONT)
-                plt.yticks(fontsize=FONT_SIZE)
-                plt.ylim([np.amin(x_plt[(n_t-1)*n_3:n_t*n_3]),np.amax(x_plt[(n_t-1)*n_3:n_t*n_3])])
-                fig.savefig(name+str(n_t)+'.png',bbox_inches='tight')
-                plt.close(fig)
-
-def read_and_plot_2d_pcolormesh_abs(filenamez,filenamex,n_1,n_2,cmap,title,name):
-    """
-    Read and plot the absolute value of a vactor from its two
-    AMoRE 2D map simulation result file entitled filename1(2)
-    """
-    n_1 = int(n_1)
-    n_2 = int(n_2)
-    n_3 = n_1*n_2
-    x_plt = []
-    z_plt = []
-    p_z = []
-    p_x = []
-    z_map = np.zeros((n_1,n_2))
-    x_map = np.zeros((n_1,n_2))
-    p_map = np.zeros((n_1,n_2))
-    with open(filenamez, 'r', encoding='utf-8') as filez :
-        with open(filenamex, 'r', encoding='utf-8') as filex :
-            counter = 0
-            for linez in filez:
-                linez      = linez.strip()
-                arrayz     = linez.split()
-                x_plt.append(float(arrayz[1]))
-                z_plt.append(float(arrayz[2]))
-                p_z.append(float(arrayz[3]))
-                counter = counter + 1
-                if counter % n_3 == 0:
-                    time     = float(arrayz[0])
-                    str_time = f"{time:1.4E}"
-                    print(' * t = '+str_time+' fs')
-                    n_t = int(counter/n_3)
-                    for _ in range(0,n_3):
-                        linex  = filex.readline()
-                        linex  = linex.strip()
-                        arrayx = linex.split()
-                        p_x.append(float(arrayx[3]))
-                    for i in range(0,n_1):
-                        for k in range(0,n_2):
-                            z_map[i][k] = z_plt[(n_t-1)*n_3+i*n_2+k]
-                            x_map[i][k] = x_plt[(n_t-1)*n_3+i*n_2+k]
-                            p_map_z2    = p_z[(n_t-1)*n_3+i*n_2+k]**2.
-                            p_map_x2    = p_x[(n_t-1)*n_3+i*n_2+k]**2.
-                            p_map[i][k] = np.sqrt(p_map_z2+p_map_x2)
-                    max_val = np.matrix(p_map).max()
-                    power_log10=np.int(np.log(max_val)/np.log(10.))
-                    p_map = p_map / (10.**power_log10)
-                    cmap = plt.get_cmap(cmap)
                     max_val = np.matrix(p_map).max()
                     min_val = np.matrix(p_map).min()
-                    norm = cm.colors.Normalize(vmax=max_val, vmin=min_val)
-                    fig=plt.figure()
-                    plt.rc('text', usetex=True)
-                    plt.pcolormesh(z_map,x_map,p_map,cmap=cmap,norm=norm,shading='gouraud')
-                    cbar=plt.colorbar()
-                    cbar.ax.tick_params(labelsize=FONT_SIZE)
-                    plt.gca().set_aspect('equal')
-                    plot_title  = f"{10**(-power_log10):.0E}"
-                    plot_title += r'$\times$'+title+' at '+str_time+' fs'
-                    plt.title(plot_title, fontdict=FONT)
-                    plt.xticks(fontsize=FONT_SIZE)
-                    plt.xlabel(r'$z\,(\mu\mathrm{m})$', fontdict=FONT)
-                    z_plt_min = np.amin(z_plt[(n_t-1)*n_3:n_t*n_3])
-                    z_plt_max = np.amax(z_plt[(n_t-1)*n_3:n_t*n_3])
-                    plt.xlim([z_plt_min,z_plt_max])
-                    plt.ylabel(r'$x\,(\mu\mathrm{m})$', fontdict=FONT)
-                    plt.yticks(fontsize=FONT_SIZE)
-                    x_plt_min = np.amin(x_plt[(n_t-1)*n_3:n_t*n_3])
-                    x_plt_max = np.amax(x_plt[(n_t-1)*n_3:n_t*n_3])
-                    plt.ylim([x_plt_min,x_plt_max])
-                    fig.savefig(name+str(n_t)+'.png',bbox_inches='tight')
-                    plt.close(fig)
+                make_2d_field_pcolormesh_figure(xmap     = z_map,
+                                                ymap     = x_map,
+                                                zmap     = p_map,
+                                                colormap = kwargs['colormap'],
+                                                xmap_min = np.matrix(z_map).min(),
+                                                xmap_max = np.matrix(z_map).max(),
+                                                ymap_min = np.matrix(x_map).min(),
+                                                ymap_max = np.matrix(x_map).max(),
+                                                zmap_min = min_val,
+                                                zmap_max = max_val,
+                                                xlabel   = kwargs['xlabel'],
+                                                ylabel   = kwargs['ylabel'],
+                                                title    = plot_title,
+                                                eq_axis  = kwargs['eq_axis'],
+                                                fig_file = kwargs['fig_file']+str(n_t)+'.png')
 
 def read_and_plot_distribution(**kwargs):
     """
