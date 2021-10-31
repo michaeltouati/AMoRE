@@ -12,7 +12,7 @@
 [![Clones : 14 days](https://img.shields.io/badge/dynamic/json?color=success&label=Clones%20(<15%20days)&query=count&url=https://github.com/michaeltouati/AMoRE/blob/master/.github/clone.json?raw=True&logo=github)](https://github.com/michaeltouati/AMoRE/actions/workflows/clones.yml)
 [![Compilation check](https://github.com/michaeltouati/AMoRE/actions/workflows/compilation.yml/badge.svg?branch=master)](https://github.com/michaeltouati/AMoRE/actions/workflows/compilation.yml)
 [![Tests check](https://github.com/michaeltouati/AMoRE/actions/workflows/tests.yml/badge.svg?branch=master)](https://github.com/michaeltouati/AMoRE/actions/workflows/tests.yml)
-[![Plots check](https://github.com/michaeltouati/AMoRE/actions/workflows/plots.yml/badge.svg?branch=master)](https://github.com/michaeltouati/AMoRE/actions/workflows/plots.yml)
+[![Plotting tools check](https://github.com/michaeltouati/AMoRE/actions/workflows/plots.yml/badge.svg?branch=master)](https://github.com/michaeltouati/AMoRE/actions/workflows/plots.yml)
 [![Open issues](https://img.shields.io/github/issues/michaeltouati/AMoRE)](https://github.com/michaeltouati/AMoRE/issues)
 [![Closed issues](https://img.shields.io/github/issues-closed/michaeltouati/AMoRE)](https://github.com/michaeltouati/AMoRE/issues)
 [![Open pull requests](https://img.shields.io/github/issues-pr/michaeltouati/AMoRE)](https://github.com/michaeltouati/AMoRE/pulls)
