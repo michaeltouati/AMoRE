@@ -566,7 +566,7 @@ module vfp
     !$omp END PARALLEL DO
     if (coll_implicit_scheme.eqv..false.) then
       !$omp PARALLEL DO DEFAULT(NONE) &
-      !$omp& SHARED(N_z, N_x, N_eps) &
+      !$omp& SHARED(N_z, N_x, N_eps, backward) &
       !$omp& SHARED(Sv_a, Sv_a_lp1, phi_n, dF_deps) &
       !$omp& PRIVATE(m,k,i,phi_temp_eps,Sv_a_temp,Sv_a_lp1_temp,der_collisional) &
       !$omp& COLLAPSE(3)
@@ -618,7 +618,8 @@ module vfp
     real(PR), dimension(psi0:psi1z) :: phi_temp, Fx, Fz
     integer                         :: m,l,k,i
     !$omp  PARALLEL DO DEFAULT(NONE) &
-    !$omp& SHARED(N_eps, N_z, N_x, phi_n, B_y, E_z, E_x, eps_a, nu_a) &
+    !$omp& SHARED(N_eps, N_z, N_x, backward) &
+    !$omp& SHARED(phi_n, B_y, E_z, E_x, eps_a, nu_a) &
     !$omp& SHARED(coll_implicit_scheme, gama_E, gama_B, gama_nu) &
     !$omp& PRIVATE(m,l,k,i,Ezv,Exv,pv,phi_temp,Fz,Fx,Byv,pc,nnu) COLLAPSE(4)
     do m=forward,backward,1
@@ -699,7 +700,7 @@ module vfp
     real(PR), dimension(forward:backward,psi0:psi1z,-1:N_x+2,-1:N_z+2,-1:N_eps+2), intent(out) :: phi_np1
     integer                                                                   :: m, l, k, i, psi_mu
     !$omp PARALLEL DO DEFAULT(NONE) &
-    !$omp SHARED(N_eps, N_z, N_x, d_t, phi_n, phi_np1) &
+    !$omp SHARED(backward, N_eps, N_z, N_x, d_t, phi_n, phi_np1) &
     !$omp SHARED(dF_dz, dF_dx, dF_deps, gama_e, gama_b, gama_nu) &
     !$omp PRIVATE(m,l,k,i,psi_mu) COLLAPSE(5)
     do m= forward,backward,1
@@ -722,7 +723,7 @@ module vfp
     if (coll_implicit_scheme) then
       ! implicit resolution of collisional terms (implicit downwind scheme)
       !$omp PARALLEL DO DEFAULT(NONE) &
-      !$omp SHARED(N_eps, N_z, N_x, d_t, d_eps, phi_n, phi_np1) &
+      !$omp SHARED(backward, N_eps, N_z, N_x, d_t, d_eps, phi_n, phi_np1) &
       !$omp SHARED(Sv_a_lp1, Sv_a, nu_a) &
       !$omp PRIVATE(m,k,i,l) COLLAPSE(3)
       do m=forward,backward,1
@@ -797,7 +798,7 @@ module vfp
     ! Energy boundary condition (kinetic energy indices l = 0,-1 and l = N_eps+1,N_eps+2) : !
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !$omp PARALLEL DO DEFAULT(NONE) &
-    !$omp SHARED(N_z, N_x, N_eps, phin) &
+    !$omp SHARED(backward, N_z, N_x, N_eps, phin) &
     !$omp PRIVATE(m,k,i,psi_mu) COLLAPSE(4)    
     do m = forward,backward,1
       do k =-1,N_z+2,1
@@ -816,7 +817,7 @@ module vfp
     ! Space boundary conditions (transverse indices i = 0,-1 and i = N_x+1, N_x+2) : !
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !$omp PARALLEL DO DEFAULT(NONE) &
-    !$omp SHARED(N_z, N_x, N_eps, d_eps, dt, d_z, sim_box_thickness, norma) &
+    !$omp SHARED(backward, N_z, N_x, N_eps, d_eps, dt, d_z, sim_box_thickness, norma) &
     !$omp SHARED(phin, epsa, usd_temp_x, usu_temp_x) &
     !$omp PRIVATE(m,l,k,phitemp,Fx_l,Fx_r) COLLAPSE(3)
     do m=forward,backward,1    

@@ -506,7 +506,7 @@ module initialization
           end do
         else
           !$omp PARALLEL DO DEFAULT(NONE) &
-          !$omp SHARED(A, Z, ni, Te, Ti, A1, Z1, ni1, T_ini) & 
+          !$omp SHARED(N_z, N_x, A, Z, ni, Te, Ti, A1, Z1, ni1, T_ini) & 
           !$omp PRIVATE(i,k) COLLAPSE(2)
           do i=0,N_x+1,1
             do k=0,N_z+1,1
@@ -649,7 +649,7 @@ module initialization
     real(PR), intent(inout)                                                        :: ub, uel, uma
     integer                                                                        :: m,i, k, l
     !$omp  PARALLEL DO DEFAULT(NONE) &
-    !$omp& SHARED(N_eps, N_x, N_z, phin, phinp1) &
+    !$omp& SHARED(backward,N_eps, N_x, N_z, phin, phinp1) &
     !$omp& PRIVATE(m,l,k,i) COLLAPSE(4)
     do m=forward,backward,1
       do l=-1,N_eps+2,1
