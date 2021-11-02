@@ -396,7 +396,9 @@ module initialization
           end do
           Nx_plasma_tab = i - 2
           Nz_plasma_tab = N_plasma_tab / Nx_plasma_tab
-          !$omp PARALLEL DO DEFAULT(SHARED) &
+          !$omp PARALLEL DO DEFAULT(NONE) &
+          !$omp& SHARED(N_z, N_x, Nz_plasma_tab, Nx_plasma_tab) &
+          !$omp& SHARED(plasma_tab, x_a, z_a, A, A1, Z, Z1, ni, Te, Ti) &
           !$omp& PRIVATE(k,i,not_found,il,ir,im,kl,kr,km, alpha_x,beta_x,alpha_z,beta_z,r,t) &
           !$omp& COLLAPSE(2)
           do k=1,N_z,1
@@ -503,7 +505,9 @@ module initialization
             Ti(N_x+1,k) = Ti(N_x,k)
           end do
         else
-          !$omp PARALLEL DO DEFAULT(SHARED) PRIVATE(i,k) COLLAPSE(2)
+          !$omp PARALLEL DO DEFAULT(NONE) &
+          !$omp SHARED(A, Z, ni, Te, Ti, A1, Z1, ni1, T_ini) & 
+          !$omp PRIVATE(i,k) COLLAPSE(2)
           do i=0,N_x+1,1
             do k=0,N_z+1,1
               A(i,k)     = A1
@@ -516,7 +520,9 @@ module initialization
           !$omp END PARALLEL DO
         end if
       case (2)
-        !$omp PARALLEL DO DEFAULT(SHARED) PRIVATE(i,k) COLLAPSE(2)
+        !$omp PARALLEL DO DEFAULT(NONE) &
+        !$omp SHARED(N_x, N_z, A, Z, ni, Te, Ti, A1, Z1, ni1) & 
+        !$omp PRIVATE(i,k) COLLAPSE(2)
         do i=0,N_x+1,1
           do k=0,N_z+1,1
             ni(i,k)    = ni1
@@ -529,7 +535,10 @@ module initialization
         !$omp END PARALLEL DO
     end select
     if (Tracer==1) then
-      !$omp PARALLEL DO DEFAULT(SHARED) PRIVATE(i,k) COLLAPSE(2)
+      !$omp PARALLEL DO DEFAULT(NONE) &
+      !$omp SHARED(N_x, N_z, A, Z, ni, z_a) &
+      !$omp SHARED(z_tracer_start, z_tracer_stop, A_tracer, rho_tracer, Z_tracer) & 
+      !$omp PRIVATE(i,k) COLLAPSE(2)
       do i=0,N_x+1,1
         do k=1,N_z,1
           if ( (z_a(k) >= z_tracer_start) .and. (z_a(k) < z_tracer_stop) ) then
@@ -542,7 +551,9 @@ module initialization
       !$omp END PARALLEL DO
       ! guard cells
       if (z_a(1) == z_tracer_start) then
-        !$omp PARALLEL DO DEFAULT(SHARED) PRIVATE(i) COLLAPSE(1)
+        !$omp PARALLEL DO DEFAULT(NONE) &
+        !$omp SHARED(N_x, A, Z, ni) & 
+        !$omp PRIVATE(i) COLLAPSE(1)
         do i=0,N_x+1,1
           ni(i,0) = ni(i,1)
           A(i,0)  = A(i,1)
@@ -551,7 +562,9 @@ module initialization
         !$omp END PARALLEL DO
       end if
       if (z_a(N_z) == z_tracer_stop) then
-        !$omp PARALLEL DO DEFAULT(SHARED) PRIVATE(i) COLLAPSE(1)
+        !$omp PARALLEL DO DEFAULT(NONE) &
+        !$omp SHARED(N_x, N_z, A, Z, ni) & 
+        !$omp PRIVATE(i) COLLAPSE(1)
         do i=0,N_x+1,1
           ni(i,N_z+1) = ni(i,N_z)
           A(i,N_z+1)  = A(i,N_z)
@@ -560,7 +573,13 @@ module initialization
         !$omp END PARALLEL DO
       end if
     end if
-    !$omp PARALLEL DO DEFAULT(SHARED) PRIVATE(i,k) COLLAPSE(2)
+    !$omp PARALLEL DO DEFAULT(NONE) &
+    !$omp SHARED(N_x, N_z, Ex, Ez, By_n, By_np1) &
+    !$omp SHARED(nb, jbx_n, jbz_n, jrx_n, jrz_n) &
+    !$omp SHARED(jbx_np1, jbz_np1, jrx_np1, jrz_np1) &
+    !$omp SHARED(pdepos, plost_col, plost_res) &
+    !$omp SHARED(nK_Holes, nKalpha, nKbeta, ioniztime) & 
+    !$omp PRIVATE(i,k) COLLAPSE(2)
     do i=1,N_x,1
       do k=1,N_z,1
         Ex(i,k)          = 0._PR
@@ -629,7 +648,9 @@ module initialization
     real(PR), intent(inout), dimension(1:N_x,1:N_z)                                :: ioniztime
     real(PR), intent(inout)                                                        :: ub, uel, uma
     integer                                                                        :: m,i, k, l
-    !$omp PARALLEL DO DEFAULT(SHARED) PRIVATE(m,l,k,i) COLLAPSE(4)
+    !$omp  PARALLEL DO DEFAULT(NONE) &
+    !$omp& SHARED(N_eps, N_x, N_z, phin, phinp1) &
+    !$omp& PRIVATE(m,l,k,i) COLLAPSE(4)
     do m=forward,backward,1
       do l=-1,N_eps+2,1
         do k=-1,N_z+2,1
@@ -640,7 +661,13 @@ module initialization
         end do
       end do
     end do
-    !$omp PARALLEL DO DEFAULT(SHARED) PRIVATE(i,k) COLLAPSE(2)
+    !$omp PARALLEL DO DEFAULT(NONE) &
+    !$omp SHARED(N_x, N_z, Ex, Ez, By_n, By_np1) &
+    !$omp SHARED(jbx_n, jbz_n, jrx_n, jrz_n) &
+    !$omp SHARED(jbx_np1, jbz_np1, jrx_np1, jrz_np1) &
+    !$omp SHARED(pdepos, plost_col, plost_res) &
+    !$omp SHARED(ioniztime) & 
+    !$omp PRIVATE(i,k) COLLAPSE(2)
     do k=1,N_z,1
       do i=1,N_x,1
         By_n(i,k)      = By_np1(i,k)             

@@ -189,7 +189,12 @@ module diagnostics
     integer                                                                                    :: k,i
     real(PR), dimension(:), allocatable                                                        :: phi_temp
     !
-    !$omp PARALLEL DO DEFAULT(SHARED) PRIVATE(k,i,phi_temp) COLLAPSE(2)
+    !$omp  PARALLEL DO & 
+    !$omp& DEFAULT(NONE) &
+    !$omp& SHARED(N_z, N_x, N_eps, backward, phi_n) &
+    !$omp& SHARED(Kalpha_tab, norm, d_t, Z, ni, eps_a) &
+    !$omp& SHARED(n_K_Holes, n_Kalpha, n_Kbeta, ioniz_rate) &
+    !$omp& PRIVATE(k,i,phi_temp) COLLAPSE(2)
     do k=1,N_z,1
       do i=1,N_x,1
         allocate(phi_temp(1:N_eps))

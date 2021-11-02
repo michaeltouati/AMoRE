@@ -43,7 +43,7 @@
 #########
 
 # OPTS = -O -g -debug all -debug-parameters all -C -fopenmp
-# OPTS = -traceback -r8 -std08 -fpe0 -g -debug all -debug-parameters all -C -fopenmp
+# OPTS = -O0 -traceback -r8 -std08 -fpe0 -g -debug all -debug-parameters all -C -fopenmp
 
 ################
 ################
@@ -66,7 +66,7 @@ OPTS = -O2 -fopenmp
 #########
 
 #OPTS = -O3 -Wall -fcheck=all -g -fbacktrace -fopenmp
-# OPTS = -fdefault-real-8 -O -g -fopenmp -Wall -fcheck=all -fbacktrace -std=f2008 -fall-intrinsics -ffpe-trap=invalid,zero,overflow
+# OPTS = -fdefault-real-8 -O0 -g -fopenmp -Wall -fcheck=all -fbacktrace -std=f2008 -fall-intrinsics -ffpe-trap=invalid,zero,overflow
 
 #####################################
 #####################################

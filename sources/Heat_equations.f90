@@ -58,7 +58,8 @@ module heat_equations
     real(PR)                                            :: kapa_iph_k, kapa_imh_k 
     real(PR)                                            :: kapa_i_kph, kapa_i_kmh
     real(PR)                                            :: div_q
-    !$omp  PARALLEL DO DEFAULT(SHARED) &
+    !$omp  PARALLEL DO DEFAULT(NONE) &
+    !$omp& SHARED(N_z, N_x, dt, d_z, d_x, Z, ni, Te_old, Ti_old, Te) &
     !$omp& PRIVATE(i, k, kapa_iph_k, kapa_imh_k,kapa_i_kph, kapa_i_kmh,div_q) &
     !$omp& COLLAPSE(2)
     do k=1,N_z,1
@@ -153,7 +154,11 @@ module heat_equations
     real(PR), dimension(0:N_x+1,0:N_z+1) :: Te_old, Ti_old
     Te_old = Te
     Ti_old = Ti
-    !$omp PARALLEL DO DEFAULT(SHARED) PRIVATE(k,i,Omega,Cve,Cvi) COLLAPSE(2)
+    !$omp PARALLEL DO DEFAULT(NONE) &
+    !$omp SHARED(N_z, N_x, N_eps, dt, norm, d_eps, Sva, Z, A, ni) &
+    !$omp SHARED(phi, n_b, Plost_col, Plost_res, Pdepos, Te, Ti) &
+    !$omp SHARED(backward, biTemperature, E_x, E_z, jbx, jbz, jrx, jrz) &
+    !$omp PRIVATE(k, i, Omega, Cv, Cve, Cvi) COLLAPSE(2)
     do k=1,N_z,1
       do i=1,N_x,1
         n_b(i,k)       = sum(phi(forward,psi0,i,k,1:N_eps)) * norm * d_eps

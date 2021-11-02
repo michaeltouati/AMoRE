@@ -91,9 +91,9 @@
 #########################################################################
 #########################################################################
 #
-#simu Parallelization
+#simu Plasmas
 #
-#N_threads   4
+#N_threads   1
 #
 #hll_order           2
 #
@@ -103,7 +103,7 @@
 #
 #bi_temp        .false.
 #
-#magnetic_diff .false.
+#magnetic_diff .true.
 #
 #backward 1
 #
@@ -234,7 +234,7 @@
 ##                         .false. in this case)                       ##
 ##                                                                     ##
 ## if plasma : Z0               = Mean Atomic Number (ex. 1. for H)    ##
-##             A0               = Mean Atomic Weight (ex. 1.01 for H)  ##
+##             A0               = Mean Atomic Weight (ex. 1.008 for H) ##
 ##             tabulated_plasma = A tabulated map of the plasma        ##
 ##                                density and temperature may be used  ##
 ##                                (.true.) or not (.false.)            ##
@@ -280,19 +280,19 @@
 #########################################################################
 #########################################################################
 #
-#Material  2
+#Material  1
 #
 #Mat Al
 #
-#Z0  13.
+#Z0  1.
 #
-#A0  26.98
+#A0  1.008
 #
 #tabulated_plasma .false.
 #
-#rho   2.7
+#rho   1.e1
 #
-#T_ini 2.6e-2
+#T_ini 1.e1
 #
 #tabulated_resistivity .false.
 #

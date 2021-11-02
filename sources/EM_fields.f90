@@ -62,8 +62,9 @@ module em_fields
     real(PR)                                                :: ne_im1_k, ne_ip1_k
     real(PR)                                                :: eta_i_k, eta_im1_k, eta_ip1_k
     real(PR)                                                :: eta_i_km1, eta_i_kp1
-    !$omp  PARALLEL DO DEFAULT(SHARED) &
-    !$omp& PRIVATE(i,k,Bcour,Bres,Bcross) &
+    !$omp  PARALLEL DO DEFAULT(NONE) &
+    !$omp& SHARED(N_z, N_x, eta_tab, Zn, ni, Te, Ti, dt, d_z, d_x, jbx, jbz, By_n, By_np1) &
+    !$omp& PRIVATE(i, k, Bcour, Bres, Bcross) &
     !$omp& PRIVATE(eta_i_k, eta_im1_k, eta_ip1_k, eta_i_km1, eta_i_kp1) &
     !$omp& PRIVATE(ne_i_k, ne_i_km1, ne_i_kp1, ne_im1_k, ne_ip1_k) &
     !$omp& COLLAPSE(2)
@@ -162,7 +163,8 @@ module em_fields
     real(PR)                                               :: eta_temp, ne, Pe_mup1, Pe_mum1
     integer                                                :: i, k
     real(PR)                                               :: Excour, Ezcour, Expres, Ezpres
-    !$omp  PARALLEL DO DEFAULT(SHARED) &
+    !$omp  PARALLEL DO DEFAULT(NONE) &
+    !$omp& SHARED(N_z, N_x, eta_tab, Zn, ni, Te, Ti, d_z, d_x, jrx, jrz, Ex, Ez) &
     !$omp& PRIVATE(i, k, eta_temp, ne, Pe_mup1, Pe_mum1, Excour, Ezcour, Expres, Ezpres) &
     !$omp& COLLAPSE(2)
     do k= 2,N_z-1,1
