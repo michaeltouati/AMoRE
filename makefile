@@ -28,21 +28,22 @@
 ######################
 ######################
 
-F90 = ifort
+# F90 = ifort
 
 ##########
 # openMP #
 ##########
 
 # OPTS = -O3 -fopenmp -r8
-OPTS = -O2 -fopenmp
+# OPTS = -O2 -fopenmp 
+# OPTS = -fopenmp 
 
 #########
 # debug #
 #########
 
 # OPTS = -O -g -debug all -debug-parameters all -C -fopenmp
-# OPTS = -g -traceback -fopenmp -r8 -std95 -fpe0 -debug all -debug-parameters all -C
+# OPTS = -traceback -r8 -std08 -fpe0 -g -debug all -debug-parameters all -C -fopenmp
 
 ################
 ################
@@ -57,7 +58,7 @@ F90 = gfortran
 # openMP #
 ##########
 
-#OPTS = -O3 -fopenmp -fdefault-real-8
+# OPTS = -O3 -fopenmp -fdefault-real-8
 OPTS = -O2 -fopenmp
 
 #########
@@ -65,7 +66,7 @@ OPTS = -O2 -fopenmp
 #########
 
 #OPTS = -O3 -Wall -fcheck=all -g -fbacktrace -fopenmp
-# OPTS = -fdefault-real-8 -O -g -fopenmp -Wall -fcheck=all -fbacktrace -std=f95 -fall-intrinsics -ffpe-trap=invalid,zero,overflow
+# OPTS = -fdefault-real-8 -O -g -fopenmp -Wall -fcheck=all -fbacktrace -std=f2008 -fall-intrinsics -ffpe-trap=invalid,zero,overflow
 
 #####################################
 #####################################

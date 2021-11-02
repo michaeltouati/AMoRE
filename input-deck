@@ -91,9 +91,9 @@
 #########################################################################
 #########################################################################
 #
-#simu Laser-solid-interaction
+#simu Parallelization
 #
-#N_threads   1
+#N_threads   4
 #
 #hll_order           2
 #
@@ -101,15 +101,15 @@
 #
 #cfl               0.9
 #
-#bi_temp        .true.
+#bi_temp        .false.
 #
-#magnetic_diff .true.
+#magnetic_diff .false.
 #
-#backward 2
+#backward 1
 #
-#irradiated_side_refluxing .true.
+#irradiated_side_refluxing .false.
 #
-#Kalpha .true.
+#Kalpha .false.
 #
 #L_t    150.
 #
@@ -296,11 +296,11 @@
 #
 #tabulated_resistivity .false.
 #
-#Tracer 1
+#Tracer 0
 #
-#z_tracer_start 3.
+#z_tracer_start 50.
 #
-#z_tracer_stop 6.
+#z_tracer_stop 55.
 #
 #Z_tracer 29.
 #

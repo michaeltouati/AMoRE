@@ -23,8 +23,8 @@
 !! Initial commit written by Michaël J TOUATI - Oct. 2015
 program input_chk
 
-use input
+  use input
 
-call read_init_parameters()
+  call read_init_parameters()
 
 end program input_chk

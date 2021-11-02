@@ -23,10 +23,10 @@
 !! Initial commit written by Michaël J TOUATI - Oct. 2015
 module acuracy
   
-implicit none
+  implicit none
 
-! Double Floatting Point Format
-! Number of bytes occupied in the memory by one real number :
-integer, parameter, public :: PR = 8
+  ! Double Floatting Point Format
+  ! Number of bytes occupied in the memory by one real number :
+  integer, parameter, public :: PR = 8
   
 end module acuracy
