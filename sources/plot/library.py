@@ -144,15 +144,15 @@ def make_scalars_plot_figure(**kwargs):
     """
     Plot and save a .png image of scalar fields (maximum 10)
     kwargs keys :
-    * scalars  : xplot_min, xplot_max,
+    * Scalars  : xplot_min, xplot_max,
                  yplot_min, yplot_max
-    * vectors  : xplot,
+    * Vectors  : xplot,
                  yplot1, ... yplot10
-    * strings  : xlabel, ylabel,
+    * Strings  : xlabel, ylabel,
                  color1, ..., color10,
                  legend1, ..., legend9
                  title, filename
-    * logicals : logx, logy, grid
+    * Logicals : logx, logy, grid
     """
     fig=plt.figure()
     plt.rc('text', usetex=True)
@@ -197,13 +197,13 @@ def make_scalar_plot_figure(**kwargs):
     """
     Plot and save a .png image of scalar fields (maximum 10)
     kwargs keys :
-    * scalars  : xplot_min, xplot_max,
+    * Scalars  : xplot_min, xplot_max,
                  yplot_min, yplot_max
-    * vectors  : xplot, yplot
-    * strings  : xlabel, ylabel,
+    * Vectors  : xplot, yplot
+    * Strings  : xlabel, ylabel,
                  color
                  title, filename
-    * logicals : logx, logy, grid
+    * Logicals : logx, logy, grid
     """
     fig=plt.figure()
     plt.rc('text', usetex=True)
@@ -276,14 +276,14 @@ def make_2d_field_pcolormesh_figure(**kwargs):
     """
     Plot and save a .png image of a 2D field map
     kwargs keys :
-    * scalars   : xmap_min, xmap_max,
+    * Scalars   : xmap_min, xmap_max,
                   ymap_min, ymap_max,
                   zmap_min, zmap_max
     * 2D arrays : xmap, ymap, zmap
-    * strings   : xlabel, ylabel,
+    * Strings   : xlabel, ylabel,
                   colormap, title,
                   fig_file
-    * logical   : eq_axis
+    * Logical   : eq_axis
     """
     cmap = plt.get_cmap(kwargs['colormap'])
     norm = cm.colors.Normalize(vmin=kwargs['zmap_min'],
@@ -308,7 +308,7 @@ def make_2d_field_pcolormesh_figure(**kwargs):
     txt_condition = txt_condition and ('txt_posy' in kwargs)
     txt_condition = txt_condition and ('txt_str'  in kwargs)
     if txt_condition:
-        plt.text(kwargs['txt_posx'], kwargs['txt_posy'], 
+        plt.text(kwargs['txt_posx'], kwargs['txt_posy'],
                  kwargs['txt_str'], color=kwargs['txt_col'],fontsize=FONT_SIZE)
     fig.savefig(kwargs['fig_file'],bbox_inches='tight')
     plt.close(fig)
@@ -367,10 +367,10 @@ def normalize(**kwargs):
 def read_and_plot_2d_pcolormesh(**kwargs):
     """
     Read and plot an AMoRE 2D map simulation result file entitled filename
-    kwargs keys  :
-    * integers   : n_1, n_2
-    * strings    : res_file, colormap, title, fig_file
-    * Logicals   : log, eq_axis
+    kwargs keys :
+    * Integers  : n_1, n_2
+    * Strings   : res_file, colormap, title, fig_file
+    * Logicals  : log, eq_axis
     """
     x_plt = []
     z_plt = []
@@ -425,51 +425,168 @@ def read_and_plot_2d_pcolormesh(**kwargs):
                                                 eq_axis  = kwargs['eq_axis'],
                                                 fig_file = kwargs['fig_file']+str(n_t)+'.png')
 
-def read_and_plot_distribution(**kwargs):
+def make_phase_space_grid(**kwargs):
     """
-    Plot the beam electron distribution from the
-    AMoRE elecron beam distribution angular moment simulation result files entitled
-    filename_psi0, filename_psi1x, filename_psi1z
+    Construct the phase-space grid 2D arrays pz_map, px_map
+    * Integers  : n_e, n_theta
+    * 1D arrays : e_0, theta
     """
-    n_e_n_mu_grk  = kwargs['n_e']*kwargs['n_mu_grk']
-    n_theta       = 500
-    theta         = np.linspace(0., 2. * np.pi, n_theta)
-    gamma_l       = np.zeros(kwargs['n_e'])
-    p_b           = np.zeros(kwargs['n_e'])
-    v_b           = np.zeros(kwargs['n_e'])
-    p_z           = np.zeros((n_theta,kwargs['n_e']))
-    p_x           = np.zeros((n_theta,kwargs['n_e']))
+    det_jacobian  = np.zeros(kwargs['n_e'])
+    p_z           = np.zeros((kwargs['n_theta'],kwargs['n_e']))
+    p_x           = np.zeros((kwargs['n_theta'],kwargs['n_e']))
     c_light       = 2.9979e8
     m_ele         = 9.1091e-31
     kev_in_joules = 1.6022e-16
     mc2           = (m_ele*c_light)**2.
     mc3           = (m_ele*c_light)**3.
-    unit = (1./kev_in_joules)*(c_light/mc2)*mc3
+    unit          = (1./kev_in_joules)*(c_light/mc2)*mc3
     for l_eps in range(0,kwargs['n_e']):
-        gamma_l[l_eps]=1. + (kwargs['e_0'][l_eps]/511.)
-        p_b[l_eps]=np.sqrt((gamma_l[l_eps]**2.)-1.)
-        v_b[l_eps]=np.sqrt(1.-(gamma_l[l_eps]**(-2.)))
-        for i_theta in range(0,n_theta):
-            p_z[i_theta][l_eps]=p_b[l_eps]*np.cos(theta[i_theta])
-            p_x[i_theta][l_eps]=p_b[l_eps]*np.sin(theta[i_theta])
-    time  = []
-    z_0   = []
-    x_0   = []
-    f_0   = []
-    f1x   = []
-    f1z   = []
-    o_x   = np.zeros(kwargs['n_e'])
-    o_z   = np.zeros(kwargs['n_e'])
-    o_m   = np.zeros(kwargs['n_e'])
-    a_x   = np.zeros(kwargs['n_e'])
-    a_z   = np.zeros(kwargs['n_e'])
-    a_m   = np.zeros(kwargs['n_e'])
-    norma = np.zeros(kwargs['n_e'])
-    distr = np.zeros((n_theta,kwargs['n_e']))
+        gamma_l             = 1. + ( kwargs['e_0'][l_eps] / 511. )
+        p_b                 = np.sqrt( (gamma_l**2.) - 1. )
+        v_b                 = np.sqrt( 1. - (gamma_l**(-2.)) )
+        det_jacobian[l_eps] = ( v_b / (p_b**2.) ) * unit
+        for i_theta in range(0,kwargs['n_theta']):
+            p_z[i_theta][l_eps] = p_b * np.cos(kwargs['theta'][i_theta])
+            p_x[i_theta][l_eps] = p_b * np.sin(kwargs['theta'][i_theta])
+    return [det_jacobian, p_z, p_x]
+
+def minerbo_distribution(**kwargs):
+    """
+    Return the distribution 2D array fb_map and the 1D arrays
+    index n_0 corresponding to the plot spatial location
+    kwargs keys :
+    * Integers  : n_t, n_e_n_mu_grk,
+                  i_mu, n_theta, n_e
+    * 1D arrays : f_0, f1x, f1z
+                  theta, n_e,
+                  det_jacobian
+    """
+    fb_map = np.zeros((kwargs['n_theta'],kwargs['n_e']))
+    for l_eps in range(0,kwargs['n_e']):
+        n_0  = (kwargs['n_t']-1)*kwargs['n_e_n_mu_grk']
+        n_0 += (kwargs['i_mu']-1)*kwargs['n_e']
+        n_0 += l_eps
+        if kwargs['f_0'][n_0]!=0.:
+            o_x = kwargs['f1x'][n_0]/kwargs['f_0'][n_0]
+            o_z = kwargs['f1z'][n_0]/kwargs['f_0'][n_0]
+        else:
+            o_x = 0.
+            o_z = 0.
+        o_m   = np.sqrt((o_x**2.)+(o_z**2.))
+        o_m   = min(o_m, 0.998585)
+        o_m_2 = o_m**2.
+        den   = 0.5 * o_m_2 * ( 1. + o_m_2)
+        den   = 1. - den
+        den   = den / 3.
+        a_x   = o_x / den
+        a_z   = o_z / den
+        a_m   = o_m / den
+        if a_m == 0.:
+            norma = 1./(4.*np.pi)
+        elif a_m > 709.:
+            norma = 1.373e-306
+        else:
+            norma = a_m / ( 4. * np.pi * np.sinh(a_m) )
+        norma = kwargs['f_0'][n_0] * norma * kwargs['det_jacobian'][l_eps]
+        for i_theta in range(0,kwargs['n_theta']):
+            phi_var  = a_x * np.sin(kwargs['theta'][i_theta])
+            phi_var += a_z * np.cos(kwargs['theta'][i_theta])
+            if phi_var > 709.:
+                fb_map[i_theta][l_eps] = norma * 8.2184e307
+            else:
+                fb_map[i_theta][l_eps] = norma * np.exp(phi_var)
+            if  fb_map[i_theta][l_eps] > 0. :
+                fb_map[i_theta][l_eps] = np.log(fb_map[i_theta][l_eps])/np.log(10.)
+            else :
+                fb_map[i_theta][l_eps] = -15.
+    return [n_0, fb_map]
+
+def construct_distribution_and_plot(**kwargs):
+    """
+    Construct the distribution and plot
+    kwargs keys :
+    * Integers  : counter, n_mu_grk
+                  n_e_n_mu_grk,
+                  n_e, n_theta
+    * 1D arrays : theta, e_0, t_0,
+                  det_jacobian,
+                  z_0 , x_0, f_0, f1x, f1z
+    * 2D arrays : pz_map, px_map
+    * Strings   : psi1x_file,
+                  psi1z_file,
+                  fb_mu, fig_name
+
+    """
+    i_mu     = 1 + int(kwargs['n_mu_grk']/2.)
+    n_t      = int(kwargs['counter']/kwargs['n_e_n_mu_grk'])
+    str_time = f"{kwargs['t_0'][(n_t-1)*kwargs['n_e_n_mu_grk']]:1.4E}"
+    print(' * t = '+str_time+' fs')
+    f1z_new = kwargs['f1z']
+    f1x_new = kwargs['f1x']
+    for _ in range(0,kwargs['n_e_n_mu_grk']):
+        f1x_new.append(float(kwargs['psi1x_file'].readline().strip().split()[4]))
+        f1z_new.append(float(kwargs['psi1z_file'].readline().strip().split()[4]))
+    [n_0, fb_map] = minerbo_distribution(n_t          = n_t,
+                                         n_e_n_mu_grk = kwargs['n_e_n_mu_grk'],
+                                         i_mu         = i_mu,
+                                         f_0          = kwargs['f_0'],
+                                         f1x          = f1x_new,
+                                         f1z          = f1z_new,
+                                         n_theta      = kwargs['n_theta'],
+                                         theta        = kwargs['theta'],
+                                         n_e          = kwargs['n_e'],
+                                         det_jacobian = kwargs['det_jacobian'])
+    create_dir(kwargs['fig_name']+str(i_mu)+'/')
+    plot_title  = r'$\log_{10}(f_b(x_0,\,z_0,\,p_x,\,p_{y_0},\,p_z,\,t=$'
+    plot_title += str_time
+    plot_title += r'$\mathrm{fs})\,$'
+    plot_title += r'$(\mathrm{cm}^{-3}.\mathrm{m_e c}^{-3}))$'+'\n'
+    plot_title += r'$x_0\,=$'
+    plot_title +=str(np.floor(100*kwargs['x_0'][n_0])/100)+r'$\,\mu\mathrm{m},\,$'
+    plot_title += r'$z_0=$'+str(np.floor(100*kwargs['z_0'][n_0])/100)+r'$\,\mu\mathrm{m}$'
+    plot_title += ' and '+r'$p_{y_0}=0\,\mathrm{m_e c}$'
+    file_name = kwargs['fig_name']+str(i_mu)+'/'+kwargs['fb_mu']+str(i_mu)+'_'+str(n_t)+'.png'
+    make_2d_field_pcolormesh_figure(xmap     = kwargs['pz_map'],
+                                    ymap     = kwargs['px_map'],
+                                    zmap     = fb_map,
+                                    colormap = 'nipy_spectral',
+                                    xmap_min = np.matrix(kwargs['pz_map']).min(),
+                                    xmap_max = np.matrix(kwargs['pz_map']).max(),
+                                    ymap_min = np.matrix(kwargs['px_map']).min(),
+                                    ymap_max = np.matrix(kwargs['px_map']).max(),
+                                    zmap_min = np.matrix(fb_map).min(),
+                                    zmap_max = np.matrix(fb_map).max(),
+                                    xlabel   = r'$p_z\,(m_e c)$',
+                                    ylabel   = r'$p_x\,(m_e c)$',
+                                    title    = plot_title,
+                                    eq_axis  = True,
+                                    fig_file = file_name)
+    return [f1z_new,f1x_new]
+
+def read_and_plot_distribution(**kwargs):
+    """
+    Plot the beam electron distribution from the
+    AMoRE elecron beam distribution angular moment simulation result files entitled
+    kwargs jeys :
+    * Integers  : n_theta, n_e,
+                  mu_grk, n_mu_grk
+    * 1D arrays : theta ,e_0,
+                  det_jacobian
+    * 2D arrays : pz_map, px_map
+    * Strings   : filename_psi0,
+                  filename_psi1x,
+                  filename_psi1z,
+                  fig_name
+    """
+    t_0    = []
+    z_0    = []
+    x_0    = []
+    f_0    = []
+    f1x    = []
+    f1z    = []
     with open(kwargs['filename_psi0'],  'r', encoding='utf-8') as psi0_file :
         with open(kwargs['filename_psi1x'], 'r', encoding='utf-8') as psi1x_file :
             with open(kwargs['filename_psi1z'], 'r', encoding='utf-8') as psi1z_file :
-                counter = 0
                 if kwargs['mu_grk'] == 1: #z
                     colx = 3
                     colz = 1
@@ -478,94 +595,32 @@ def read_and_plot_distribution(**kwargs):
                     colx = 1
                     colz = 3
                     fb_mu = '/fb_x'
+                counter = 0
                 for line in psi0_file:
-                    line      = line.strip()
-                    array     = line.split()
-                    time.append(float(array[0]))
-                    x_0.append(float(array[colx]))
-                    z_0.append(float(array[colz]))
-                    f_0.append(float(array[4]))
+                    t_0.append(float(line.strip().split()[0]))
+                    x_0.append(float(line.strip().split()[colx]))
+                    z_0.append(float(line.strip().split()[colz]))
+                    f_0.append(float(line.strip().split()[4]))
                     counter = counter + 1
-                    if counter % n_e_n_mu_grk == 0 :
-                        n_t = int(counter/n_e_n_mu_grk)
-                        str_time = f"{time[(n_t-1)*n_e_n_mu_grk]:1.4E}"
-                        print(' * t = '+str_time+' fs')
-                        for _ in range(0,n_e_n_mu_grk):
-                            line_x  = psi1x_file.readline()
-                            line_x  = line_x.strip()
-                            array_x = line_x.split()
-                            f1x.append(float(array_x[4]))
-                            line_z  = psi1z_file.readline()
-                            line_z  = line_z.strip()
-                            array_z = line_z.split()
-                            f1z.append(float(array_z[4]))
-                        i =1 + int(kwargs['n_mu_grk']/2.)
-                        for l_eps in range(0,kwargs['n_e']):
-                            n_0 = (n_t-1)*n_e_n_mu_grk+(i-1)*kwargs['n_e']+l_eps
-                            if f_0[n_0]!=0.:
-                                o_x[l_eps]=f1x[n_0]/f_0[n_0]
-                                o_z[l_eps]=f1z[n_0]/f_0[n_0]
-                            else:
-                                o_x[l_eps]=0.
-                                o_z[l_eps]=0.
-                            o_m[l_eps]=np.sqrt((o_x[l_eps]**2.)+(o_z[l_eps]**2.))
-                            if o_m[l_eps]>=0.998585:
-                                o_m[l_eps]=0.998585
-                            o_m_2 = o_m[l_eps]**2.
-                            a_x[l_eps]=3.*o_x[l_eps]/(1.-(0.5*o_m_2)*(1.+o_m_2))
-                            a_z[l_eps]=3.*o_z[l_eps]/(1.-(0.5*o_m_2)*(1.+o_m_2))
-                            a_m[l_eps]=np.sqrt((a_x[l_eps]**2.)+(a_z[l_eps]**2.))
-                            if a_m[l_eps]==0.:
-                                norma[l_eps]=1./(4.*np.pi)
-                            elif a_m[l_eps]>709.:
-                                norma[l_eps]=1.373e-306
-                            else:
-                                norma[l_eps]=a_m[l_eps]/(4.*np.pi*np.sinh(a_m[l_eps]))
-                            norma[l_eps] = f_0[n_0]*norma[l_eps]*(v_b[l_eps]/(p_b[l_eps]**2.))*unit
-                            for i_theta in range(0,n_theta):
-                                a_thres  = a_x[l_eps]*np.sin(theta[i_theta])
-                                a_thres += a_z[l_eps]*np.cos(theta[i_theta])
-                                if a_thres>709.:
-                                    distr[i_theta][l_eps]=norma[l_eps]*8.2184e307
-                                else:
-                                    phi_var  = a_x[l_eps]*np.sin(theta[i_theta])
-                                    phi_var += a_z[l_eps]*np.cos(theta[i_theta])
-                                    distr[i_theta][l_eps] = norma[l_eps]*np.exp(phi_var)
-                                distr[i_theta][l_eps]=np.log(1.+distr[i_theta][l_eps])/np.log(10.)
-                        create_dir(kwargs['name']+str(i)+'/')
-                        distr_min = np.matrix(distr).min()
-                        distr_max = np.matrix(distr).max()
-                        plot_title  = r'$\log_{10}(f_b(x_0,\,z_0,\,p_x,\,p_{y_0},\,p_z,\,t=$'
-                        plot_title += f"{time[n_0]:1.4E}"
-                        plot_title += r'$\mathrm{fs})\,$'
-                        plot_title += r'$(\mathrm{cm}^{-3}.\mathrm{m_e c}^{-3}))$'
-                        p_z_min = np.matrix(p_z).min()
-                        p_z_max = np.matrix(p_z).max()
-                        p_x_min = np.matrix(p_x).min()
-                        p_x_max = np.matrix(p_x).max()
-                        pos_x = p_z_min-0.5
-                        pos_y = p_x_min-1. + 0.875*(p_x_max-p_x_min+2.)
-                        txt_plt  =  r'$x_0\,=$'
-                        txt_plt +=str(np.floor(100*x_0[n_0])/100)+r'$\,\mu\mathrm{m},\,$'
-                        txt_plt += r'$z_0=$'+str(np.floor(100*z_0[n_0])/100)+r'$\,\mu\mathrm{m}$'
-                        txt_plt += ' and \n'+r'$p_{y_0}=0\,\mathrm{m_e c}$'
-                        file_name = kwargs['name']+str(i)+'/'+fb_mu+str(i)+'_'+str(n_t)+'.png'
-                        make_2d_field_pcolormesh_figure(xmap     = p_z,
-                                                        ymap     = p_x,
-                                                        zmap     = distr,
-                                                        colormap = 'nipy_spectral',
-                                                        xmap_min = p_z_min,
-                                                        xmap_max = p_z_max,
-                                                        ymap_min = p_x_min,
-                                                        ymap_max = p_x_max,
-                                                        zmap_min = distr_min,
-                                                        zmap_max = distr_max,
-                                                        xlabel   = r'$p_z\,(m_e c)$',
-                                                        ylabel   = r'$p_x\,(m_e c)$',
-                                                        title    = plot_title,
-                                                        txt_str  = txt_plt,
-                                                        txt_col  = 'red',
-                                                        txt_posx = pos_x,
-                                                        txt_posy = pos_y,
-                                                        eq_axis  = True,
-                                                        fig_file = file_name)
+                    if counter % (kwargs['n_e']*kwargs['n_mu_grk']) == 0 :
+                        [f1z,f1x] = construct_distribution_and_plot(
+                            counter      = counter,
+                            n_mu_grk     = kwargs['n_mu_grk'],
+                            n_e_n_mu_grk = kwargs['n_e']*kwargs['n_mu_grk'],
+                            n_e          = kwargs['n_e'],
+                            n_theta      = kwargs['n_theta'],
+                            theta        = kwargs['theta'],
+                            e_0          = kwargs['e_0'],
+                            t_0          = t_0,
+                            z_0          = z_0,
+                            x_0          = x_0,
+                            f_0          = f_0,
+                            psi1x_file   = psi1x_file,
+                            f1x          = f1x,
+                            psi1z_file   = psi1z_file,
+                            f1z          = f1z,
+                            det_jacobian = kwargs['det_jacobian'],
+                            pz_map       = kwargs['pz_map'],
+                            px_map       = kwargs['px_map'],
+                            fb_mu        = fb_mu,
+                            fig_name     = kwargs['fig_name'])
