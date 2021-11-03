@@ -43,9 +43,9 @@ TEST_DIR+=' Spectrum/Gaussian'
 TEST_DIR+=' Spectrum/Boltzmannian'
 TEST_DIR+=' Spectrum/Bi-temperature'
 TEST_DIR+=' Spectrum/Modified-bi-temperature'
+TEST_DIR+=' Spectrum/Particle-In-Cell'
 TEST_DIR+=' X-rays/Kalpha'
 TEST_DIR+=' X-rays/Tracer'
-# TEST_DIR+=' Spectrum/Tabulated'
 # TEST_DIR+=' New-features/'
 
 cd ../..
@@ -55,12 +55,26 @@ for tst in ${TEST_DIR}; do \
 		mv sources/user/resistivity_tab.dat sources/user/resistivity_tab-old.dat ; \
 		cp test-cases/Tests/${tst}/resistivity_tab.dat sources/user/ ; \
 	fi
+	if [ ${tst} = Spectrum/Particle-In-Cell ]; then \
+		mv sources/user/spectrum_tab.dat sources/user/spectrum_tab-old.dat ; \
+		cp test-cases/Tests/${tst}/spectrum_tab.dat sources/user/ ; \
+	fi
+	if [ ${tst} = Plasmas/Shock-ignition ]; then \
+		mv sources/user/plasma_tab.dat sources/user/plasma_tab-old.dat ; \
+		cp test-cases/Tests/${tst}/plasma_tab.dat sources/user/ ; \
+	fi
 	cp test-cases/Tests/${tst}/input-deck .
 	./amore > output 
 	mv output test-cases/Tests/${tst}/ ; \
 	echo ${tst}'/output file generated'
 	if [[ ${tst} = Solids/C-vitreous || ${tst} = Solids/CH-like ]]; then \
 		mv sources/user/resistivity_tab-old.dat sources/user/resistivity_tab.dat ; \
+	fi
+	if [ ${tst} = Spectrum/Particle-In-Cell ]; then \
+		mv sources/user/spectrum_tab-old.dat sources/user/spectrum_tab.dat ; \
+	fi
+	if [ ${tst} = Plasmas/Shock-ignition ]; then \
+		mv sources/user/plasma_tab-old.dat sources/user/plasma_tab.dat ; \
 	fi
 done
 rm -rf results/Vlasov output

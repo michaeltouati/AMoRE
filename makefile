@@ -204,7 +204,7 @@ TEST_DIR += Spectrum/Gaussian
 TEST_DIR += Spectrum/Boltzmannian
 TEST_DIR += Spectrum/Bi-temperature
 TEST_DIR += Spectrum/Modified-bi-temperature
-# TEST_DIR += Spectrum/Tabulated
+TEST_DIR += Spectrum/Particle-In-Cell
 TEST_DIR += X-rays/Kalpha
 TEST_DIR += X-rays/Tracer
 # TEST_DIR += New-features/Example
@@ -239,6 +239,14 @@ test :
 			mv sources/user/resistivity_tab.dat sources/user/resistivity_tab-old.dat ; \
 			cp test-cases/Tests/Solids/CH-like/resistivity_tab.dat sources/user/ ; \
 		fi ; \
+		if [ $${tst} = Plasmas/Shock-ignition ]; then \
+			mv sources/user/plasma_tab.dat sources/user/plasma_tab-old.dat ; \
+			cp test-cases/Tests/Plasmas/Shock-ignition/plasma_tab.dat sources/user/ ; \
+		fi ; \
+		if [ $${tst} = Spectrum/Particle-In-Cell ]; then \
+			mv sources/user/spectrum_tab.dat sources/user/spectrum_tab-old.dat ; \
+			cp test-cases/Tests/Spectrum/Particle-In-Cell/spectrum_tab.dat sources/user/ ; \
+		fi ; \
 		cp test-cases/Tests/$${tst}/input-deck . ; \
 		./amore > test.output ; \
 		if hash tac 2>/dev/null; then \
@@ -257,6 +265,12 @@ test :
 		fi ; \
 		if [ $${tst} = Solids/CH-like ]; then \
 			mv sources/user/resistivity_tab-old.dat sources/user/resistivity_tab.dat ; \
+		fi ; \
+		if [ $${tst} = Plasmas/Shock-ignition ]; then \
+			mv sources/user/plasma_tab-old.dat sources/user/plasma_tab.dat ; \
+		fi ; \
+		if [ $${tst} = Spectrum/Particle-In-Cell ]; then \
+			mv sources/user/spectrum_tab-old.dat sources/user/spectrum_tab.dat ; \
 		fi ; \
 	done
 	@rm -rf results/Vlasov
