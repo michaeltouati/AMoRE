@@ -2,7 +2,7 @@
  Recapitulation of simulation parameters :
  -----------------------------------------
  * Simulation :
-   simu = Laser-solid-interaction
+   simu = X-rays
  -----------------------------------------
  * Number of OpenMP threads :
    N_threads =    1

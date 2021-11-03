@@ -274,5 +274,13 @@ test :
 		fi ; \
 	done
 	@rm -rf results/Vlasov
+	@rm -rf results/Fokker-Planck
+	@rm -rf results/Laser-solid-interaction
+	@rm -rf results/MHD
+	@rm -rf results/Parallelization
+	@rm -rf results/Plasmas
+	@rm -rf results/Solids
+	@rm -rf results/Spectrum
+	@rm -rf results/X-rays
 	@mv input-deck-old input-deck
 	@rm -f  test.output

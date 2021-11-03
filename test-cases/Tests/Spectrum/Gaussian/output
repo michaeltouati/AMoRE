@@ -2,7 +2,7 @@
  Recapitulation of simulation parameters :
  -----------------------------------------
  * Simulation :
-   simu = Vlasov
+   simu = Spectrum
  -----------------------------------------
  * Number of OpenMP threads :
    N_threads =    1
