@@ -41,8 +41,8 @@
 # debug #
 #########
 
-# OPTS = -O0 -g -debug all -debug-parameters all -fopenmp -C
-# OPTS = -O0 -traceback -r8 -std08 -fpe0 -g -debug all -debug-parameters all -fopenmp -C
+# OPTS = -O0 -g -debug all -debug-parameters all -fopenmp
+# OPTS = -O0 -traceback -r8 -std08 -fpe0 -g -debug all -debug-parameters all -fopenmp
 
 ################
 ################
@@ -66,7 +66,6 @@ OPTS = -O2 -fopenmp
 
 #OPTS = -O3 -Wall -fcheck=all -g -fbacktrace -fopenmp
 # OPTS = -fdefault-real-8 -O0 -g -fopenmp -Wall -fcheck=all -fbacktrace -std=f2008 -fall-intrinsics -ffpe-trap=invalid,zero,overflow
-# OPTS = -O0 -g -fopenmp -Wall -fcheck=all -fbacktrace -std=f2008 -fall-intrinsics -ffpe-trap=invalid,zero,overflow
 
 #####################################
 #####################################
@@ -200,7 +199,7 @@ TEST_DIR += Solids/CH-like
 TEST_DIR += Solids/C-vitreous
 TEST_DIR += Plasmas/H
 TEST_DIR += Plasmas/Be
-# TEST_DIR += Plasmas/Tabulated
+TEST_DIR += Plasmas/Shock-ignition
 TEST_DIR += Spectrum/Gaussian
 TEST_DIR += Spectrum/Boltzmannian
 TEST_DIR += Spectrum/Bi-temperature

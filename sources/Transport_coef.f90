@@ -561,13 +561,13 @@ module transport_coef
     ! table eta_tab :
     reason = 0
     i = -2
-    open (unit=50,file='sources/user/resistivity_tab.dat',form='formatted',status='unknown')      
+    open (unit=700,file='sources/user/resistivity_tab.dat',form='formatted',status='unknown')      
     do while (reason==0)
-      read(50,*,IOSTAT=Reason) str
+      read(700,*,IOSTAT=Reason) str
       i = i + 1
       if (str == '') reason = 1
     end do
-    close(50)
+    close(700)
     N_eta_tab = i
     allocate(eta_tab(1:N_eta_tab,1:2))
     !  Read the file 'sources/user/resistivity_tab.dat' and define the table eta_tab with the 

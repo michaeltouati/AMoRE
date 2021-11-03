@@ -52,23 +52,23 @@ module initialization
     ! table eps_tab :
     reason = 0
     i = -2   
-    open (unit=50,file='sources/user/spectrum_tab.dat',form='formatted',status='unknown')  
+    open (unit=500,file='sources/user/spectrum_tab.dat',form='formatted',status='unknown')  
     do while (reason==0)
-      read(50,*,IOSTAT=Reason) str
+      read(500,*,IOSTAT=Reason) str
       i = i + 1
       if (str == '') reason = 1
     end do
-    close(50)
+    close(500)
     N_eps_tab = i
     allocate(eps_tab(1:N_eps_tab,1:2))
     !  Read the file 'sources/user/spectrum_tab.dat' and define the table eps_tab with the 
     !  corresponding values
-    open (unit=40,file='sources/user/spectrum_tab.dat',form='formatted',status='unknown')      
-    read(40,*)
+    open (unit=400,file='sources/user/spectrum_tab.dat',form='formatted',status='unknown')      
+    read(400,*)
     do i =1,N_eps_tab,1
-      read(40,*) eps_tab(i,1),eps_tab(i,2)
+      read(400,*) eps_tab(i,1),eps_tab(i,2)
     end do
-    close(40)
+    close(400)
     ! Conversion MeV -> keV
     do i =1,N_eps_tab,1
       eps_tab(i,1) = eps_tab(i,1)*1.e3_PR
@@ -365,23 +365,23 @@ module initialization
           !  Read the file 'sources/user/plasma_tab.dat' and find the number of lines :
           reason = 0
           i = -2
-          open (unit=50,file='sources/user/plasma_tab.dat',form='formatted',status='unknown')      
+          open (unit=600,file='sources/user/plasma_tab.dat',form='formatted',status='unknown')      
           do while (reason==0)
-            read(50,*,IOSTAT=Reason) str
+            read(600,*,IOSTAT=Reason) str
             i = i + 1
             if (str == '') reason = 1
           end do
-          close(50)
+          close(600)
           N_plasma_tab = i
           allocate(plasma_tab(1:N_plasma_tab,1:4))
           !  Read the file 'sources/user/plasma_tab.dat' and define the table plasma_tab with the 
           !  corresponding values :
-          open (unit=50,file='sources/user/plasma_tab.dat',form='formatted',status='unknown')      
-          read(50,*)
+          open (unit=700,file='sources/user/plasma_tab.dat',form='formatted',status='unknown')      
+          read(700,*)
           do i =1,N_plasma_tab,1
-            read(50,*) plasma_tab(i,1),plasma_tab(i,2),plasma_tab(i,3),plasma_tab(i,4)
+            read(700,*) plasma_tab(i,1),plasma_tab(i,2),plasma_tab(i,3),plasma_tab(i,4)
           end do
-          close(50)
+          close(700)
           ! find the number of cells on x-axis and deduce the
           !      the number of cells on z-axis in 'sources/user/plasma_tab.dat' :
           i = 1

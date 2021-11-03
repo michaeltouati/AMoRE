@@ -91,9 +91,9 @@
 #########################################################################
 #########################################################################
 #
-#simu Fokker-Planck
+#simu Plasmas
 #
-#N_threads   1
+#N_threads   4
 #
 #hll_order           2
 #
@@ -103,7 +103,7 @@
 #
 #bi_temp        .false.
 #
-#magnetic_diff .false.
+#magnetic_diff .true.
 #
 #backward 1
 #
@@ -111,23 +111,23 @@
 #
 #Kalpha .false.
 #
-#L_t    150.
+#L_t    1.2e5
 #
-#Delta_t_diag 30.
+#Delta_t_diag 2.e4
 #
-#d_z      3.
+#d_z      100.
 #
-#d_x      6.
+#d_x      100.
 #
-#L_z      9.
+#L_z     1000.
 #
-#L_x     60.
+#L_x     1000.
 #
 #d_eps     50.
 #
-#eps_min   50.
+#eps_min   25.
 #
-#L_eps     1.e3
+#L_eps     5.25e2
 #
 #########################################################################
 #########################################################################
@@ -192,19 +192,19 @@
 #########################################################################
 #########################################################################
 #
-#E_tot      2.
+#E_tot      1.e4
 #
-#Delta_t    30.
+#Delta_t    4.e4
 #
-#Delta_r    6.
+#Delta_r    3.e2
 #
-#spectrum   1
+#spectrum   2
 #
 #eps0       700.
 #
 #sigma_eps   50.
 #
-#Tb0        3.e2
+#Tb0        1.e2
 #
 #alpha1      1.
 #
@@ -214,9 +214,9 @@
 #
 #eps1        3.e2
 #
-#angle0       20.
+#angle0       0.
 #
-#Delta_theta  40.
+#Delta_theta  60.
 #
 #########################################################################
 #########################################################################
@@ -234,7 +234,7 @@
 ##                         .false. in this case)                       ##
 ##                                                                     ##
 ## if plasma : Z0               = Mean Atomic Number (ex. 1. for H)    ##
-##             A0               = Mean Atomic Weight (ex. 1.01 for H)  ##
+##             A0               = Mean Atomic Weight (ex. 1.008 for H) ##
 ##             tabulated_plasma = A tabulated map of the plasma        ##
 ##                                density and temperature may be used  ##
 ##                                (.true.) or not (.false.)            ##
@@ -288,11 +288,11 @@
 #
 #A0  1.008
 #
-#tabulated_plasma .false.
+#tabulated_plasma .true.
 #
-#rho   10.
+#rho   1.e1
 #
-#T_ini 1.e2
+#T_ini 1.e1
 #
 #tabulated_resistivity .false.
 #
