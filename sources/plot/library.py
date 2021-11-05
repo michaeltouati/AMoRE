@@ -172,7 +172,11 @@ def make_scalars_plot_figure(**kwargs):
                     plt.semilogx(kwargs['xplot'],yplot,
                                  linewidth=2,label=legend,color=color)
             else :
-                plt.plot(kwargs['xplot'],yplot,
+                if kwargs['logy'] :
+                    plt.semilogy(kwargs['xplot'],yplot,
+                                 linewidth=2,label=legend,color=color)
+                else :
+                    plt.plot(kwargs['xplot'],yplot,
                          linewidth=2,label=legend,color=color)
     leg = plt.legend(fontsize=FONT_SIZE,
                      fancybox=True,
@@ -215,8 +219,12 @@ def make_scalar_plot_figure(**kwargs):
             plt.semilogx(kwargs['xplot'],kwargs['yplot'],
                          linewidth=2,color=kwargs['color'])
     else :
-        plt.plot(kwargs['xplot'],kwargs['yplot'],
-                 linewidth=2,color=kwargs['color'])
+        if kwargs['logy'] :
+            plt.semilogy(kwargs['xplot'],kwargs['yplot'],
+                         linewidth=2,color=kwargs['color'])
+        else :
+            plt.plot(kwargs['xplot'],kwargs['yplot'],
+                     linewidth=2,color=kwargs['color'])
     if ('xplot_min' in kwargs) and ('xplot_max' in kwargs) :
         plt.xlim([kwargs['xplot_min'],kwargs['xplot_max']])
     if ('yplot_min' in kwargs) and ('yplot_max' in kwargs) :
