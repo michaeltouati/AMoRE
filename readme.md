@@ -26,7 +26,21 @@
 To achieve this, it computes the two first momentum angular moments of the beam electrons Vlasov-Fokker-Planck-Beliaev-Budker (VFPBB) kinetic equation (the two first order equations of the kinetic equation Cartesian tensor scalar product expansion), completed with the Minerbo maximum angular entropy closure to express the distribution function second order momentum angular moment needed in the first order equation. The resulting kinetic equations are coupled with the target electrons and ions Magneto-Hydrodynamic (MHD) equations considering time scales on which the target electron return current has already set up. [AMoRE](https://github.com/michaeltouati/AMoRE) thus takes into account both collective effects, with the self-generated electromagnetic fields, and collisional effects, with the slowing down of beam electrons in collisions with plasmons, bound and free electrons and their angular scattering on both ions and electrons. The kinetic energy cut-off separating target electrons and beam electrons is assumed to be around 10 keV for the beam electrons collisional friction and diffusion VFPBB terms and the solid/plasma species MHD equations to be valid. More pieces of information can be found in my [PhD manuscript](https://tel.archives-ouvertes.fr/tel-01238782/document) and in this [peer-reviewed article](https://iopscience.iop.org/article/10.1088/1367-2630/16/7/073014/pdf). In the latter, there is no mention of updates in relation with the possible beam electrons specular reflection boundary conditions (refluxing), thermal capacities valid at ambient temperatures according to the Einstein and Debye models as well as the distinction between collisions of free electrons with s, p or d-band electrons in the electron-electron collisions contribution on transport coefficients. Citations to these references are recommended and appreciated for publications of scientific results using [AMoRE](https://github.com/michaeltouati/AMoRE) in peer-reviewed journals. 
 
 Python scripts, using the Matplotlib and Numpy packages, are provided to automatically extract and plot the simulation results. The simulation parameters are described in the [input-deck](https://github.com/michaeltouati/AMoRE/blob/main/input-deck) and they can be modified without having to recompile the code. Compilation rules can be modified in the [makefile](https://github.com/michaeltouati/AMoRE/blob/main/makefile) depending on the user compiler preferences. Tools for testing the compilation of the code and tools for checking the simulation parameters are provided. X-ray Kα and Kβ photon emission from the target can be computed using a provided [X-ray Kα and Kβ table](https://github.com/michaeltouati/AMoRE/blob/master/sources/data/Kalpha_tab.dat). The user can use its own [tabulated electrical resistivity](https://github.com/michaeltouati/AMoRE/blob/master/sources/user/resistivity_tab.dat) for the solid/plasma and/or its own [tabulated plasma material-density-temperature profile](https://github.com/michaeltouati/AMoRE/blob/master/sources/user/plasma_tab.dat) and/or its own [tabulated electron beam kinetic energy spectrum](https://github.com/michaeltouati/AMoRE/blob/master/sources/user/spectrum_tab.dat).
-  
+
+# Simulation plot examples
+
+<p align="center">
+  <img width="400" height="325" src="test-cases/NJP-Academic-case/nb_51.png">
+  <img width="400" height="325" src="test-cases/NJP-Academic-case/fb_x51_51.png">
+</p>
+
+<p align="center">
+  <img width="200" height="325" src="test-cases/PRL-LULI-C-vitreous/nb_51.png">
+  <img width="200" height="325" src="test-cases/PRL-LULI-C-vitreous/Te_51.png">
+  <img width="200" height="325" src="test-cases/PRL-LULI-C-vitreous/By_51.png">
+  <img width="200" height="325" src="test-cases/PRL-LULI-C-vitreous/nKa_51.png">
+</p>
+
 # Compiling the code
 
 Modify the [makefile](https://github.com/michaeltouati/AMoRE/blob/main/makefile) as a function of the Fortran compiler installed on your computer and then type

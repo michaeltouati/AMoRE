@@ -373,13 +373,13 @@ module initialization
           end do
           close(600)
           N_plasma_tab = i
-          allocate(plasma_tab(1:N_plasma_tab,1:4))
+          allocate(plasma_tab(1:N_plasma_tab,1:6))
           !  Read the file 'sources/user/plasma_tab.dat' and define the table plasma_tab with the 
           !  corresponding values :
           open (unit=700,file='sources/user/plasma_tab.dat',form='formatted',status='unknown')      
           read(700,*)
           do i =1,N_plasma_tab,1
-            read(700,*) plasma_tab(i,1),plasma_tab(i,2),plasma_tab(i,3),plasma_tab(i,4)
+            read(700,*) plasma_tab(i,1),plasma_tab(i,2),plasma_tab(i,3),plasma_tab(i,4),plasma_tab(i,5),plasma_tab(i,6)
           end do
           close(700)
           ! find the number of cells on x-axis and deduce the
@@ -440,39 +440,39 @@ module initialization
                         / (plasma_tab((im-1)*Nz_plasma_tab+km+1,2) - plasma_tab((im-1)*Nz_plasma_tab+km,2))
                 beta_z  = (z_a(k) - plasma_tab((im-1)*Nz_plasma_tab+km,2))&
                         / (plasma_tab((im-1)*Nz_plasma_tab+km+1,2) - plasma_tab((im-1)*Nz_plasma_tab+km,2))
-                r = (alpha_x * ((alpha_z * plasma_tab((im-1)*Nz_plasma_tab+km  ,3))&
-                               +(beta_z  * plasma_tab((im-1)*Nz_plasma_tab+km+1,3))))&
-                  + (beta_x  * ((alpha_z * plasma_tab( im   *Nz_plasma_tab+km  ,3))&
-                               +(beta_z  * plasma_tab( im   *Nz_plasma_tab+km+1,3))))
-                t = (alpha_x * ((alpha_z * plasma_tab((im-1)*Nz_plasma_tab+km  ,4))&
-                               +(beta_z  * plasma_tab((im-1)*Nz_plasma_tab+km+1,4))))&
-                  + (beta_x  * ((alpha_z * plasma_tab( im   *Nz_plasma_tab+km  ,4))&
-                               +(beta_z  * plasma_tab( im   *Nz_plasma_tab+km+1,4))))
+                r = (alpha_x * ((alpha_z * plasma_tab((im-1)*Nz_plasma_tab+km  ,5))&
+                               +(beta_z  * plasma_tab((im-1)*Nz_plasma_tab+km+1,5))))&
+                  + (beta_x  * ((alpha_z * plasma_tab( im   *Nz_plasma_tab+km  ,5))&
+                               +(beta_z  * plasma_tab( im   *Nz_plasma_tab+km+1,5))))
+                t = (alpha_x * ((alpha_z * plasma_tab((im-1)*Nz_plasma_tab+km  ,6))&
+                               +(beta_z  * plasma_tab((im-1)*Nz_plasma_tab+km+1,6))))&
+                  + (beta_x  * ((alpha_z * plasma_tab( im   *Nz_plasma_tab+km  ,6))&
+                               +(beta_z  * plasma_tab( im   *Nz_plasma_tab+km+1,6))))
               else if ((im == Nx_plasma_tab).and.(km.ne.Nz_plasma_tab)) then
                 alpha_z = (plasma_tab((im-1)*Nz_plasma_tab+km+1,2) - z_a(k))&
                         / (plasma_tab((im-1)*Nz_plasma_tab+km+1,2) - plasma_tab((im-1)*Nz_plasma_tab+km,2))
                 beta_z  = (z_a(k) - plasma_tab((im-1)*Nz_plasma_tab+km,2))&
                         / (plasma_tab((im-1)*Nz_plasma_tab+km+1,2) - plasma_tab((im-1)*Nz_plasma_tab+km,2))
-                r = (alpha_z * plasma_tab((im-1)*Nz_plasma_tab+km  ,3))&
-                  + (beta_z  * plasma_tab((im-1)*Nz_plasma_tab+km+1,3))
-                t = (alpha_z * plasma_tab((im-1)*Nz_plasma_tab+km  ,4))&
-                  + (beta_z  * plasma_tab((im-1)*Nz_plasma_tab+km+1,4))
+                r = (alpha_z * plasma_tab((im-1)*Nz_plasma_tab+km  ,5))&
+                  + (beta_z  * plasma_tab((im-1)*Nz_plasma_tab+km+1,5))
+                t = (alpha_z * plasma_tab((im-1)*Nz_plasma_tab+km  ,6))&
+                  + (beta_z  * plasma_tab((im-1)*Nz_plasma_tab+km+1,6))
               else if ((im.ne.Nx_plasma_tab).and.(km == Nz_plasma_tab)) then
                 alpha_x = (plasma_tab(im * Nz_plasma_tab+km,1) - x_a(i))&
                         / (plasma_tab(im * Nz_plasma_tab+km,1) - plasma_tab((im-1)*Nz_plasma_tab+km,1))
                 beta_x  = (x_a(i) - plasma_tab((im-1)*Nz_plasma_tab+km,1))&
                         / (plasma_tab(im*Nz_plasma_tab+km,1) - plasma_tab((im-1)*Nz_plasma_tab+km,1))
-                r = (alpha_x * plasma_tab((im-1)*Nz_plasma_tab+km,3))&
-                  + (beta_x  * plasma_tab( im   *Nz_plasma_tab+km,3))
-                t = (alpha_x * plasma_tab((im-1)*Nz_plasma_tab+km,4))&
-                  + (beta_x  * plasma_tab( im   *Nz_plasma_tab+km,4))
+                r = (alpha_x * plasma_tab((im-1)*Nz_plasma_tab+km,5))&
+                  + (beta_x  * plasma_tab( im   *Nz_plasma_tab+km,5))
+                t = (alpha_x * plasma_tab((im-1)*Nz_plasma_tab+km,6))&
+                  + (beta_x  * plasma_tab( im   *Nz_plasma_tab+km,6))
               else
-                r = plasma_tab((im-1)*Nz_plasma_tab+km,3)
-                t = plasma_tab((im-1)*Nz_plasma_tab+km,4)
+                r = plasma_tab((im-1)*Nz_plasma_tab+km,5)
+                t = plasma_tab((im-1)*Nz_plasma_tab+km,6)
               end if
-              A(i,k)  = A1
-              Z(i,k)  = Z1
-              ni(i,k) = r / (A1 * mu)
+              A(i,k)  = plasma_tab((im-1)*Nz_plasma_tab+km,3)
+              Z(i,k)  = plasma_tab((im-1)*Nz_plasma_tab+km,4)
+              ni(i,k) = r / (A(i,k) * mu)
               Te(i,k) = t * eV
               Ti(i,k) = t * eV
             end do

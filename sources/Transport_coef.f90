@@ -639,17 +639,17 @@ module transport_coef
     real(PR), dimension(1:N_eta_tab,1:2), intent(in) :: eta_tab
     real(PR), intent(in)                             :: Z, ni, Te, Ti
     real(PR)                                         :: resis
-    if (tabulated_resistivity) then
-      resis = resistivity_tab(eta_tab, Z, ni, Te, Ti)
-    else
-      ! Metals
-      if ((Z == Z_Al).or.(Z == Z_Cu).or.(Z == Z_Ta)) then
-        resis = resistivity_metals(Z, ni, Te, Ti)
-      ! Hydrogen plasmas
-      else if (Z == 1) then
-        resis = resistivity_H(Z, ni, Te, Ti)
-      ! Other plasmas
-      else 
+    ! Metals
+    if ((Z == Z_Al).or.(Z == Z_Cu).or.(Z == Z_Ta)) then
+      resis = resistivity_metals(Z, ni, Te, Ti)
+    ! Hydrogen plasmas
+    else if (Z == 1) then
+      resis = resistivity_H(Z, ni, Te, Ti)
+    ! Other plasmas
+    else 
+      if (tabulated_resistivity) then
+        resis = resistivity_tab(eta_tab, Z, ni, Te, Ti)
+      else
         resis = resistivity_Spitzer(Z, ni, Te, Ti)
       end if
     end if

@@ -65,27 +65,31 @@ print(' ---------------------------------------')
 X_LABEL   = r'$z\,(\mu\mathrm{m})$'
 Y_LABEL   = r'$x\,(\mu\mathrm{m})$'
 
-print('  ')
-print(' Target ion density ni')
-NI_RES = RES_DIR+'ni[cm-3].dat'
-NI_TTL = r'$n_i\,(\mathrm{cm}^{-3})$'
-NI_DIR = MAP_DIR+'ni/'
-lib.create_dir(NI_DIR)
-NI_FIG = NI_DIR+'ni_'
-lib.read_and_plot_2d_pcolormesh(res_file = NI_RES,
-                                n_1      = N_x,
-                                n_2      = N_z,
-                                colormap = 'Greens',
-                                title    = NI_TTL,
-                                log      = False,
-                                xlabel   = X_LABEL,
-                                ylabel   = Y_LABEL,
-                                eq_axis  = True,
-                                fig_file = NI_FIG)
+plot_ni = lib.get_string_parameter('tabulated_plasma') == '.true.'
+plot_ni = plot_ni or  lib.get_string_parameter('Tracer') == '1'
+if plot_ni :
+    print('  ')
+    print(' Target ion density ni')
+    NI_RES = RES_DIR+'ni[cm-3].dat'
+    NI_TTL = r'$n_i\,(\mathrm{cm}^{-3})$'
+    NI_DIR = MAP_DIR+'ni/'
+    lib.create_dir(NI_DIR)
+    NI_FIG = NI_DIR+'ni_'
+    lib.read_and_plot_2d_pcolormesh(res_file = NI_RES,
+                                    n_1      = N_x,
+                                    n_2      = N_z,
+                                    colormap = 'Greens',
+                                    title    = NI_TTL,
+                                    log      = False,
+                                    xlabel   = X_LABEL,
+                                    ylabel   = Y_LABEL,
+                                    eq_axis  = True,
+                                    fig_file = NI_FIG)
 print('  ')
 print(' Beam density nb')
 NB_RES = RES_DIR+'nb[cm-3].dat'
 NB_TTL = r'$n_b\,(\mathrm{cm}^{-3})$'
+# NB_TTL = r'$\log_{10} ( n_b\,(\mathrm{cm}^{-3}) )$')
 NB_DIR = MAP_DIR+'nb/'
 lib.create_dir(NB_DIR)
 NB_FIG = NB_DIR+'nb_'
@@ -252,23 +256,24 @@ lib.read_and_plot_2d_pcolormesh(res_file = WE_RES,
                                 ylabel   = Y_LABEL,
                                 eq_axis  = True,
                                 fig_file = WE_FIG)
-print('  ')
-print(' Density of power deposited on background ions Wi')
-WI_RES = RES_DIR+'Wi[erg_s-1_cm-3].dat'
-WI_TTL = r'$W_i\,(\mathrm{erg/s.cm}^{3})$'
-WI_DIR = MAP_DIR+'Wi/'
-lib.create_dir(WI_DIR)
-WI_FIG = WI_DIR+'Wi_'
-lib.read_and_plot_2d_pcolormesh(res_file = WI_RES,
-                                n_1      = N_x,
-                                n_2      = N_z,
-                                colormap = 'BuGn',
-                                title    = WI_TTL,
-                                log      = False,
-                                xlabel   = X_LABEL,
-                                ylabel   = Y_LABEL,
-                                eq_axis  = True,
-                                fig_file = WI_FIG)
+if lib.get_string_parameter('bi_temp') == '.true.':
+    print('  ')
+    print(' Density of power deposited on background ions Wi')
+    WI_RES = RES_DIR+'Wi[erg_s-1_cm-3].dat'
+    WI_TTL = r'$W_i\,(\mathrm{erg/s.cm}^{3})$'
+    WI_DIR = MAP_DIR+'Wi/'
+    lib.create_dir(WI_DIR)
+    WI_FIG = WI_DIR+'Wi_'
+    lib.read_and_plot_2d_pcolormesh(res_file = WI_RES,
+                                    n_1      = N_x,
+                                    n_2      = N_z,
+                                    colormap = 'BuGn',
+                                    title    = WI_TTL,
+                                    log      = False,
+                                    xlabel   = X_LABEL,
+                                    ylabel   = Y_LABEL,
+                                    eq_axis  = True,
+                                    fig_file = WI_FIG)
 print('  ')
 print(' Background electron temperature Te')
 TE_RES = RES_DIR+'Te[eV].dat'
@@ -286,23 +291,24 @@ lib.read_and_plot_2d_pcolormesh(res_file = TE_RES,
                                 ylabel   = Y_LABEL,
                                 eq_axis  = True,
                                 fig_file = TE_FIG)
-print('  ')
-print(' Background ion temperature Ti')
-TI_RES = RES_DIR+'Ti[eV].dat'
-TI_TTL = r'$\log_{10}{\left(T_i\,(\mathrm{eV})\right)}$'
-TI_DIR = MAP_DIR+'Ti/'
-lib.create_dir(TI_DIR)
-TI_FIG = TI_DIR+'Ti_'
-lib.read_and_plot_2d_pcolormesh(res_file = TI_RES,
-                                n_1      = N_x,
-                                n_2      = N_z,
-                                colormap = 'jet',
-                                title    = TI_TTL,
-                                log      = True,
-                                xlabel   = X_LABEL,
-                                ylabel   = Y_LABEL,
-                                eq_axis  = True,
-                                fig_file = TI_FIG)
+if lib.get_string_parameter('bi_temp') == '.true.':
+    print('  ')
+    print(' Background ion temperature Ti')
+    TI_RES = RES_DIR+'Ti[eV].dat'
+    TI_TTL = r'$\log_{10}{\left(T_i\,(\mathrm{eV})\right)}$'
+    TI_DIR = MAP_DIR+'Ti/'
+    lib.create_dir(TI_DIR)
+    TI_FIG = TI_DIR+'Ti_'
+    lib.read_and_plot_2d_pcolormesh(res_file = TI_RES,
+                                    n_1      = N_x,
+                                    n_2      = N_z,
+                                    colormap = 'jet',
+                                    title    = TI_TTL,
+                                    log      = True,
+                                    xlabel   = X_LABEL,
+                                    ylabel   = Y_LABEL,
+                                    eq_axis  = True,
+                                    fig_file = TI_FIG)
 print('  ')
 print(' Electrical resistivity eta')
 ETA_RES = RES_DIR+'resis[Ohm.m].dat'
@@ -338,54 +344,57 @@ lib.read_and_plot_2d_pcolormesh(res_file = KAPPA_RES,
                                 ylabel   = Y_LABEL,
                                 eq_axis  = True,
                                 fig_file = KAPPA_FIG)
-print('  ')
-print(' Ionization rate of K-shell electrons nuK')
-NUK_RES = RES_DIR+'K_shell_ioniz_rate_[s-1].dat'
-NUK_TTL = r'$\nu_K\,(\mathrm{s}^{-1})$'
-NUK_DIR = MAP_DIR+'nuK/'
-lib.create_dir(NUK_DIR)
-NUK_FIG = NUK_DIR+'nuK_'
-lib.read_and_plot_2d_pcolormesh(res_file = NUK_RES,
-                                n_1      = N_x,
-                                n_2      = N_z,
-                                colormap = 'OrRd',
-                                title    = NUK_TTL,
-                                log      = False,
-                                xlabel   = X_LABEL,
-                                ylabel   = Y_LABEL,
-                                eq_axis  = True,
-                                fig_file = NUK_FIG)
-print('  ')
-print(' Time integrated density of emitted Kalpha photons nKalpha')
-NKA_RES = RES_DIR+'n_Kalpha[cm-3].dat'
-NKA_TTL = r'$n_{K\alpha}\,(\mathrm{cm}^{-3}.\mathrm{sr}^{-1})$'
-NKA_DIR = MAP_DIR+'nKa/'
-lib.create_dir(NKA_DIR)
-NKA_FIG = NKA_DIR+'nKa_'
-lib.read_and_plot_2d_pcolormesh(res_file = NKA_RES,
-                                n_1      = N_x,
-                                n_2      = N_z,
-                                colormap = 'hot',
-                                title    = NKA_TTL,
-                                log      = False,
-                                xlabel   = X_LABEL,
-                                ylabel   = Y_LABEL,
-                                eq_axis  = True,
-                                fig_file = NKA_FIG)
-print('  ')
-print(' Time integrated density of emitted Kbeta photons nKb')
-NKB_RES = RES_DIR+'n_Kbeta[cm-3].dat'
-NKB_TTL = r'$n_{K\beta}\,(\mathrm{cm}^{-3}.\mathrm{sr}^{-1})$'
-NKB_DIR = MAP_DIR+'nKb/'
-lib.create_dir(NKB_DIR)
-NKB_FIG = NKB_DIR+'nKb_'
-lib.read_and_plot_2d_pcolormesh(res_file = NKB_RES,
-                                n_1      = N_x,
-                                n_2      = N_z,
-                                colormap = 'hot',
-                                title    = NKB_TTL,
-                                log      = False,
-                                xlabel   = X_LABEL,
-                                ylabel   = Y_LABEL,
-                                eq_axis  = True,
-                                fig_file = NKB_FIG)
+if lib.get_string_parameter('Kalpha') == '.true.':
+    print('  ')
+    print(' Ionization rate of K-shell electrons nuK')
+    NUK_RES = RES_DIR+'K_shell_ioniz_rate_[s-1].dat'
+    NUK_TTL = r'$\nu_K\,(\mathrm{s}^{-1})$'
+    NUK_DIR = MAP_DIR+'nuK/'
+    lib.create_dir(NUK_DIR)
+    NUK_FIG = NUK_DIR+'nuK_'
+    lib.read_and_plot_2d_pcolormesh(res_file = NUK_RES,
+                                    n_1      = N_x,
+                                    n_2      = N_z,
+                                    colormap = 'OrRd',
+                                    title    = NUK_TTL,
+                                    log      = False,
+                                    xlabel   = X_LABEL,
+                                    ylabel   = Y_LABEL,
+                                    eq_axis  = True,
+                                    fig_file = NUK_FIG)
+    print('  ')
+    print(' Time integrated density of emitted Kalpha photons nKalpha')
+    NKA_RES = RES_DIR+'n_Kalpha[cm-3].dat'
+    # NKA_TTL = r'$n_{K\alpha}\,(\mathrm{cm}^{-3}.\mathrm{sr}^{-1})$'
+    NKA_TTL = r'$\log_{10} ( n_{K\alpha}\,(\mathrm{cm}^{-3}.\mathrm{sr}^{-1}))$'
+    NKA_DIR = MAP_DIR+'nKa/'
+    lib.create_dir(NKA_DIR)
+    NKA_FIG = NKA_DIR+'nKa_'
+    lib.read_and_plot_2d_pcolormesh(res_file = NKA_RES,
+                                    n_1      = N_x,
+                                    n_2      = N_z,
+                                    colormap = 'hot',
+                                    title    = NKA_TTL,
+                                    log      = True,
+                                    xlabel   = X_LABEL,
+                                    ylabel   = Y_LABEL,
+                                    eq_axis  = True,
+                                    fig_file = NKA_FIG)
+    print('  ')
+    print(' Time integrated density of emitted Kbeta photons nKb')
+    NKB_RES = RES_DIR+'n_Kbeta[cm-3].dat'
+    # NKB_TTL = r'$n_{K\beta}\,(\mathrm{cm}^{-3}.\mathrm{sr}^{-1})$'
+    NKB_TTL = r'$\log_{10} ( n_{K\beta}\,(\mathrm{cm}^{-3}.\mathrm{sr}^{-1}) )$'
+    NKB_DIR = MAP_DIR+'nKb/'
+    lib.create_dir(NKB_DIR)
+    NKB_FIG = NKB_DIR+'nKb_'
+    lib.read_and_plot_2d_pcolormesh(res_file = NKB_RES,
+                                    n_1      = N_x,
+                                    n_2      = N_z,
+                                    colormap = 'hot',
+                                    title    = NKB_TTL,
+                                    log      = True,
+                                    xlabel   = X_LABEL,
+                                    ylabel   = Y_LABEL,
+                                    eq_axis  = True,
+                                    fig_file = NKB_FIG)

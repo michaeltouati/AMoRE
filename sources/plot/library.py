@@ -37,6 +37,18 @@ FONT = {'style':  'normal',
         'size': FONT_SIZE,
         }
 
+def get_string_parameter(param):
+    """
+    Return AMoRE simulation input deck param value
+    """
+    with open('input-deck', 'r', encoding='utf-8') as file :
+        for line in file:
+            array     = line.strip().split()
+            if array[0] == '#'+param :
+                param_value = array[1]
+                break
+    return param_value
+
 def get_results_dir():
     """
     Return AMoRE simulation name
@@ -48,6 +60,7 @@ def get_results_dir():
             if array[0] == '#simu' :
                 name = array[1]
                 break
+    name = get_string_parameter('simu')
     to_print      = ' ' + name + ' AMoRE SIMULATION PLOTS :'
     line_to_print = ' '
     for _ in range(0,len(to_print)-1):
@@ -562,7 +575,7 @@ def construct_distribution_and_plot(**kwargs):
                                     xmap_max = np.matrix(kwargs['pz_map']).max(),
                                     ymap_min = np.matrix(kwargs['px_map']).min(),
                                     ymap_max = np.matrix(kwargs['px_map']).max(),
-                                    zmap_min = np.matrix(fb_map).min(),
+                                    zmap_min = -15.,#np.matrix(fb_map).min(),
                                     zmap_max = np.matrix(fb_map).max(),
                                     xlabel   = r'$p_z\,(m_e c)$',
                                     ylabel   = r'$p_x\,(m_e c)$',
