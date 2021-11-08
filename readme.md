@@ -30,15 +30,15 @@ Python scripts, using the Matplotlib and Numpy packages, are provided to automat
 # Simulation plot examples
 
 <p align="center">
-  <img width="400" height="325" src="test-cases/NJP-Academic-case/nb_51.png">
-  <img width="400" height="325" src="test-cases/NJP-Academic-case/fb_x51_51.png">
+  <img width="390" height="325" src="test-cases/NJP-Academic-case/nb_51.png">
+  <img width="390" height="325" src="test-cases/NJP-Academic-case/fb_x51_51.png">
 </p>
 
 <p align="center">
-  <img width="200" height="325" src="test-cases/PRL-LULI-C-vitreous/nb_51.png">
-  <img width="200" height="325" src="test-cases/PRL-LULI-C-vitreous/Te_51.png">
-  <img width="200" height="325" src="test-cases/PRL-LULI-C-vitreous/By_51.png">
-  <img width="200" height="325" src="test-cases/PRL-LULI-C-vitreous/nKa_51.png">
+  <img width="195" height="325" src="test-cases/PRL-LULI-C-vitreous/nb_51.png">
+  <img width="195" height="325" src="test-cases/PRL-LULI-C-vitreous/Te_51.png">
+  <img width="195" height="325" src="test-cases/PRL-LULI-C-vitreous/By_51.png">
+  <img width="195" height="325" src="test-cases/PRL-LULI-C-vitreous/nKa_51.png">
 </p>
 
 # Compiling the code
