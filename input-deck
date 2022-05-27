@@ -93,7 +93,7 @@
 #
 #simu NJP-Academic-case
 #
-#N_threads   0
+#N_threads   4
 #
 #hll_order           2
 #
