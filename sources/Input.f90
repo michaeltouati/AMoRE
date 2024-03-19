@@ -230,7 +230,7 @@ module input
       write(*,*)'The plasma temperature T_ini must be greater than the Fermi temperature :'
       if (Tmin_alert) write(*,*)'because the electrical resistivity is not yet implemented for this plasma'
       if (Tmin_alert2) write(*,*)'because the electrical resistivity is not yet implemented for this tracer'
-      write(*,*) 'T_ini =',T_ini,'eV while T_F = ',Tfermi(Z0, ni0)/eV,' eV'
+      write(*,*) 'T_ini =',T_ini/eV,'eV while T_F = ',Tfermi(Z0, ni0)/eV,' eV'
       stop
     end if
 
