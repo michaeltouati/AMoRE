@@ -616,6 +616,8 @@ def read_and_plot_distribution(**kwargs):
                     colx = 1
                     colz = 3
                     fb_mu = '/fb_x'
+                else:
+                    raise ValueError("mu_grk must be 1 or 2")
                 counter = 0
                 for line in psi0_file:
                     t_0.append(float(line.strip().split()[0]))
