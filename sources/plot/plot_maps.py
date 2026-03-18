@@ -94,8 +94,8 @@ NB_DIR = MAP_DIR+'nb/'
 lib.create_dir(NB_DIR)
 NB_FIG = NB_DIR+'nb_'
 lib.read_and_plot_2d_pcolormesh(res_file = NB_RES,
-                                n_1      = N_x,
-                                n_2      = N_z,
+                                n_1      = N_X,
+                                n_2      = N_Z,
                                 colormap = 'Blues',
                                 title    = NB_TTL,
                                 log      = False,
@@ -111,8 +111,8 @@ NE_DIR = MAP_DIR+'ne/'
 lib.create_dir(NE_DIR)
 NE_FIG = NE_DIR+'ne_'
 lib.read_and_plot_2d_pcolormesh(res_file = NE_RES,
-                                n_1      = N_x,
-                                n_2      = N_z,
+                                n_1      = N_X,
+                                n_2      = N_Z,
                                 colormap = 'Reds',
                                 title    = NE_TTL,
                                 log      = False,
@@ -128,8 +128,8 @@ JBZ_DIR = MAP_DIR+'jbz/'
 lib.create_dir(JBZ_DIR)
 JBZ_FIG = JBZ_DIR+'jbz_'
 lib.read_and_plot_2d_pcolormesh(res_file = JBZ_RES,
-                                n_1      = N_x,
-                                n_2      = N_z,
+                                n_1      = N_X,
+                                n_2      = N_Z,
                                 colormap = 'seismic',
                                 title    = JBZ_TTL,
                                 log      = False,
@@ -145,8 +145,8 @@ JBX_DIR = MAP_DIR+'jbx/'
 lib.create_dir(JBX_DIR)
 JBX_FIG = JBX_DIR+'jbx_'
 lib.read_and_plot_2d_pcolormesh(res_file = JBX_RES,
-                                n_1      = N_x,
-                                n_2      = N_z,
+                                n_1      = N_X,
+                                n_2      = N_Z,
                                 colormap = 'seismic',
                                 title    = JBX_TTL,
                                 log      = False,
@@ -162,8 +162,8 @@ JEZ_DIR = MAP_DIR+'jez/'
 lib.create_dir(JEZ_DIR)
 JEZ_FIG = JEZ_DIR+'jez_'
 lib.read_and_plot_2d_pcolormesh(res_file = JEZ_RES,
-                                n_1      = N_x,
-                                n_2      = N_z,
+                                n_1      = N_X,
+                                n_2      = N_Z,
                                 colormap = 'seismic',
                                 title    = JEZ_TTL,
                                 log      = False,
@@ -179,8 +179,8 @@ JEX_DIR = MAP_DIR+'jex/'
 lib.create_dir(JEX_DIR)
 JEX_FIG = JEX_DIR+'jex_'
 lib.read_and_plot_2d_pcolormesh(res_file = JEX_RES,
-                                n_1      = N_x,
-                                n_2      = N_z,
+                                n_1      = N_X,
+                                n_2      = N_Z,
                                 colormap = 'seismic',
                                 title    = JEX_TTL,
                                 log      = False,
@@ -196,8 +196,8 @@ EZ_DIR = MAP_DIR+'Ez/'
 lib.create_dir(EZ_DIR)
 EZ_FIG=EZ_DIR+'Ez_'
 lib.read_and_plot_2d_pcolormesh(res_file = EZ_RES,
-                                n_1      = N_x,
-                                n_2      = N_z,
+                                n_1      = N_X,
+                                n_2      = N_Z,
                                 colormap = 'seismic',
                                 title    = EZ_TTL,
                                 log      = False,
@@ -213,8 +213,8 @@ EX_DIR = MAP_DIR+'Ex/'
 lib.create_dir(EX_DIR)
 EX_FIG = EX_DIR+'Ex_'
 lib.read_and_plot_2d_pcolormesh(res_file = EX_RES,
-                                n_1      = N_x,
-                                n_2      = N_z,
+                                n_1      = N_X,
+                                n_2      = N_Z,
                                 colormap = 'seismic',
                                 title    = EX_TTL,
                                 log      = False,
@@ -230,8 +230,8 @@ BY_DIR = MAP_DIR+'By/'
 lib.create_dir(BY_DIR)
 BY_FIG = BY_DIR+'By_'
 lib.read_and_plot_2d_pcolormesh(res_file = BY_RES,
-                                n_1      = N_x,
-                                n_2      = N_z,
+                                n_1      = N_X,
+                                n_2      = N_Z,
                                 colormap = 'seismic',
                                 title    = BY_TTL,
                                 log      = False,
@@ -247,8 +247,8 @@ WE_DIR = MAP_DIR+'We/'
 lib.create_dir(WE_DIR)
 WE_FIG = WE_DIR+'We_'
 lib.read_and_plot_2d_pcolormesh(res_file = WE_RES,
-                                n_1      = N_x,
-                                n_2      = N_z,
+                                n_1      = N_X,
+                                n_2      = N_Z,
                                 colormap = 'OrRd',
                                 title    = WE_TTL,
                                 log      = False,
@@ -265,8 +265,8 @@ if lib.get_string_parameter('bi_temp') == '.true.':
     lib.create_dir(WI_DIR)
     WI_FIG = WI_DIR+'Wi_'
     lib.read_and_plot_2d_pcolormesh(res_file = WI_RES,
-                                    n_1      = N_x,
-                                    n_2      = N_z,
+                                    n_1      = N_X,
+                                    n_2      = N_Z,
                                     colormap = 'BuGn',
                                     title    = WI_TTL,
                                     log      = False,
@@ -282,8 +282,8 @@ TE_DIR = MAP_DIR+'Te/'
 lib.create_dir(TE_DIR)
 TE_FIG = TE_DIR+'Te_'
 lib.read_and_plot_2d_pcolormesh(res_file = TE_RES,
-                                n_1      = N_x,
-                                n_2      = N_z,
+                                n_1      = N_X,
+                                n_2      = N_Z,
                                 colormap = 'jet',
                                 title    = TE_TTL,
                                 log      = True,
@@ -300,8 +300,8 @@ if lib.get_string_parameter('bi_temp') == '.true.':
     lib.create_dir(TI_DIR)
     TI_FIG = TI_DIR+'Ti_'
     lib.read_and_plot_2d_pcolormesh(res_file = TI_RES,
-                                    n_1      = N_x,
-                                    n_2      = N_z,
+                                    n_1      = N_X,
+                                    n_2      = N_Z,
                                     colormap = 'jet',
                                     title    = TI_TTL,
                                     log      = True,
@@ -317,8 +317,8 @@ ETA_DIR = MAP_DIR+'eta/'
 lib.create_dir(ETA_DIR)
 ETA_FIG = ETA_DIR+'eta_'
 lib.read_and_plot_2d_pcolormesh(res_file = ETA_RES,
-                                n_1      = N_x,
-                                n_2      = N_z,
+                                n_1      = N_X,
+                                n_2      = N_Z,
                                 colormap = 'terrain',
                                 title    = ETA_TTL,
                                 log      = True,
@@ -335,8 +335,8 @@ KAPPA_DIR  = MAP_DIR+'kappa/'
 lib.create_dir(KAPPA_DIR)
 KAPPA_FIG  = KAPPA_DIR+'kappa_'
 lib.read_and_plot_2d_pcolormesh(res_file = KAPPA_RES,
-                                n_1      = N_x,
-                                n_2      = N_z,
+                                n_1      = N_X,
+                                n_2      = N_Z,
                                 colormap = 'terrain',
                                 title    = KAPPA_TTL,
                                 log      = True,
@@ -353,8 +353,8 @@ if lib.get_string_parameter('Kalpha') == '.true.':
     lib.create_dir(NUK_DIR)
     NUK_FIG = NUK_DIR+'nuK_'
     lib.read_and_plot_2d_pcolormesh(res_file = NUK_RES,
-                                    n_1      = N_x,
-                                    n_2      = N_z,
+                                    n_1      = N_X,
+                                    n_2      = N_Z,
                                     colormap = 'OrRd',
                                     title    = NUK_TTL,
                                     log      = False,
@@ -371,8 +371,8 @@ if lib.get_string_parameter('Kalpha') == '.true.':
     lib.create_dir(NKA_DIR)
     NKA_FIG = NKA_DIR+'nKa_'
     lib.read_and_plot_2d_pcolormesh(res_file = NKA_RES,
-                                    n_1      = N_x,
-                                    n_2      = N_z,
+                                    n_1      = N_X,
+                                    n_2      = N_Z,
                                     colormap = 'hot',
                                     title    = NKA_TTL,
                                     log      = True,
@@ -389,8 +389,8 @@ if lib.get_string_parameter('Kalpha') == '.true.':
     lib.create_dir(NKB_DIR)
     NKB_FIG = NKB_DIR+'nKb_'
     lib.read_and_plot_2d_pcolormesh(res_file = NKB_RES,
-                                    n_1      = N_x,
-                                    n_2      = N_z,
+                                    n_1      = N_X,
+                                    n_2      = N_Z,
                                     colormap = 'hot',
                                     title    = NKB_TTL,
                                     log      = True,
