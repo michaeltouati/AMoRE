@@ -61,7 +61,7 @@ print(' ---------------------------------------')
 print(' Hydrodynamic Moments 2D Density Plot')
 print(' ---------------------------------------')
 
-[N_z,N_x] = lib.find_spatial_simulation_box_dimension(RES_DIR+'B_y[Tesla].dat')
+[N_Z,N_X] = lib.find_spatial_simulation_box_dimension(RES_DIR+'B_y[Tesla].dat')
 X_LABEL   = r'$z\,(\mu\mathrm{m})$'
 Y_LABEL   = r'$x\,(\mu\mathrm{m})$'
 
@@ -76,8 +76,8 @@ if plot_ni :
     lib.create_dir(NI_DIR)
     NI_FIG = NI_DIR+'ni_'
     lib.read_and_plot_2d_pcolormesh(res_file = NI_RES,
-                                    n_1      = N_x,
-                                    n_2      = N_z,
+                                    n_1      = N_X,
+                                    n_2      = N_Z,
                                     colormap = 'Greens',
                                     title    = NI_TTL,
                                     log      = False,
@@ -330,7 +330,7 @@ print('  ')
 print(' Thermal conductivity kappa')
 KAPPA_RES  = RES_DIR+'Kappa_e[erg_m-1_K-1_s-1].dat'
 KAPPA_TTL  = r'$\log_{10}\Big (\kappa\,$'
-KAPPA_TTL += r'$(\mathrm{erg/m.K.s}) \Big )$'
+KAPPA_TTL += r'$(\mathrm{erg/m.K.s}) \Big )$' # pylint: disable=invalid-name
 KAPPA_DIR  = MAP_DIR+'kappa/'
 lib.create_dir(KAPPA_DIR)
 KAPPA_FIG  = KAPPA_DIR+'kappa_'
