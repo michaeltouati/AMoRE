@@ -170,7 +170,7 @@ def make_scalars_plot_figure(**kwargs):
     fig=plt.figure()
     plt.rc('text', usetex=True)
     for i in range(1,11):
-        condition = ('yplot'+str(i) in kwargs)
+        condition = 'yplot'+str(i) in kwargs
         condition = condition and ('legend'+str(i) in kwargs)
         condition = condition and ('color'+str(i) in kwargs)
         if condition :
