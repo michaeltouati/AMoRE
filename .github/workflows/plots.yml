@@ -7,14 +7,14 @@ on:
     branches: [ master ]
   workflow_dispatch:
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    
     steps:
     
     - uses: actions/checkout@v5
@@ -22,7 +22,7 @@ jobs:
     - name: Set up Python 3.11
       uses: actions/setup-python@v5
       with:
-        python-version: 3.9
+        python-version: '3.11'
         
     - name: Install dependencies
       run: |
