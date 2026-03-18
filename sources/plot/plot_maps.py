@@ -329,7 +329,7 @@ lib.read_and_plot_2d_pcolormesh(res_file = ETA_RES,
 print('  ')
 print(' Thermal conductivity kappa')
 KAPPA_RES  = RES_DIR+'Kappa_e[erg_m-1_K-1_s-1].dat'
-KAPPA_TTL  = r'$\log_{10}\Big (\kappa\,$'
+KAPPA_TTL  = r'$\log_{10}\Big (\kappa\,$'     # pylint: disable=invalid-name
 KAPPA_TTL += r'$(\mathrm{erg/m.K.s}) \Big )$' # pylint: disable=invalid-name
 KAPPA_DIR  = MAP_DIR+'kappa/'
 lib.create_dir(KAPPA_DIR)
@@ -338,7 +338,7 @@ lib.read_and_plot_2d_pcolormesh(res_file = KAPPA_RES,
                                 n_1      = N_X,
                                 n_2      = N_Z,
                                 colormap = 'terrain',
-                                title    = KAPPA_TTL,
+                                title    = KAPPA_TTL, # pylint: disable=invalid-name
                                 log      = True,
                                 xlabel   = X_LABEL,
                                 ylabel   = Y_LABEL,
