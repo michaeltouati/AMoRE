@@ -64,15 +64,15 @@ C_EL    = np.floor(np.log(np.amax(U_B)/np.amax(U_EL))/np.log(10))
 C_EL    = 10.**C_EL
 C_MA    = np.floor(np.log(np.amax(U_B)/np.amax(U_MA))/np.log(10))
 C_MA    = 10.**C_MA
-U_stot  = []
+U_STOT  = []
 U_EL_N  = []
 U_MA_N  = []
 N_T     = len(T)-1
 for i in range(0, N_T+1):
-    U_stot.append(U_S_U[i]+U_S_D[i]+U_S_F[i]+U_S_B[i])
+    U_STOT.append(U_S_U[i]+U_S_D[i]+U_S_F[i]+U_S_B[i])
     U_EL_N.append(C_EL*U_EL[i])
     U_MA_N.append(C_MA*U_MA[i])
-U_BAL    = U_INJ[N_T]-(U_B[N_T]+U_EL[N_T]+U_MA[N_T]+U_D_COL[N_T]+U_D_RES[N_T]+U_stot[N_T])
+U_BAL    = U_INJ[N_T]-(U_B[N_T]+U_EL[N_T]+U_MA[N_T]+U_D_COL[N_T]+U_D_RES[N_T]+U_STOT[N_T])
 U_ERR    = 100.*U_BAL/U_INJ[N_T]
 T_MIN    = 0.
 T_MAX    = T[N_T-1]
@@ -82,8 +82,8 @@ U_EL_LEG = r'$U_{E}\times$'+f"{C_EL:.0E}"
 U_MA_LEG = r'$U_{B}\times$'+f"{C_MA:.0E}"
 T_LBL    = r'$t \, (\mathrm{fs})$'
 U_LBL    = r'$\mathrm{Energy}\, U\,(\mathrm{J})$'
-U_TTL    = 'Energy conservation error '
-U_TTL   += '= '+str(np.floor(100*U_ERR)/100)+r'$\,\%$'
+u_ttl    = 'Energy conservation error '
+u_ttl   += '= '+str(np.floor(100*U_ERR)/100)+r'$\,\%$'
 U_FIG    = SIMU_DIR+'energy_conservation.png'
 lib.make_scalars_plot_figure(xplot     = T,
                              yplot1    = U_EL_N,
@@ -104,7 +104,7 @@ lib.make_scalars_plot_figure(xplot     = T,
                              yplot6    = U_D_RES,
                              legend6   = r'$U_{d,\mathrm{res}}$',
                              color6    = 'blue',
-                             yplot7    = U_stot,
+                             yplot7    = U_STOT,
                              legend7   = r'$U_\mathrm{esc}$',
                              color7    = 'red',
                              xplot_min = T_MIN,
@@ -113,7 +113,7 @@ lib.make_scalars_plot_figure(xplot     = T,
                              yplot_max = U_MAX,
                              xlabel    = T_LBL,
                              ylabel    = U_LBL,
-                             title     = U_TTL,
+                             title     = u_ttl,
                              filename  = U_FIG,
                              logx      = False,
                              logy      = False,
