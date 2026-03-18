@@ -3,8 +3,7 @@
 [<img src='https://img.shields.io/badge/shell_script-%23121011.svg?style=for-the-badge&logo=gnu-bash&logoColor=white' height="20">](https://www.gnu.org/software/bash/)
 [<img src='https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54' height="20">](https://www.python.org/)
 [<img src='https://img.shields.io/badge/numpy-%23013243.svg?style=for-the-badge&logo=numpy&logoColor=white' height="20">](https://numpy.org/)
-<!-- [<img src='https://matplotlib.org/_static/logo2_compressed.svg' height="20">](https://matplotlib.org/stable/index.html#) -->
-[![Matplotlib](https://img.shields.io/badge/Matplotlib-3.7.2-blue?logo=matplotlib&logoColor=white)](https://matplotlib.org/stable/index.html#)
+[<img src='https://matplotlib.org/stable/_static/logo_dark.svg' height="20">](https://matplotlib.org/stable/index.html#)
 [<img src='https://img.shields.io/badge/latex-%23008080.svg?style=for-the-badge&logo=latex&logoColor=white' height="20">](https://www.latex-project.org//)
 [![GPLv3 License](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-v2.0%20adopted-ff69b4.svg)](CODE_OF_CONDUCT.md)
