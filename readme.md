@@ -16,8 +16,8 @@
 [![Closed issues](https://img.shields.io/github/issues-closed/michaeltouati/AMoRE)](https://github.com/michaeltouati/AMoRE/issues)
 [![Open pull requests](https://img.shields.io/github/issues-pr/michaeltouati/AMoRE)](https://github.com/michaeltouati/AMoRE/pulls)
 [![Closed pull requests](https://img.shields.io/github/issues-pr-closed/michaeltouati/AMoRE)](https://github.com/michaeltouati/AMoRE/pulls)
+[![Downloads](https://img.shields.io/github/downloads/michaeltouati/AMoRE/total)](https://github.com/michaeltouati/AMoRE/releases)
 <!-- ![My Stats](https://github-readme-stats.vercel.app/api?username=michaeltouati&show_icons=true) -->
-<!-- [![Downloads](https://img.shields.io/github/downloads/michaeltouati/AMoRE/total)](https://github.com/michaeltouati/AMoRE/releases) -->
 
 ## Written by Michaël J TOUATI
 
